@@ -1,0 +1,24 @@
+{
+  "sessionName": "01-技能树",
+  "isStandalone": false,
+  "linkedNotes": [
+    {
+      "path": "00-索引/01-技能树.md",
+      "title": "01-技能树",
+      "linkedAt": "2026-05-13T11:42:37.156Z",
+      "isPrimary": false
+    },
+    {
+      "path": "00-索引/02-学习进度.md",
+      "title": "02-学习进度",
+      "linkedAt": "2026-05-13T11:42:37.156Z",
+      "isPrimary": false
+    }
+  ],
+  "backend": "opencode",
+  "lastUsed": "2026-05-13T11:38:57.717Z",
+  "createdAt": "2026-05-13T11:38:57.706Z",
+  "messageCount": 1,
+  "notePath": "00-索引/01-技能树.md",
+  "noteTitle": "01-技能树"
+}

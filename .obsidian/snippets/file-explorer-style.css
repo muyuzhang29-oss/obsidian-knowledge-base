@@ -1,0 +1,198 @@
+/* ============================
+   文件浏览器美化
+   ============================ */
+
+/* 文件夹图标颜色 - 不同层级不同颜色 */
+.nav-folder-title .nav-folder-collapse-indicator svg {
+  color: var(--text-muted);
+}
+
+/* 一级文件夹 - 深蓝色 */
+.nav-folder.mod-root > .nav-folder-title .nav-folder-title-content {
+  color: #2563eb;
+  font-weight: 700;
+  font-size: 1.05em;
+}
+
+/* 二级文件夹 - 紫色 */
+.nav-folder.mod-root > .nav-folder > .nav-folder-title .nav-folder-title-content {
+  color: #7c3aed;
+  font-weight: 600;
+}
+
+/* 三级文件夹 - 青色 */
+.nav-folder.mod-root > .nav-folder > .nav-folder > .nav-folder-title .nav-folder-title-content {
+  color: #0891b2;
+  font-weight: 500;
+}
+
+/* 四级文件夹 - 橙色 */
+.nav-folder.mod-root > .nav-folder > .nav-folder > .nav-folder > .nav-folder-title .nav-folder-title-content {
+  color: #ea580c;
+  font-weight: 500;
+}
+
+/* 文件夹悬停和活动状态由 sakura-theme.css 统一控制 */
+
+/* 不同类型文件的颜色区分 */
+/* Markdown 文件 - 默认色 */
+.nav-file-title .nav-file-title-content {
+  font-size: 0.92em;
+}
+
+/* 带有特定前缀的文件夹特殊样式 */
+/* 索引文件夹 */
+.nav-folder-title-content:contains("索引"),
+.nav-folder-title-content:contains("📑") {
+  color: #dc2626 !important;
+}
+
+/* 代码/脚本相关 */
+.nav-folder-title-content:contains("Scripts"),
+.nav-folder-title-content:contains("scripts"),
+.nav-folder-title-content:contains("📜"),
+.nav-folder-title-content:contains("📂") {
+  color: #059669 !important;
+}
+
+/* 工具相关 */
+.nav-folder-title-content:contains("Tools"),
+.nav-folder-title-content:contains("🔧") {
+  color: #d97706 !important;
+}
+
+/* 项目相关 */
+.nav-folder-title-content:contains("Projects"),
+.nav-folder-title-content:contains("🚀") {
+  color: #7c3aed !important;
+}
+
+/* 笔记相关 */
+.nav-folder-title-content:contains("Notes"),
+.nav-folder-title-content:contains("📒") {
+  color: #2563eb !important;
+}
+
+/* 问题/Issues */
+.nav-folder-title-content:contains("Issues"),
+.nav-folder-title-content:contains("⚠️") {
+  color: #dc2626 !important;
+}
+
+/* 灵感/想法 */
+.nav-folder-title-content:contains("灵感"),
+.nav-folder-title-content:contains("💡") {
+  color: #f59e0b !important;
+}
+
+/* 目标规划 */
+.nav-folder-title-content:contains("目标"),
+.nav-folder-title-content:contains("🎯") {
+  color: #10b981 !important;
+}
+
+/* 资源收藏 */
+.nav-folder-title-content:contains("资源"),
+.nav-folder-title-content:contains("🔗") {
+  color: #6366f1 !important;
+}
+
+/* 成就记录 */
+.nav-folder-title-content:contains("成就"),
+.nav-folder-title-content:contains("🏆") {
+  color: #f59e0b !important;
+}
+
+/* 待解决 */
+.nav-folder-title-content:contains("待解决"),
+.nav-folder-title-content:contains("❓") {
+  color: #ef4444 !important;
+}
+
+/* 模板 */
+.nav-folder-title-content:contains("templates"),
+.nav-folder-title-content:contains("📋") {
+  color: #8b5cf6 !important;
+}
+
+/* ============================
+   文件图标颜色
+   ============================ */
+
+/* 根据文件扩展名设置不同颜色 */
+.nav-file-title .nav-file-title-content {
+  position: relative;
+}
+
+/* 索引文件 - 红色 */
+.nav-file-title .nav-file-title-content[href*="索引"] {
+  color: #dc2626;
+}
+
+/* 脚本文件 - 绿色 */
+.nav-file-title .nav-file-title-content[href$=".py"],
+.nav-file-title .nav-file-title-content[href$=".sh"],
+.nav-file-title .nav-file-title-content[href$=".bat"] {
+  color: #059669;
+}
+
+/* ============================
+   层级缩进优化
+   ============================ */
+
+/* 使用 Obsidian 默认缩进（由 .nav-folder-children padding 控制） */
+
+/* 层级分隔线 */
+.nav-folder.mod-root > .nav-folder + .nav-folder {
+  border-top: 1px solid var(--background-modifier-border);
+  margin-top: 4px;
+  padding-top: 4px;
+}
+
+/* ============================
+   折叠/展开图标美化
+   ============================ */
+
+.nav-folder-collapse-indicator svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.2s ease;
+}
+
+.nav-folder.is-collapsed .nav-folder-collapse-indicator svg {
+  transform: rotate(-90deg);
+}
+
+/* ============================
+   文件计数显示效果
+   ============================ */
+
+.nav-folder-title {
+  position: relative;
+}
+
+/* ============================
+   活动文件高亮
+   ============================ */
+
+.nav-file.is-active .nav-file-title {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.nav-file.is-active .nav-file-title .nav-file-title-content {
+  color: var(--text-on-accent);
+}
+
+/* ============================
+   拖拽提示
+   ============================ */
+
+.nav-folder-title.is-being-dragged,
+.nav-file-title.is-being-dragged {
+  opacity: 0.6;
+  background: var(--background-modifier-hover);
+  border-radius: 6px;
+}

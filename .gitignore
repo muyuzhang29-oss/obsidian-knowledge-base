@@ -1,0 +1,14 @@
+﻿# Obsidian工作区文件
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/workspace
+
+# 系统文件
+desktop.ini
+Thumbs.db
+.DS_Store
+
+# 临时文件
+*.tmp
+*.bak
+*.swp

@@ -1,0 +1,24 @@
+{
+  "sessionName": "00-SPI",
+  "isStandalone": false,
+  "linkedNotes": [
+    {
+      "path": "muyu工作站/03-Protocol/SPI/00-SPI.md",
+      "title": "00-SPI",
+      "linkedAt": "2026-05-07T01:56:34.846Z",
+      "isPrimary": true
+    },
+    {
+      "path": "muyu工作站/05-Verification/02-FMEA-FuSa.md",
+      "title": "02-FMEA-FuSa",
+      "linkedAt": "2026-05-13T01:39:03.298Z",
+      "isPrimary": false
+    }
+  ],
+  "backend": "opencode",
+  "lastUsed": "2026-05-13T01:38:13.480Z",
+  "createdAt": "2026-05-07T01:56:34.846Z",
+  "messageCount": 3,
+  "notePath": "muyu工作站/03-Protocol/SPI/00-SPI.md",
+  "noteTitle": "00-SPI"
+}

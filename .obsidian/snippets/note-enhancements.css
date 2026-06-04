@@ -1,0 +1,248 @@
+/* ============================================
+   笔记增强样式 - 通用美化
+   ============================================ */
+
+/* 标题样式增强 */
+.markdown-preview-view h1 {
+  color: #1e293b;
+  border-bottom: 3px solid #667eea;
+  padding-bottom: 10px;
+  margin-top: 30px;
+}
+
+.markdown-preview-view h2 {
+  color: #334155;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 8px;
+  margin-top: 25px;
+}
+
+.markdown-preview-view h3 {
+  color: #475569;
+  margin-top: 20px;
+}
+
+.markdown-preview-view h4 {
+  color: #64748b;
+  margin-top: 15px;
+}
+
+/* 段落样式 */
+.markdown-preview-view p {
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+
+/* 列表样式 */
+.markdown-preview-view ul,
+.markdown-preview-view ol {
+  padding-left: 24px;
+  margin-bottom: 16px;
+}
+
+.markdown-preview-view li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.markdown-preview-view li::marker {
+  color: #667eea;
+}
+
+/* 引用块样式 */
+.markdown-preview-view blockquote {
+  border-left: 4px solid #667eea;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  padding: 16px 20px;
+  margin: 16px 0;
+  border-radius: 0 8px 8px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.markdown-preview-view blockquote p {
+  margin-bottom: 0;
+}
+
+/* 行内代码样式 */
+.markdown-preview-view code {
+  background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: #e11d48;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* 代码块样式 */
+.markdown-preview-view pre {
+  background: linear-gradient(135deg, #1e293b, #334155);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.2);
+  overflow-x: auto;
+}
+
+.markdown-preview-view pre code {
+  background: transparent;
+  color: #e2e8f0;
+  padding: 0;
+  font-size: 0.95em;
+  line-height: 1.6;
+}
+
+/* 表格样式 */
+.markdown-preview-view table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+}
+
+.markdown-preview-view th {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+}
+
+.markdown-preview-view td {
+  padding: 10px 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.markdown-preview-view tr:nth-child(even) {
+  background: #f8fafc;
+}
+
+.markdown-preview-view tr:hover {
+  background: #e0f2fe;
+  transition: background 0.2s ease;
+}
+
+/* 水平分隔线样式 */
+.markdown-preview-view hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+  margin: 30px 0;
+}
+
+/* 链接样式 */
+.markdown-preview-view a {
+  color: #667eea;
+  text-decoration: none;
+  border-bottom: 1px dashed #667eea;
+  transition: all 0.2s ease;
+}
+
+.markdown-preview-view a:hover {
+  color: #764ba2;
+  border-bottom-color: #764ba2;
+  border-bottom-style: solid;
+}
+
+/* 图片样式 */
+.markdown-preview-view img {
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  margin: 16px 0;
+  max-width: 100%;
+}
+
+/* 任务列表样式 */
+.markdown-preview-view .task-list-item {
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin: 4px 0;
+  background: #f8fafc;
+  transition: background 0.2s ease;
+  list-style: none;
+}
+
+.markdown-preview-view .task-list-item:hover {
+  background: #e0f2fe;
+}
+
+.markdown-preview-view .task-list-item-checkbox {
+  margin-right: 8px;
+  accent-color: #667eea;
+}
+
+/* 高亮文本 */
+.markdown-preview-view mark {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* 脚注样式 */
+.markdown-preview-view .footnotes {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.markdown-preview-view .footnote-ref {
+  color: #667eea;
+  font-size: 0.8em;
+}
+
+/* 键盘按键样式 */
+.markdown-preview-view kbd {
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.9em;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* 删除线样式 */
+.markdown-preview-view del {
+  color: #94a3b8;
+  text-decoration-color: #94a3b8;
+}
+
+/* 上标和下标 */
+.markdown-preview-view sup,
+.markdown-preview-view sub {
+  font-size: 0.8em;
+  color: #64748b;
+}
+
+/* 编辑器样式增强 */
+.markdown-source-view {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  line-height: 1.6;
+}
+
+/* 行号样式 */
+.markdown-source-view .cm-lineNumbers .cm-gutterElement {
+  color: #94a3b8;
+  padding: 0 8px;
+}
+
+/* 选中文本样式 */
+.markdown-source-view .cm-selectionBackground,
+.markdown-preview-view ::selection {
+  background: rgba(102, 126, 234, 0.2);
+}
+
+/* 光标样式 */
+.markdown-source-view .cm-cursor {
+  border-left-color: #667eea;
+}
+
+/* 搜索高亮 */
+.markdown-source-view .cm-searchMatch {
+  background: rgba(251, 191, 36, 0.3);
+}
+
+.markdown-source-view .cm-searchMatch.cm-searchMatch-selected {
+  background: rgba(251, 191, 36, 0.5);
+}

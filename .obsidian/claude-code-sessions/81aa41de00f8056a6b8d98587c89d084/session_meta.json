@@ -1,0 +1,18 @@
+{
+  "sessionName": "HOME",
+  "isStandalone": false,
+  "linkedNotes": [
+    {
+      "path": "HOME.md",
+      "title": "HOME",
+      "linkedAt": "2026-05-13T11:47:13.741Z",
+      "isPrimary": true
+    }
+  ],
+  "backend": "opencode",
+  "lastUsed": "2026-05-13T11:52:40.186Z",
+  "createdAt": "2026-05-13T11:47:13.741Z",
+  "messageCount": 3,
+  "notePath": "HOME.md",
+  "noteTitle": "HOME"
+}

@@ -1,0 +1,222 @@
+{
+  "main": {
+    "id": "d7c2c5b5f888ee71",
+    "type": "split",
+    "children": [
+      {
+        "id": "87677be3a6682483",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "886bafee9c0a0b55",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "HOME.md",
+                "mode": "preview"
+              },
+              "icon": "lucide-file",
+              "title": "HOME"
+            }
+          },
+          {
+            "id": "886bafee9c0a0b56",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "00-索引/00-总索引.md",
+                "mode": "preview"
+              },
+              "icon": "lucide-file",
+              "title": "00-总索引"
+            }
+          }
+        ],
+        "currentTab": 0
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "075cd2b5444d6703",
+    "type": "split",
+    "children": [
+      {
+        "id": "c8eff8a71400ecd4",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1bbe345212834be1",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": true
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "6bfb20f81d7497a0",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "65ecb96b75575d55",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          },
+          {
+            "id": "65ecb96b75575d56",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          }
+        ],
+        "currentTab": 0
+      }
+    ],
+    "direction": "horizontal",
+    "width": 250
+  },
+  "right": {
+    "id": "f7bc3c23fd5ea63b",
+    "type": "split",
+    "children": [
+      {
+        "id": "3de7cb6ba7fd31c3",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f1560038c94b5854",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "HOME.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "反向链接"
+            }
+          },
+          {
+            "id": "d696a91fa5111410",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "HOME.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "出链"
+            }
+          },
+          {
+            "id": "6962dbb161bbdc51",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "HOME.md"
+              },
+              "icon": "lucide-list",
+              "title": "大纲"
+            }
+          },
+          {
+            "id": "c65a6b3d413f6cb2",
+            "type": "leaf",
+            "state": {
+              "type": "todo",
+              "state": {},
+              "icon": "checkmark",
+              "title": "待办事项"
+            }
+          },
+          {
+            "id": "bc30bea17afd79b5",
+            "type": "leaf",
+            "state": {
+              "type": "claude-code-view",
+              "state": {},
+              "icon": "bot",
+              "title": "OpenCode"
+            }
+          }
+        ],
+        "currentTab": 0
+      }
+    ],
+    "direction": "horizontal",
+    "width": 350
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "random-note:开始漫游笔记": false,
+      "workspaces:管理工作区布局": false,
+      "bases:新建数据库": false,
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "templater-obsidian:Templater": false,
+      "remotely-save:Remotely Save": false,
+      "claude-code-integration:Open Claude Code": false
+    }
+  },
+  "active": "886bafee9c0a0b55",
+  "lastOpenFiles": [
+    "HOME.md",
+    "00-索引/00-总索引.md",
+    "01-SV语法/00-入门.md",
+    "02-UVM/00-入门.md",
+    "03-Protocol/AXI/00-AXI.md",
+    "04-Tools/Linux/00-常用命令.md",
+    "05-Verification/01-覆盖率.md",
+    "06-Environment/00-环境搭建.md",
+    "07-Scripts/00-Python.md",
+    "08-Projects",
+    "09-Issues",
+    "10-Notes/时隙-TimeSlot.md",
+    "11-UVM源码学习/UVM源代码研究.md"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "sessionName": "00-总索引-新",
+  "isStandalone": false,
+  "linkedNotes": [
+    {
+      "path": "muyu工作站/00-索引/00-总索引-新.md",
+      "title": "00-总索引-新",
+      "linkedAt": "2026-05-13T09:49:31.991Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/00-索引/00-总索引-备份.md",
+      "title": "00-总索引-备份",
+      "linkedAt": "2026-05-13T09:49:31.992Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/00-索引/00-总索引.md",
+      "title": "00-总索引",
+      "linkedAt": "2026-05-13T09:49:32.001Z",
+      "isPrimary": false
+    }
+  ],
+  "backend": "opencode",
+  "lastUsed": "2026-05-13T09:45:27.423Z",
+  "createdAt": "2026-05-13T09:45:27.412Z",
+  "messageCount": 1,
+  "notePath": "muyu工作站/00-索引/00-总索引-新.md",
+  "noteTitle": "00-总索引-新"
+}

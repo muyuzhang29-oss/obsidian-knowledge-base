@@ -1,0 +1,228 @@
+{
+  "sessionName": "00-总索引-备份",
+  "isStandalone": false,
+  "linkedNotes": [
+    {
+      "path": "muyu工作站/📑 索引/00-总索引-备份.md",
+      "title": "00-总索引-备份",
+      "linkedAt": "2026-05-13T10:14:02.782Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/📑 索引/00-总索引.md",
+      "title": "00-总索引",
+      "linkedAt": "2026-05-13T10:14:02.783Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/📑 索引/11-UVM源码学习/UVM-uvm_component与uvm_root.md",
+      "title": "UVM-uvm_component与uvm_root",
+      "linkedAt": "2026-05-13T10:14:02.794Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/📑 索引/11-UVM源码学习/UVM-uvm中的factory机制.md",
+      "title": "UVM-uvm中的factory机制",
+      "linkedAt": "2026-05-13T10:14:02.801Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/📑 索引/11-UVM源码学习/UVM-从run_test浅谈TestBench启动.md",
+      "title": "UVM-从run_test浅谈TestBench启动",
+      "linkedAt": "2026-05-13T10:14:02.809Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/📑 索引/11-UVM源码学习/UVM源代码研究.md",
+      "title": "UVM源代码研究",
+      "linkedAt": "2026-05-13T10:14:02.816Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/📑 索引/脚本/fec.md",
+      "title": "fec",
+      "linkedAt": "2026-05-13T10:14:02.823Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/📝 SV语法/00-入门.md",
+      "title": "00-入门",
+      "linkedAt": "2026-05-13T10:14:02.831Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/📝 SV语法/01-数据类型.md",
+      "title": "01-数据类型",
+      "linkedAt": "2026-05-13T10:14:02.838Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/📝 SV语法/02-类.md",
+      "title": "02-类",
+      "linkedAt": "2026-05-13T10:14:02.845Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/🔬 UVM/00-入门.md",
+      "title": "00-入门",
+      "linkedAt": "2026-05-13T10:14:02.853Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/🔬 UVM/00-索引.md",
+      "title": "00-索引",
+      "linkedAt": "2026-05-13T10:14:02.860Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/🔬 UVM/01-Phase机制.md",
+      "title": "01-Phase机制",
+      "linkedAt": "2026-05-13T10:14:02.867Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/🔬 UVM/02-config_db.md",
+      "title": "02-config_db",
+      "linkedAt": "2026-05-13T10:14:02.874Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/🔬 UVM/03-Sequence机制.md",
+      "title": "03-Sequence机制",
+      "linkedAt": "2026-05-13T10:14:02.881Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/🔬 UVM/04-组件.md",
+      "title": "04-组件",
+      "linkedAt": "2026-05-13T10:14:02.888Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/🔌 Protocol/00-协议索引.md",
+      "title": "00-协议索引",
+      "linkedAt": "2026-05-13T10:14:02.896Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/🔌 Protocol/APB/00-APB.md",
+      "title": "00-APB",
+      "linkedAt": "2026-05-13T10:14:02.903Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/🔌 Protocol/AXI/00-AXI.md",
+      "title": "00-AXI",
+      "linkedAt": "2026-05-13T10:14:02.910Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/🔌 Protocol/I2C/00-I2C.md",
+      "title": "00-I2C",
+      "linkedAt": "2026-05-13T10:14:02.917Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/🔌 Protocol/UART/00-UART.md",
+      "title": "00-UART",
+      "linkedAt": "2026-05-13T10:14:02.924Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/🔌 Protocol/SPI/00-SPI.md",
+      "title": "00-SPI",
+      "linkedAt": "2026-05-13T10:14:02.932Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/🔧 Tools/Linux/00-常用命令.md",
+      "title": "00-常用命令",
+      "linkedAt": "2026-05-13T10:14:02.939Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/🔧 Tools/GVim/00-快捷键.md",
+      "title": "00-快捷键",
+      "linkedAt": "2026-05-13T10:14:02.947Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/🔧 Tools/xrun/00-xrun.md",
+      "title": "00-xrun",
+      "linkedAt": "2026-05-13T10:14:02.955Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/🔧 Tools/imc/00-imc.md",
+      "title": "00-imc",
+      "linkedAt": "2026-05-13T10:14:02.962Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/✅ Verification/00-验证计划.md",
+      "title": "00-验证计划",
+      "linkedAt": "2026-05-13T10:14:02.969Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/✅ Verification/01-覆盖率.md",
+      "title": "01-覆盖率",
+      "linkedAt": "2026-05-13T10:14:02.976Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/✅ Verification/02-FMEA-FuSa.md",
+      "title": "02-FMEA-FuSa",
+      "linkedAt": "2026-05-13T10:14:02.984Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/🖥️ Environment/00-环境搭建.md",
+      "title": "00-环境搭建",
+      "linkedAt": "2026-05-13T10:14:02.991Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/📜 Scripts/00-Makefile.md",
+      "title": "00-Makefile",
+      "linkedAt": "2026-05-13T10:14:02.998Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/📜 Scripts/00-Python.md",
+      "title": "00-Python",
+      "linkedAt": "2026-05-13T10:14:03.005Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/📜 Scripts/01-Log解析.md",
+      "title": "01-Log解析",
+      "linkedAt": "2026-05-13T10:14:03.014Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/📒 Notes/数字寄存器.md",
+      "title": "数字寄存器",
+      "linkedAt": "2026-05-13T10:14:03.022Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/📒 Notes/时隙-TimeSlot.md",
+      "title": "时隙-TimeSlot",
+      "linkedAt": "2026-05-13T10:14:03.032Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/📋 templates/通用模板.md",
+      "title": "通用模板",
+      "linkedAt": "2026-05-13T10:14:03.040Z",
+      "isPrimary": false
+    }
+  ],
+  "backend": "opencode",
+  "lastUsed": "2026-05-13T10:16:10.739Z",
+  "createdAt": "2026-05-13T09:56:48.873Z",
+  "messageCount": 4,
+  "notePath": "muyu工作站/📑 索引/00-总索引-备份.md",
+  "noteTitle": "00-总索引-备份"
+}

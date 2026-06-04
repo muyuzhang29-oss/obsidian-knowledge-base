@@ -1,0 +1,54 @@
+/* Annotator Plugin Styles */
+/* This is a placeholder CSS file. The full styles will be loaded when you install the plugin from Obsidian Community Plugins. */
+
+.annotator-plugin {
+    font-family: var(--font-interface);
+}
+
+.annotator-plugin .pdf-viewer {
+    width: 100%;
+    height: 100%;
+}
+
+.annotator-plugin .annotation-panel {
+    background: var(--background-secondary);
+    border-left: 1px solid var(--background-modifier-border);
+}
+
+.annotator-plugin .annotation-toolbar {
+    display: flex;
+    gap: 8px;
+    padding: 8px;
+    background: var(--background-primary);
+    border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.annotator-plugin .annotation-toolbar button {
+    background: var(--interactive-normal);
+    color: var(--text-normal);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
+.annotator-plugin .annotation-toolbar button:hover {
+    background: var(--interactive-hover);
+}
+
+.annotator-plugin .highlight {
+    background: rgba(255, 255, 0, 0.3);
+    border-radius: 2px;
+}
+
+.annotator-plugin .underline {
+    border-bottom: 2px solid var(--text-accent);
+}
+
+.annotator-plugin .note {
+    background: var(--background-secondary);
+    border-left: 3px solid var(--text-accent);
+    padding: 8px;
+    margin: 8px 0;
+    border-radius: 0 4px 4px 0;
+}

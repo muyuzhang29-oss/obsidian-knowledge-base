@@ -1,0 +1,436 @@
+/* ============================================================
+   仪表盘美化样式 - Dashboard Style
+   ============================================================ */
+
+/* ── 仪表盘页面特殊样式 ─────────────────────────────── */
+
+/* 仪表盘页面标题 */
+.markdown-preview-view h1:has(+ .callout[data-callout="quote"]) {
+  text-align: center;
+  font-size: 2.2em;
+  margin-bottom: 0.3em;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 统计卡片样式 */
+.dashboard .callout[data-callout="info"] {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe) !important;
+  border: 1px solid #93c5fd !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15) !important;
+}
+
+.dashboard .callout[data-callout="info"] .callout-title {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white !important;
+  border-radius: 12px 12px 0 0;
+  padding: 12px 16px !important;
+}
+
+.dashboard .callout[data-callout="info"] .callout-content {
+  padding: 16px !important;
+}
+
+/* 统计表格样式 */
+.dashboard .callout[data-callout="info"] table {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.dashboard .callout[data-callout="info"] th {
+  background: rgba(59, 130, 246, 0.2) !important;
+  color: #1e40af !important;
+  border: none !important;
+}
+
+.dashboard .callout[data-callout="info"] td {
+  border: none !important;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.2) !important;
+}
+
+.dashboard .callout[data-callout="info"] tr:last-child td {
+  border-bottom: none !important;
+}
+
+/* 快速导航卡片 */
+.dashboard .callout[data-callout="example"] {
+  background: linear-gradient(135deg, #faf5ff, #ede9fe) !important;
+  border: 1px solid #c4b5fd !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15) !important;
+}
+
+.dashboard .callout[data-callout="example"] .callout-title {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: white !important;
+  border-radius: 12px 12px 0 0;
+  padding: 12px 16px !important;
+}
+
+/* 分类入口卡片 */
+.dashboard .callout[data-callout="note"] {
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9) !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+  transition: all 0.3s ease !important;
+}
+
+.dashboard .callout[data-callout="note"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1) !important;
+}
+
+.dashboard .callout[data-callout="note"] .callout-title {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white !important;
+  border-radius: 12px 12px 0 0;
+  padding: 12px 16px !important;
+}
+
+/* 最近更新卡片 */
+.dashboard .callout[data-callout="tip"] {
+  background: linear-gradient(135deg, #dcfce7, #bbf7d0) !important;
+  border: 1px solid #86efac !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.15) !important;
+}
+
+.dashboard .callout[data-callout="tip"] .callout-title {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white !important;
+  border-radius: 12px 12px 0 0;
+  padding: 12px 16px !important;
+}
+
+/* 标签云卡片 */
+.dashboard .callout[data-callout="abstract"] {
+  background: linear-gradient(135deg, #fef3c7, #fde68a) !important;
+  border: 1px solid #fcd34d !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15) !important;
+}
+
+.dashboard .callout[data-callout="abstract"] .callout-title {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white !important;
+  border-radius: 12px 12px 0 0;
+  padding: 12px 16px !important;
+}
+
+/* 待办事项卡片 */
+.dashboard .callout[data-callout="todo"] {
+  background: linear-gradient(135deg, #fee2e2, #fecaca) !important;
+  border: 1px solid #fca5a5 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15) !important;
+}
+
+.dashboard .callout[data-callout="todo"] .callout-title {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white !important;
+  border-radius: 12px 12px 0 0;
+  padding: 12px 16px !important;
+}
+
+/* 学习进度卡片 */
+.dashboard .callout[data-callout="success"] {
+  background: linear-gradient(135deg, #ccfbf1, #99f6e4) !important;
+  border: 1px solid #6ee7b7 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(20, 184, 166, 0.15) !important;
+}
+
+.dashboard .callout[data-callout="success"] .callout-title {
+  background: linear-gradient(135deg, #14b8a6, #0d9488);
+  color: white !important;
+  border-radius: 12px 12px 0 0;
+  padding: 12px 16px !important;
+}
+
+/* 快速搜索卡片 */
+.dashboard .callout[data-callout="question"] {
+  background: linear-gradient(135deg, #e0f2fe, #bae6fd) !important;
+  border: 1px solid #7dd3fc !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.15) !important;
+}
+
+.dashboard .callout[data-callout="question"] .callout-title {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  color: white !important;
+  border-radius: 12px 12px 0 0;
+  padding: 12px 16px !important;
+}
+
+/* 知识图谱卡片 */
+.dashboard .callout[data-callout="note"]:has(.callout-title:contains("知识图谱")) {
+  background: linear-gradient(135deg, #f3e8ff, #e9d5ff) !important;
+  border: 1px solid #c4b5fd !important;
+}
+
+.dashboard .callout[data-callout="note"]:has(.callout-title:contains("知识图谱")) .callout-title {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+/* 快捷操作卡片 */
+.dashboard .callout[data-callout="warning"] {
+  background: linear-gradient(135deg, #fef3c7, #fde68a) !important;
+  border: 1px solid #fcd34d !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15) !important;
+}
+
+.dashboard .callout[data-callout="warning"] .callout-title {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white !important;
+  border-radius: 12px 12px 0 0;
+  padding: 12px 16px !important;
+}
+
+/* 快速记录卡片 */
+.dashboard .callout[data-callout="tip"]:has(.callout-title:contains("快速记录")) {
+  background: linear-gradient(135deg, #dcfce7, #bbf7d0) !important;
+  border: 1px solid #86efac !important;
+}
+
+.dashboard .callout[data-callout="tip"]:has(.callout-title:contains("快速记录")) .callout-title {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+/* 推荐阅读卡片 */
+.dashboard .callout[data-callout="info"]:has(.callout-title:contains("推荐阅读")) {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe) !important;
+  border: 1px solid #93c5fd !important;
+}
+
+.dashboard .callout[data-callout="info"]:has(.callout-title:contains("推荐阅读")) .callout-title {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+/* 学习资源卡片 */
+.dashboard .callout[data-callout="abstract"]:has(.callout-title:contains("学习资源")) {
+  background: linear-gradient(135deg, #fef3c7, #fde68a) !important;
+  border: 1px solid #fcd34d !important;
+}
+
+.dashboard .callout[data-callout="abstract"]:has(.callout-title:contains("学习资源")) .callout-title {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+/* ── 按钮样式 ─────────────────────────────── */
+
+/* 按钮容器 */
+.dashboard .callout-content:has(.btn) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 16px !important;
+}
+
+/* 按钮基础样式 */
+.dashboard .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9em;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+}
+
+.dashboard .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 蓝色按钮 */
+.dashboard .btn-primary {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+}
+
+/* 绿色按钮 */
+.dashboard .btn-success {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+}
+
+/* 紫色按钮 */
+.dashboard .btn-purple {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: white;
+}
+
+/* 橙色按钮 */
+.dashboard .btn-warning {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+}
+
+/* 红色按钮 */
+.dashboard .btn-danger {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+}
+
+/* ── 表格样式增强 ─────────────────────────────── */
+
+/* 表格容器 */
+.dashboard .callout-content table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+
+/* 表格头部 */
+.dashboard .callout-content thead tr {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+}
+
+.dashboard .callout-content th {
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8em;
+  letter-spacing: 0.5px;
+  padding: 10px 12px;
+  border: none;
+}
+
+/* 表格主体 */
+.dashboard .callout-content td {
+  padding: 10px 12px;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  font-size: 0.9em;
+}
+
+.dashboard .callout-content tbody tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.dashboard .callout-content tbody tr:hover {
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.dashboard .callout-content tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ── Mermaid 图表美化 ─────────────────────────────── */
+
+.dashboard .mermaid {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 12px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* ── 链接样式增强 ─────────────────────────────── */
+
+.dashboard .internal-link {
+  color: #6366f1;
+  text-decoration: none;
+  border-bottom: 1px dashed #6366f1;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.dashboard .internal-link:hover {
+  background: rgba(99, 102, 241, 0.1);
+  border-bottom-color: #4f46e5;
+  color: #4f46e5;
+}
+
+/* ── 标签样式增强 ─────────────────────────────── */
+
+.dashboard .tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 0.8em;
+  font-weight: 500;
+  margin: 2px;
+  transition: all 0.2s ease;
+}
+
+.dashboard .tag:hover {
+  transform: scale(1.05);
+}
+
+/* ── 响应式设计 ─────────────────────────────── */
+
+@media (max-width: 768px) {
+  .dashboard .callout {
+    margin: 8px 0 !important;
+  }
+  
+  .dashboard .callout-title {
+    padding: 8px 12px !important;
+    font-size: 0.9em;
+  }
+  
+  .dashboard .callout-content {
+    padding: 8px 12px !important;
+  }
+  
+  .dashboard .btn {
+    padding: 6px 12px;
+    font-size: 0.85em;
+  }
+}
+
+/* ── 动画效果 ─────────────────────────────── */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dashboard .callout {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+.dashboard .callout:nth-child(1) { animation-delay: 0.1s; }
+.dashboard .callout:nth-child(2) { animation-delay: 0.2s; }
+.dashboard .callout:nth-child(3) { animation-delay: 0.3s; }
+.dashboard .callout:nth-child(4) { animation-delay: 0.4s; }
+.dashboard .callout:nth-child(5) { animation-delay: 0.5s; }
+.dashboard .callout:nth-child(6) { animation-delay: 0.6s; }
+.dashboard .callout:nth-child(7) { animation-delay: 0.7s; }
+.dashboard .callout:nth-child(8) { animation-delay: 0.8s; }
+
+/* ── 打印样式 ─────────────────────────────── */
+
+@media print {
+  .dashboard .callout {
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+    break-inside: avoid;
+  }
+  
+  .dashboard .btn {
+    display: none;
+  }
+}

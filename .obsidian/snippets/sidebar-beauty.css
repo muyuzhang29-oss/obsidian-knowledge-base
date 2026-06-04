@@ -1,0 +1,275 @@
+/* ============================================================
+   侧边栏全面美化 - Sidebar Beauty
+   ============================================================ */
+
+/* ── 侧边栏整体背景 ─────────────────────────────── */
+.workspace-split .workspace-tabs .workspace-tab-content-container {
+  background: linear-gradient(180deg, var(--surface-1) 0%, var(--surface-0) 100%) !important;
+}
+
+/* ── 文件资源管理器 ─────────────────────────────── */
+
+/* 文件夹标题 */
+.nav-folder-title {
+  padding: 6px 10px !important;
+  border-radius: var(--radius-sm) !important;
+  transition: background-color 0.2s ease, color 0.2s ease !important;
+  margin: 2px 4px !important;
+}
+
+.nav-folder-title:hover {
+  background: var(--background-modifier-hover) !important;
+}
+
+/* 文件夹图标颜色 */
+.nav-folder-title .nav-folder-collapse-indicator svg {
+  color: var(--accent-primary) !important;
+  transition: transform 0.2s ease !important;
+}
+
+.nav-folder.is-collapsed .nav-folder-collapse-indicator svg {
+  transform: rotate(-90deg) !important;
+}
+
+/* 文件夹展开时的背景 */
+.nav-folder.is-active > .nav-folder-title {
+  background: rgba(99, 102, 241, 0.08) !important;
+  border-left: 3px solid var(--accent-primary) !important;
+}
+
+/* 文件标题 */
+.nav-file-title {
+  padding: 5px 10px !important;
+  border-radius: var(--radius-sm) !important;
+  transition: background-color 0.2s ease, color 0.2s ease, border-left-color 0.2s ease !important;
+  margin: 1px 4px !important;
+  border-left: 3px solid transparent !important;
+}
+
+.nav-file-title:hover {
+  background: var(--background-modifier-hover) !important;
+  border-left-color: var(--accent-secondary) !important;
+}
+
+/* 活动文件高亮 */
+.nav-file.is-active .nav-file-title {
+  background: linear-gradient(90deg, rgba(99, 102, 241, 0.12), transparent) !important;
+  border-left-color: var(--accent-primary) !important;
+  font-weight: 600 !important;
+  color: var(--accent-primary) !important;
+}
+
+/* 文件图标 */
+.nav-file-title .nav-file-icon {
+  color: var(--text-muted) !important;
+  margin-right: 6px !important;
+}
+
+/* ── 搜索面板 ─────────────────────────────── */
+
+/* 搜索输入框 */
+.search-input-container {
+  background: var(--surface-2) !important;
+  border-radius: var(--radius-md) !important;
+  border: 1px solid var(--surface-3) !important;
+  padding: 8px 12px !important;
+  margin: 8px !important;
+  transition: all 0.2s ease !important;
+}
+
+.search-input-container:focus-within {
+  border-color: var(--accent-primary) !important;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2) !important;
+}
+
+.search-input-container input {
+  font-size: 0.9em !important;
+}
+
+/* 搜索结果 */
+.search-result-container {
+  margin: 4px 8px !important;
+  border-radius: var(--radius-sm) !important;
+}
+
+.search-result-file-title {
+  background: var(--surface-2) !important;
+  padding: 6px 10px !important;
+  border-radius: var(--radius-sm) !important;
+  font-weight: 600 !important;
+  font-size: 0.85em !important;
+  color: var(--text-secondary) !important;
+}
+
+.search-result-file-matches {
+  padding: 4px 8px !important;
+}
+
+/* ── 标签面板 ─────────────────────────────── */
+
+/* 标签容器 */
+.tag-pane-tag {
+  padding: 4px 10px !important;
+  border-radius: 12px !important;
+  margin: 2px 4px !important;
+  font-size: 0.85em !important;
+  transition: all 0.2s ease !important;
+  display: inline-block !important;
+}
+
+.tag-pane-tag:hover {
+  background: var(--background-modifier-hover) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* 标签计数 */
+.tag-pane-tag-count {
+  background: var(--surface-3) !important;
+  border-radius: 10px !important;
+  padding: 1px 6px !important;
+  font-size: 0.75em !important;
+  margin-left: 4px !important;
+}
+
+/* ── 书签面板 ─────────────────────────────── */
+
+/* 书签项目 */
+.bookmark-item {
+  padding: 6px 10px !important;
+  border-radius: var(--radius-sm) !important;
+  margin: 2px 4px !important;
+  transition: all 0.2s ease !important;
+}
+
+.bookmark-item:hover {
+  background: var(--background-modifier-hover) !important;
+}
+
+/* ── 大纲面板 ─────────────────────────────── */
+
+/* 大纲标题 */
+.outline-item {
+  padding: 4px 8px !important;
+  border-radius: var(--radius-sm) !important;
+  margin: 1px 4px !important;
+  transition: all 0.2s ease !important;
+  border-left: 2px solid transparent !important;
+}
+
+.outline-item:hover {
+  background: var(--background-modifier-hover) !important;
+  border-left-color: var(--accent-primary) !important;
+}
+
+/* 大纲层级缩进 */
+.outline-item.level-1 { padding-left: 8px !important; }
+.outline-item.level-2 { padding-left: 20px !important; }
+.outline-item.level-3 { padding-left: 32px !important; }
+.outline-item.level-4 { padding-left: 44px !important; }
+
+/* ── 面板标题 ─────────────────────────────── */
+
+/* 侧边栏面板标题 */
+.workspace-tabs .workspace-tab-header {
+  padding: 8px 12px !important;
+  font-weight: 600 !important;
+  font-size: 0.9em !important;
+  color: var(--text-secondary) !important;
+  border-bottom: 2px solid transparent !important;
+  transition: all 0.2s ease !important;
+}
+
+.workspace-tabs .workspace-tab-header:hover {
+  color: var(--text-primary) !important;
+  background: var(--background-modifier-hover) !important;
+}
+
+.workspace-tabs .workspace-tab-header.is-active {
+  color: var(--accent-primary) !important;
+  border-bottom-color: var(--accent-primary) !important;
+}
+
+/* ── 折叠/展开按钮 ─────────────────────────────── */
+
+.nav-folder-collapse-indicator {
+  width: 16px !important;
+  height: 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 4px !important;
+  transition: all 0.2s ease !important;
+}
+
+.nav-folder-collapse-indicator:hover {
+  background: var(--background-modifier-hover) !important;
+}
+
+/* ── 滚动条美化 ─────────────────────────────── */
+
+.workspace-split .workspace-tabs .workspace-tab-content-container::-webkit-scrollbar {
+  width: 6px !important;
+}
+
+.workspace-split .workspace-tabs .workspace-tab-content-container::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.workspace-split .workspace-tabs .workspace-tab-content-container::-webkit-scrollbar-thumb {
+  background: var(--surface-3) !important;
+  border-radius: 3px !important;
+}
+
+.workspace-split .workspace-tabs .workspace-tab-content-container::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted) !important;
+}
+
+/* ── 分隔线美化 ─────────────────────────────── */
+
+.nav-folder.mod-root > .nav-folder + .nav-folder {
+  border-top: 1px solid var(--surface-3) !important;
+  margin-top: 4px !important;
+  padding-top: 4px !important;
+}
+
+/* ── 文件计数显示 ─────────────────────────────── */
+
+.nav-folder-title-content::after {
+  content: attr(data-count);
+  font-size: 0.7em !important;
+  color: var(--text-muted) !important;
+  margin-left: 6px !important;
+  opacity: 0.7 !important;
+}
+
+/* ── 动画效果 ─────────────────────────────── */
+
+.nav-folder-title,
+.nav-file-title,
+.tag-pane-tag,
+.outline-item {
+  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+              color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              border-left-color 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* ── 暗色主题优化 ─────────────────────────────── */
+
+.theme-dark .nav-folder-title:hover,
+.theme-dark .nav-file-title:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.theme-dark .nav-file.is-active .nav-file-title {
+  background: linear-gradient(90deg, rgba(99, 102, 241, 0.2), transparent) !important;
+}
+
+.theme-dark .search-input-container {
+  background: var(--surface-2) !important;
+  border-color: var(--surface-3) !important;
+}
+
+.theme-dark .search-input-container:focus-within {
+  border-color: var(--accent-primary) !important;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3) !important;
+}

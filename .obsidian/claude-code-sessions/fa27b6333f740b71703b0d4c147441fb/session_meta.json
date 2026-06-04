@@ -1,0 +1,216 @@
+{
+  "sessionName": "00-总索引",
+  "isStandalone": false,
+  "linkedNotes": [
+    {
+      "path": "muyu工作站/📑 索引/00-总索引.md",
+      "title": "00-总索引",
+      "linkedAt": "2026-05-13T10:20:52.476Z",
+      "isPrimary": true
+    },
+    {
+      "path": "01-SV语法/00-入门.md",
+      "title": "00-入门",
+      "linkedAt": "2026-05-13T10:28:17.420Z",
+      "isPrimary": false
+    },
+    {
+      "path": "01-SV语法/01-数据类型.md",
+      "title": "01-数据类型",
+      "linkedAt": "2026-05-13T10:28:17.421Z",
+      "isPrimary": false
+    },
+    {
+      "path": "01-SV语法/02-类.md",
+      "title": "02-类",
+      "linkedAt": "2026-05-13T10:28:17.428Z",
+      "isPrimary": false
+    },
+    {
+      "path": "02-UVM/00-入门.md",
+      "title": "00-入门",
+      "linkedAt": "2026-05-13T10:28:17.436Z",
+      "isPrimary": false
+    },
+    {
+      "path": "02-UVM/00-索引.md",
+      "title": "00-索引",
+      "linkedAt": "2026-05-13T10:28:17.445Z",
+      "isPrimary": false
+    },
+    {
+      "path": "02-UVM/01-Phase机制.md",
+      "title": "01-Phase机制",
+      "linkedAt": "2026-05-13T10:28:17.452Z",
+      "isPrimary": false
+    },
+    {
+      "path": "02-UVM/02-config_db.md",
+      "title": "02-config_db",
+      "linkedAt": "2026-05-13T10:28:17.460Z",
+      "isPrimary": false
+    },
+    {
+      "path": "02-UVM/03-Sequence机制.md",
+      "title": "03-Sequence机制",
+      "linkedAt": "2026-05-13T10:28:17.467Z",
+      "isPrimary": false
+    },
+    {
+      "path": "02-UVM/04-组件.md",
+      "title": "04-组件",
+      "linkedAt": "2026-05-13T10:28:17.474Z",
+      "isPrimary": false
+    },
+    {
+      "path": "05-Verification/00-验证计划.md",
+      "title": "00-验证计划",
+      "linkedAt": "2026-05-13T10:28:17.482Z",
+      "isPrimary": false
+    },
+    {
+      "path": "05-Verification/01-覆盖率.md",
+      "title": "01-覆盖率",
+      "linkedAt": "2026-05-13T10:28:17.490Z",
+      "isPrimary": false
+    },
+    {
+      "path": "05-Verification/02-FMEA-FuSa.md",
+      "title": "02-FMEA-FuSa",
+      "linkedAt": "2026-05-13T10:28:17.497Z",
+      "isPrimary": false
+    },
+    {
+      "path": "06-Environment/00-环境搭建.md",
+      "title": "00-环境搭建",
+      "linkedAt": "2026-05-13T10:28:17.505Z",
+      "isPrimary": false
+    },
+    {
+      "path": "07-Scripts/00-Makefile.md",
+      "title": "00-Makefile",
+      "linkedAt": "2026-05-13T10:28:17.513Z",
+      "isPrimary": false
+    },
+    {
+      "path": "07-Scripts/00-Python.md",
+      "title": "00-Python",
+      "linkedAt": "2026-05-13T10:28:17.520Z",
+      "isPrimary": false
+    },
+    {
+      "path": "07-Scripts/01-Log解析.md",
+      "title": "01-Log解析",
+      "linkedAt": "2026-05-13T10:28:17.529Z",
+      "isPrimary": false
+    },
+    {
+      "path": "10-Notes/数字寄存器.md",
+      "title": "数字寄存器",
+      "linkedAt": "2026-05-13T10:28:17.536Z",
+      "isPrimary": false
+    },
+    {
+      "path": "10-Notes/时隙-TimeSlot.md",
+      "title": "时隙-TimeSlot",
+      "linkedAt": "2026-05-13T10:28:17.544Z",
+      "isPrimary": false
+    },
+    {
+      "path": "03-Protocol/AXI/00-AXI.md",
+      "title": "00-AXI",
+      "linkedAt": "2026-05-13T10:28:17.552Z",
+      "isPrimary": false
+    },
+    {
+      "path": "03-Protocol/APB/00-APB.md",
+      "title": "00-APB",
+      "linkedAt": "2026-05-13T10:28:17.561Z",
+      "isPrimary": false
+    },
+    {
+      "path": "03-Protocol/I2C/00-I2C.md",
+      "title": "00-I2C",
+      "linkedAt": "2026-05-13T10:28:17.569Z",
+      "isPrimary": false
+    },
+    {
+      "path": "03-Protocol/SPI/00-SPI.md",
+      "title": "00-SPI",
+      "linkedAt": "2026-05-13T10:28:17.576Z",
+      "isPrimary": false
+    },
+    {
+      "path": "03-Protocol/UART/00-UART.md",
+      "title": "00-UART",
+      "linkedAt": "2026-05-13T10:28:17.584Z",
+      "isPrimary": false
+    },
+    {
+      "path": "03-Protocol/00-协议索引.md",
+      "title": "00-协议索引",
+      "linkedAt": "2026-05-13T10:28:17.591Z",
+      "isPrimary": false
+    },
+    {
+      "path": "04-Tools/Linux/00-常用命令.md",
+      "title": "00-常用命令",
+      "linkedAt": "2026-05-13T10:28:17.599Z",
+      "isPrimary": false
+    },
+    {
+      "path": "04-Tools/GVim/00-快捷键.md",
+      "title": "00-快捷键",
+      "linkedAt": "2026-05-13T10:28:17.607Z",
+      "isPrimary": false
+    },
+    {
+      "path": "04-Tools/xrun/00-xrun.md",
+      "title": "00-xrun",
+      "linkedAt": "2026-05-13T10:28:17.615Z",
+      "isPrimary": false
+    },
+    {
+      "path": "04-Tools/imc/00-imc.md",
+      "title": "00-imc",
+      "linkedAt": "2026-05-13T10:28:17.623Z",
+      "isPrimary": false
+    },
+    {
+      "path": "11-UVM源码学习/UVM-uvm_component与uvm_root.md",
+      "title": "UVM-uvm_component与uvm_root",
+      "linkedAt": "2026-05-13T10:28:17.630Z",
+      "isPrimary": false
+    },
+    {
+      "path": "11-UVM源码学习/UVM-uvm中的factory机制.md",
+      "title": "UVM-uvm中的factory机制",
+      "linkedAt": "2026-05-13T10:28:17.638Z",
+      "isPrimary": false
+    },
+    {
+      "path": "11-UVM源码学习/UVM-从run_test浅谈TestBench启动.md",
+      "title": "UVM-从run_test浅谈TestBench启动",
+      "linkedAt": "2026-05-13T10:28:17.646Z",
+      "isPrimary": false
+    },
+    {
+      "path": "11-UVM源码学习/UVM源代码研究.md",
+      "title": "UVM源代码研究",
+      "linkedAt": "2026-05-13T10:28:17.654Z",
+      "isPrimary": false
+    },
+    {
+      "path": "00-索引/00-总索引.md",
+      "title": "00-总索引",
+      "linkedAt": "2026-05-13T10:28:17.662Z",
+      "isPrimary": false
+    }
+  ],
+  "backend": "opencode",
+  "lastUsed": "2026-05-13T10:26:11.082Z",
+  "createdAt": "2026-05-13T10:20:52.476Z",
+  "messageCount": 2,
+  "notePath": "muyu工作站/📑 索引/00-总索引.md",
+  "noteTitle": "00-总索引"
+}

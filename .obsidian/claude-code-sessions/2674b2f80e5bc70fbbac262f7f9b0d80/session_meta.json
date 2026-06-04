@@ -1,0 +1,24 @@
+{
+  "sessionName": "美化配置指南",
+  "isStandalone": false,
+  "linkedNotes": [
+    {
+      "path": "美化配置指南.md",
+      "title": "美化配置指南",
+      "linkedAt": "2026-05-13T10:48:18.423Z",
+      "isPrimary": false
+    },
+    {
+      "path": "配置完成总结.md",
+      "title": "配置完成总结",
+      "linkedAt": "2026-05-13T10:48:18.423Z",
+      "isPrimary": false
+    }
+  ],
+  "backend": "opencode",
+  "lastUsed": "2026-05-13T10:49:09.380Z",
+  "createdAt": "2026-05-13T10:41:55.856Z",
+  "messageCount": 3,
+  "notePath": "美化配置指南.md",
+  "noteTitle": "美化配置指南"
+}

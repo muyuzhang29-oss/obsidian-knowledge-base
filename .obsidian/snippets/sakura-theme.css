@@ -1,0 +1,444 @@
+/* ============================================
+   🌸 魔卡少女樱主题 - Sakura Theme 🌸
+   ============================================ */
+
+:root {
+  --sakura-pink: #f8a4c8;
+  --sakura-light: #fce4f0;
+  --sakura-dark: #d4567a;
+  --magic-purple: #9b59b6;
+  --magic-light: #e8d5f5;
+  --star-gold: #f1c40f;
+  --sky-blue: #5dade2;
+}
+
+/* ============================================
+   侧边栏背景
+   ============================================ */
+
+.workspace-split .workspace-tabs .workspace-tab-content-container {
+  background: linear-gradient(180deg, #fff5f9 0%, #fce4f0 50%, #f8d0e8 100%) !important;
+}
+
+/* ============================================
+   文件夹标题 - 卡片式设计
+   ============================================ */
+
+.nav-folder-title {
+  border-radius: 10px !important;
+  margin: 4px 8px !important;
+  padding: 8px 12px !important;
+  transition: all 0.3s ease !important;
+  position: relative;
+  overflow: hidden;
+  border-left: 5px solid #f8a4c8 !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(252, 228, 240, 0.6)) !important;
+  box-shadow: 0 2px 6px rgba(248, 164, 200, 0.12) !important;
+}
+
+.nav-folder-title:hover {
+  transform: translateX(4px) !important;
+  box-shadow: 0 4px 14px rgba(248, 164, 200, 0.3) !important;
+  background: linear-gradient(135deg, rgba(252, 228, 240, 0.9), rgba(232, 213, 245, 0.7)) !important;
+}
+
+.nav-folder-title-content {
+  font-weight: 600 !important;
+  font-size: 0.93em !important;
+  letter-spacing: 0.01em;
+}
+
+.nav-folder-title .nav-folder-collapse-indicator svg {
+  color: #f8a4c8 !important;
+  transition: transform 0.2s ease !important;
+}
+
+.nav-folder.is-collapsed .nav-folder-collapse-indicator svg {
+  transform: rotate(-90deg) !important;
+}
+
+/* 活动文件夹高亮 */
+.nav-folder.is-active > .nav-folder-title {
+  background: linear-gradient(135deg, rgba(248, 164, 200, 0.25), rgba(155, 89, 182, 0.15)) !important;
+  border-left-color: #d4567a !important;
+  box-shadow: 0 3px 10px rgba(248, 164, 200, 0.2) !important;
+}
+
+/* ============================================
+   一级文件夹 - 根目录下的大分类
+   用背景色深浅区分
+   ============================================ */
+
+.nav-folder.mod-root > .nav-folder > .nav-folder-title {
+  border-left-width: 6px !important;
+  padding: 9px 12px !important;
+  font-size: 0.95em;
+}
+
+/* 二级文件夹 */
+.nav-folder.mod-root > .nav-folder > .nav-folder > .nav-folder-title {
+  border-left-width: 4px !important;
+  border-left-color: #d4b8e8 !important;
+  background: linear-gradient(135deg, rgba(232, 213, 245, 0.4), rgba(255, 255, 255, 0.5)) !important;
+  font-size: 0.9em;
+}
+
+/* 三级文件夹 */
+.nav-folder.mod-root > .nav-folder > .nav-folder > .nav-folder > .nav-folder-title {
+  border-left-width: 3px !important;
+  border-left-color: #aed6f1 !important;
+  background: linear-gradient(135deg, rgba(214, 234, 248, 0.3), rgba(255, 255, 255, 0.4)) !important;
+  font-size: 0.87em;
+}
+
+/* ============================================
+   文件标题
+   ============================================ */
+
+.nav-file-title {
+  border-radius: 8px !important;
+  padding: 4px 10px !important;
+  margin: 1px 8px !important;
+  transition: all 0.2s ease !important;
+  font-size: 0.9em !important;
+}
+
+.nav-file-title:hover {
+  background: rgba(248, 164, 200, 0.12) !important;
+  transform: translateX(2px);
+}
+
+.nav-file.is-active .nav-file-title {
+  background: linear-gradient(90deg, rgba(248, 164, 200, 0.25), rgba(155, 89, 182, 0.1)) !important;
+  border-left: 3px solid #f8a4c8 !important;
+  font-weight: 600 !important;
+  color: #d4567a !important;
+}
+
+/* ============================================
+   标题
+   ============================================ */
+
+.markdown-preview-view h1 {
+  color: #d4567a !important;
+  border-bottom: 3px solid transparent !important;
+  border-image: linear-gradient(90deg, #f8a4c8, #9b59b6, #5dade2) 1 !important;
+  padding-bottom: 12px !important;
+  font-size: 1.8em;
+  font-weight: 700;
+}
+
+.markdown-preview-view h1::after {
+  content: ' ✨';
+  font-size: 0.7em;
+}
+
+.markdown-preview-view h2 {
+  color: #9b59b6 !important;
+  border-bottom: 2px solid #fce4f0 !important;
+  padding-bottom: 8px !important;
+  font-size: 1.5em;
+  font-weight: 600;
+}
+
+.markdown-preview-view h2::before {
+  content: '🌸 ';
+}
+
+.markdown-preview-view h3 {
+  color: #d4567a !important;
+  font-size: 1.25em;
+  font-weight: 600;
+}
+
+.markdown-preview-view h3::before {
+  content: '✦ ';
+  color: #f1c40f;
+}
+
+.markdown-preview-view h4 {
+  color: #7a4070 !important;
+}
+
+.markdown-preview-view p {
+  line-height: 1.8;
+}
+
+.markdown-preview-view li::marker {
+  color: #9b59b6;
+}
+
+/* ============================================
+   Callout
+   ============================================ */
+
+.callout {
+  border-radius: 12px !important;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06) !important;
+  overflow: hidden;
+  position: relative;
+}
+
+.callout::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #f8a4c8, #9b59b6, #5dade2);
+  z-index: 1;
+}
+
+.callout[data-callout="info"] {
+  background: linear-gradient(135deg, #fce4f0, #f8c4e0) !important;
+  border-left: 4px solid #f8a4c8 !important;
+}
+.callout[data-callout="tip"] {
+  background: linear-gradient(135deg, #e8d5f5, #d4b8e8) !important;
+  border-left: 4px solid #9b59b6 !important;
+}
+.callout[data-callout="warning"] {
+  background: linear-gradient(135deg, #fef9e7, #fdebd0) !important;
+  border-left: 4px solid #f1c40f !important;
+}
+.callout[data-callout="danger"],
+.callout[data-callout="failure"] {
+  background: linear-gradient(135deg, #ffebee, #ffcdd2) !important;
+  border-left: 4px solid #e53935 !important;
+}
+.callout[data-callout="example"] {
+  background: linear-gradient(135deg, #d6eaf8, #aed6f1) !important;
+  border-left: 4px solid #5dade2 !important;
+}
+.callout[data-callout="done"],
+.callout[data-callout="success"] {
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9) !important;
+  border-left: 4px solid #4caf50 !important;
+}
+.callout[data-callout="note"],
+.callout[data-callout="quote"] {
+  background: linear-gradient(135deg, #fff5f9, #fce4f0) !important;
+  border-left: 4px solid #f8a4c8 !important;
+}
+.callout[data-callout="abstract"] {
+  background: linear-gradient(135deg, #e0f2f1, #b2dfdb) !important;
+  border-left: 4px solid #009688 !important;
+}
+
+/* ============================================
+   表格
+   ============================================ */
+
+.markdown-preview-view table {
+  border-collapse: separate !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 3px 12px rgba(248, 164, 200, 0.15) !important;
+}
+
+.markdown-preview-view th {
+  background: linear-gradient(135deg, #f8a4c8, #9b59b6) !important;
+  color: white !important;
+  padding: 12px 16px !important;
+  font-weight: 600 !important;
+  border: none !important;
+}
+
+.markdown-preview-view td {
+  padding: 10px 16px !important;
+  border-bottom: 1px solid #fce4f0 !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-top: none !important;
+}
+
+.markdown-preview-view tr:nth-child(even) {
+  background: #fef0f6 !important;
+}
+
+.markdown-preview-view tr:hover td {
+  background: #fce4f0 !important;
+}
+
+/* ============================================
+   代码块
+   ============================================ */
+
+.markdown-preview-view pre {
+  background: linear-gradient(135deg, #2d1b36, #1a0a20) !important;
+  border-radius: 12px !important;
+  padding: 20px !important;
+  box-shadow: 0 6px 16px rgba(155, 89, 182, 0.25) !important;
+  border: 1px solid rgba(248, 164, 200, 0.15) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.markdown-preview-view pre::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #f8a4c8, #9b59b6, #f1c40f);
+}
+
+.markdown-preview-view pre code {
+  color: #e8d5f5 !important;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace !important;
+  line-height: 1.6 !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+.markdown-preview-view code {
+  background: linear-gradient(135deg, #fce4f0, #e8d5f5) !important;
+  padding: 2px 8px !important;
+  border-radius: 6px !important;
+  color: #d4567a !important;
+}
+
+/* ============================================
+   链接、引用、标签
+   ============================================ */
+
+.markdown-preview-view a,
+.internal-link {
+  color: #9b59b6 !important;
+  border-bottom: 1px dashed #f8a4c8 !important;
+  transition: all 0.3s ease !important;
+}
+
+.markdown-preview-view a:hover,
+.internal-link:hover {
+  color: #d4567a !important;
+  border-bottom-color: #d4567a !important;
+  border-bottom-style: solid !important;
+}
+
+.markdown-preview-view blockquote {
+  border-left: 4px solid #f8a4c8 !important;
+  background: linear-gradient(135deg, #fff5f9, #fce4f0) !important;
+  border-radius: 0 10px 10px 0 !important;
+}
+
+.tag {
+  background: linear-gradient(135deg, #fce4f0, #e8d5f5) !important;
+  color: #9b59b6 !important;
+  border-radius: 16px !important;
+  padding: 3px 10px !important;
+  border: 1px solid #f8a4c8 !important;
+  transition: all 0.3s ease !important;
+}
+
+.tag:hover {
+  background: linear-gradient(135deg, #f8a4c8, #9b59b6) !important;
+  color: white !important;
+}
+
+/* ============================================
+   其他元素
+   ============================================ */
+
+.markdown-preview-view .task-list-item {
+  border-radius: 8px !important;
+  background: #fef0f6 !important;
+  list-style: none !important;
+}
+
+.markdown-preview-view .task-list-item-checkbox {
+  accent-color: #f8a4c8 !important;
+}
+
+.markdown-preview-view hr {
+  border: none !important;
+  height: 3px !important;
+  background: linear-gradient(90deg, transparent, #f8a4c8, #9b59b6, #5dade2, transparent) !important;
+}
+
+.markdown-preview-view img {
+  border-radius: 10px !important;
+  box-shadow: 0 4px 12px rgba(155, 89, 182, 0.15) !important;
+  border: 3px solid #fce4f0 !important;
+}
+
+.markdown-preview-view mark {
+  background: linear-gradient(120deg, #fce4f0, #e8d5f5) !important;
+  color: #d4567a;
+}
+
+/* ============================================
+   滚动条
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fff5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #f8a4c8, #9b59b6);
+  border-radius: 5px;
+  border: 2px solid #fff5f9;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #d4567a, #6c3483);
+}
+
+::selection {
+  background: rgba(248, 164, 200, 0.3) !important;
+}
+
+/* ============================================
+   编辑器
+   ============================================ */
+
+.markdown-source-view .cm-cursor {
+  border-left-color: #f8a4c8;
+}
+
+.markdown-source-view .cm-selectionBackground {
+  background: rgba(248, 164, 200, 0.2) !important;
+}
+
+.markdown-source-view .cm-lineNumbers .cm-gutterElement {
+  color: #b080a0;
+}
+
+/* ============================================
+   面板
+   ============================================ */
+
+.workspace-tabs .workspace-tab-header.is-active {
+  color: #d4567a !important;
+  border-bottom-color: #f8a4c8 !important;
+}
+
+.search-input-container {
+  border-radius: 10px !important;
+  border: 1px solid #fce4f0 !important;
+}
+
+.search-input-container:focus-within {
+  border-color: #f8a4c8 !important;
+  box-shadow: 0 0 0 2px rgba(248, 164, 200, 0.2) !important;
+}
+
+/* ============================================
+   动画
+   ============================================ */
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dashboard .callout {
+  animation: fadeInUp 0.4s ease forwards;
+}

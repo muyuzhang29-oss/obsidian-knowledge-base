@@ -1,0 +1,18 @@
+{
+  "sessionName": "数字寄存器",
+  "isStandalone": false,
+  "linkedNotes": [
+    {
+      "path": "muyu工作站/10-Notes/数字寄存器.md",
+      "title": "数字寄存器",
+      "linkedAt": "2026-05-13T09:10:03.709Z",
+      "isPrimary": true
+    }
+  ],
+  "backend": "opencode",
+  "lastUsed": "2026-05-13T09:35:23.350Z",
+  "createdAt": "2026-05-13T09:10:03.709Z",
+  "messageCount": 6,
+  "notePath": "muyu工作站/10-Notes/数字寄存器.md",
+  "noteTitle": "数字寄存器"
+}

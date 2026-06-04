@@ -1,0 +1,83 @@
+/* ============================
+   标签样式优化（按前缀分类着色）
+   ============================ */
+
+.tag {
+  background-color: var(--tag-background);
+  color: var(--tag-color);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.tag:hover {
+  filter: brightness(0.9);
+  transform: translateY(-1px);
+}
+
+.tag[href^="#UVM"] {
+  --tag-background: #dbeafe;
+  --tag-color: #1e40af;
+}
+
+.tag[href^="#SV"] {
+  --tag-background: #fce7f3;
+  --tag-color: #9d174d;
+}
+
+.tag[href^="#AXI"],
+.tag[href^="#Protocol"] {
+  --tag-background: #ede9fe;
+  --tag-color: #6d28d9;
+}
+
+.tag[href^="#Bug"],
+.tag[href^="#Issue"] {
+  --tag-background: #fee2e2;
+  --tag-color: #991b1b;
+}
+
+.tag[href^="#Important"],
+.tag[href^="#核心"] {
+  --tag-background: #fef3c7;
+  --tag-color: #92400e;
+}
+
+.tag[href^="#Verification"],
+.tag[href^="#验证"] {
+  --tag-background: #ccfbf1;
+  --tag-color: #115e59;
+}
+
+.tag[href^="#Tool"],
+.tag[href^="#工具"] {
+  --tag-background: #f0fdf4;
+  --tag-color: #166534;
+}
+
+.tag[href^="#Script"],
+.tag[href^="#脚本"] {
+  --tag-background: #f5f5f4;
+  --tag-color: #44403c;
+}
+
+/* 双向链接样式 */
+.internal-link {
+  color: var(--link-color);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--link-color);
+  transition: all 0.2s ease;
+}
+
+.internal-link:hover {
+  color: var(--link-color-hover);
+  border-bottom: 1px solid var(--link-color-hover);
+}
+
+/* 悬停预览样式 */
+.popover {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}

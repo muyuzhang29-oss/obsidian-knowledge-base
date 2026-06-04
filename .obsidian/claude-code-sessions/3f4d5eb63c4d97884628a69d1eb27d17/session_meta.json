@@ -1,0 +1,54 @@
+{
+  "sessionName": "01-Log解析",
+  "isStandalone": false,
+  "linkedNotes": [
+    {
+      "path": "muyu工作站/07-Scripts/01-Log解析.md",
+      "title": "01-Log解析",
+      "linkedAt": "2026-04-27T11:34:03.045Z",
+      "isPrimary": true
+    },
+    {
+      "path": "muyu工作站/00-索引/11-UVM源码学习/UVM源代码研究.md",
+      "title": "UVM源代码研究",
+      "linkedAt": "2026-04-27T11:39:58.795Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/00-索引/11-UVM源码学习/UVM-从run_test浅谈TestBench启动.md",
+      "title": "UVM-从run_test浅谈TestBench启动",
+      "linkedAt": "2026-04-27T11:39:58.795Z",
+      "isPrimary": false
+    },
+    {
+      "path": "UVM-从run_test浅谈Test Bench的启动.md",
+      "title": "UVM-从run_test浅谈Test Bench的启动",
+      "linkedAt": "2026-04-27T11:39:58.803Z",
+      "isPrimary": false
+    },
+    {
+      "path": "UVM-uvm中的factory机制（uvm-1.2版）.md",
+      "title": "UVM-uvm中的factory机制（uvm-1.2版）",
+      "linkedAt": "2026-04-27T11:39:58.810Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/00-索引/11-UVM源码学习/UVM-uvm_component与uvm_root.md",
+      "title": "UVM-uvm_component与uvm_root",
+      "linkedAt": "2026-04-27T11:39:58.818Z",
+      "isPrimary": false
+    },
+    {
+      "path": "muyu工作站/00-索引/11-UVM源码学习/UVM-uvm中的factory机制.md",
+      "title": "UVM-uvm中的factory机制",
+      "linkedAt": "2026-04-27T11:39:58.825Z",
+      "isPrimary": false
+    }
+  ],
+  "backend": "opencode",
+  "lastUsed": "2026-04-27T11:36:32.380Z",
+  "createdAt": "2026-04-27T11:34:03.045Z",
+  "messageCount": 2,
+  "notePath": "muyu工作站/07-Scripts/01-Log解析.md",
+  "noteTitle": "01-Log解析"
+}

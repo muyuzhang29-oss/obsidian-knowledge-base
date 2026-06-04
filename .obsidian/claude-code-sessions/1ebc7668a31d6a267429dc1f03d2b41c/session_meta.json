@@ -1,0 +1,18 @@
+{
+  "sessionName": "fec",
+  "isStandalone": false,
+  "linkedNotes": [
+    {
+      "path": "muyu工作站/00-索引/脚本/fec.md",
+      "title": "fec",
+      "linkedAt": "2026-04-29T12:28:45.295Z",
+      "isPrimary": true
+    }
+  ],
+  "backend": "opencode",
+  "lastUsed": "2026-04-29T12:28:45.295Z",
+  "createdAt": "2026-04-29T12:28:45.295Z",
+  "messageCount": 1,
+  "notePath": "muyu工作站/00-索引/脚本/fec.md",
+  "noteTitle": "fec"
+}

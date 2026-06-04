@@ -1,0 +1,49 @@
+[
+  {
+    "key": "ctrl+o",
+    "modifiers": ["mod"],
+    "command": "quick-switcher:open"
+  },
+  {
+    "key": "ctrl+n",
+    "modifiers": ["mod"],
+    "command": "workspace:new-tab"
+  },
+  {
+    "key": "ctrl+shift+f",
+    "modifiers": ["mod"],
+    "command": "search:open-search"
+  },
+  {
+    "key": "ctrl+alt+f",
+    "modifiers": ["mod"],
+    "command": "all-search:open-search"
+  },
+  {
+    "key": "ctrl+shift+o",
+    "modifiers": ["mod"],
+    "command": "file-explorer:reveal-active-file"
+  },
+  {
+    "key": "ctrl+\\",
+    "modifiers": ["mod"],
+    "command": "toggle-left-sidebar"
+  },
+  {
+    "key": "ctrl+t",
+    "modifiers": ["mod"],
+    "command": "tag-pane:open"
+  },
+  {
+    "key": "ctrl+]",
+    "modifiers": ["mod"],
+    "command": "outliner:indent",
+    "when": "editorOutliner && editorTextFocus && !editorReadOnly"
+  },
+  {
+    "key": "ctrl+[",
+    "modifiers": ["mod"],
+    "command": "outliner:unindent",
+    "when": "editorOutliner && editorTextFocus && !editorReadOnly"
+  }
+]

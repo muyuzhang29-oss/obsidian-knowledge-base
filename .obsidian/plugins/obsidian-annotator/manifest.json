@@ -1,0 +1,10 @@
+{
+    "id": "obsidian-annotator",
+    "name": "Annotator",
+    "version": "0.2.10",
+    "minAppVersion": "0.12.0",
+    "description": "Annotate PDFs and EPUBs in Obsidian.",
+    "author": "Elias Sundqvist",
+    "authorUrl": "https://github.com/elias-sundqvist",
+    "isDesktopOnly": false
+}

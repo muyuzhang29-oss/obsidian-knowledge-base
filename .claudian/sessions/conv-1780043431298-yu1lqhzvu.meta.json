@@ -1,0 +1,23 @@
+{
+  "id": "conv-1780043431298-yu1lqhzvu",
+  "providerId": "claude",
+  "title": "你是森马模型",
+  "titleGenerationStatus": "failed",
+  "createdAt": 1780043431298,
+  "updatedAt": 1780043433732,
+  "lastResponseAt": 1780043433730,
+  "sessionId": "9e776c69-b156-45e2-b05a-48bfbd9f574c",
+  "providerState": {
+    "providerSessionId": "9e776c69-b156-45e2-b05a-48bfbd9f574c"
+  },
+  "currentNote": "05-Verification/UVM-Template/06-reference_model.md",
+  "usage": {
+    "model": "haiku",
+    "inputTokens": 0,
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 0,
+    "contextWindow": 200000,
+    "contextTokens": 0,
+    "percentage": 0
+  }
+}

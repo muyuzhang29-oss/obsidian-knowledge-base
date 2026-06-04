@@ -1,0 +1,405 @@
+/* ============================================================
+   彩色目录文本框 - 为不同分类文件夹设置专属颜色和图标
+   ============================================================ */
+
+/* ── 基础文件夹样式 ─────────────────────────────── */
+
+.nav-folder-title {
+  position: relative;
+  border-radius: 6px;
+  margin: 2px 0;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.nav-folder-title:hover {
+  /* transform: translateX(2px); */
+}
+
+/* ── 一级文件夹彩色文本框 ─────────────────────────────── */
+
+/* 00-索引 - 红色系 */
+.nav-folder-title-content[data-path="00-索引"] {
+  background: linear-gradient(135deg, #fee2e2, #fecaca);
+  color: #991b1b !important;
+  padding: 4px 10px !important;
+  border-radius: 6px;
+  border-left: 4px solid #dc2626;
+  font-weight: 600;
+}
+
+.nav-folder-title-content[data-path="00-索引"]::before {
+  content: "📑 ";
+  margin-right: 4px;
+}
+
+/* 01-SV语法 - 粉色系 */
+.nav-folder-title-content[data-path="01-SV语法"] {
+  background: linear-gradient(135deg, #fce7f3, #fbcfe8);
+  color: #9d174d !important;
+  padding: 4px 10px !important;
+  border-radius: 6px;
+  border-left: 4px solid #ec4899;
+  font-weight: 600;
+}
+
+.nav-folder-title-content[data-path="01-SV语法"]::before {
+  content: "💎 ";
+  margin-right: 4px;
+}
+
+/* 02-UVM - 蓝色系 */
+.nav-folder-title-content[data-path="02-UVM"] {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  color: #1e40af !important;
+  padding: 4px 10px !important;
+  border-radius: 6px;
+  border-left: 4px solid #3b82f6;
+  font-weight: 600;
+}
+
+.nav-folder-title-content[data-path="02-UVM"]::before {
+  content: "🔬 ";
+  margin-right: 4px;
+}
+
+/* 03-Protocol - 紫色系 */
+.nav-folder-title-content[data-path="03-Protocol"] {
+  background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+  color: #6d28d9 !important;
+  padding: 4px 10px !important;
+  border-radius: 6px;
+  border-left: 4px solid #8b5cf6;
+  font-weight: 600;
+}
+
+.nav-folder-title-content[data-path="03-Protocol"]::before {
+  content: "🔌 ";
+  margin-right: 4px;
+}
+
+/* 04-Tools - 橙色系 */
+.nav-folder-title-content[data-path="04-Tools"] {
+  background: linear-gradient(135deg, #ffedd5, #fed7aa);
+  color: #9a3412 !important;
+  padding: 4px 10px !important;
+  border-radius: 6px;
+  border-left: 4px solid #f97316;
+  font-weight: 600;
+}
+
+.nav-folder-title-content[data-path="04-Tools"]::before {
+  content: "🔧 ";
+  margin-right: 4px;
+}
+
+/* 05-Verification - 青色系 */
+.nav-folder-title-content[data-path="05-Verification"] {
+  background: linear-gradient(135deg, #ccfbf1, #99f6e4);
+  color: #115e59 !important;
+  padding: 4px 10px !important;
+  border-radius: 6px;
+  border-left: 4px solid #14b8a6;
+  font-weight: 600;
+}
+
+.nav-folder-title-content[data-path="05-Verification"]::before {
+  content: "✅ ";
+  margin-right: 4px;
+}
+
+/* 06-Environment - 绿色系 */
+.nav-folder-title-content[data-path="06-Environment"] {
+  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+  color: #166534 !important;
+  padding: 4px 10px !important;
+  border-radius: 6px;
+  border-left: 4px solid #22c55e;
+  font-weight: 600;
+}
+
+.nav-folder-title-content[data-path="06-Environment"]::before {
+  content: "🏗️ ";
+  margin-right: 4px;
+}
+
+/* 07-Scripts - 黄色系 */
+.nav-folder-title-content[data-path="07-Scripts"] {
+  background: linear-gradient(135deg, #fef9c3, #fef08a);
+  color: #854d0e !important;
+  padding: 4px 10px !important;
+  border-radius: 6px;
+  border-left: 4px solid #eab308;
+  font-weight: 600;
+}
+
+.nav-folder-title-content[data-path="07-Scripts"]::before {
+  content: "📜 ";
+  margin-right: 4px;
+}
+
+/* 08-Projects - 靛蓝色系 */
+.nav-folder-title-content[data-path="08-Projects"] {
+  background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+  color: #3730a3 !important;
+  padding: 4px 10px !important;
+  border-radius: 6px;
+  border-left: 4px solid #6366f1;
+  font-weight: 600;
+}
+
+.nav-folder-title-content[data-path="08-Projects"]::before {
+  content: "🚀 ";
+  margin-right: 4px;
+}
+
+/* 09-Issues - 红色系 */
+.nav-folder-title-content[data-path="09-Issues"] {
+  background: linear-gradient(135deg, #fee2e2, #fca5a5);
+  color: #991b1b !important;
+  padding: 4px 10px !important;
+  border-radius: 6px;
+  border-left: 4px solid #ef4444;
+  font-weight: 600;
+}
+
+.nav-folder-title-content[data-path="09-Issues"]::before {
+  content: "⚠️ ";
+  margin-right: 4px;
+}
+
+/* 10-Notes - 天蓝色系 */
+.nav-folder-title-content[data-path="10-Notes"] {
+  background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+  color: #0c4a6e !important;
+  padding: 4px 10px !important;
+  border-radius: 6px;
+  border-left: 4px solid #0ea5e9;
+  font-weight: 600;
+}
+
+.nav-folder-title-content[data-path="10-Notes"]::before {
+  content: "📒 ";
+  margin-right: 4px;
+}
+
+/* 11-UVM源码学习 - 深蓝色系 */
+.nav-folder-title-content[data-path="11-UVM源码学习"] {
+  background: linear-gradient(135deg, #dbeafe, #93c5fd);
+  color: #1e3a8a !important;
+  padding: 4px 10px !important;
+  border-radius: 6px;
+  border-left: 4px solid #2563eb;
+  font-weight: 600;
+}
+
+.nav-folder-title-content[data-path="11-UVM源码学习"]::before {
+  content: "📚 ";
+  margin-right: 4px;
+}
+
+/* ── 二级文件夹样式（协议子文件夹）─────────────────────────────── */
+
+/* AXI */
+.nav-folder-title-content[data-path="03-Protocol/AXI"] {
+  background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+  color: #7c3aed !important;
+  padding: 3px 8px !important;
+  border-radius: 4px;
+  border-left: 3px solid #7c3aed;
+}
+
+.nav-folder-title-content[data-path="03-Protocol/AXI"]::before {
+  content: "⚡ ";
+  margin-right: 3px;
+}
+
+/* APB */
+.nav-folder-title-content[data-path="03-Protocol/APB"] {
+  background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+  color: #0369a1 !important;
+  padding: 3px 8px !important;
+  border-radius: 4px;
+  border-left: 3px solid #0369a1;
+}
+
+.nav-folder-title-content[data-path="03-Protocol/APB"]::before {
+  content: "🔗 ";
+  margin-right: 3px;
+}
+
+/* I2C */
+.nav-folder-title-content[data-path="03-Protocol/I2C"] {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  color: #92400e !important;
+  padding: 3px 8px !important;
+  border-radius: 4px;
+  border-left: 3px solid #d97706;
+}
+
+.nav-folder-title-content[data-path="03-Protocol/I2C"]::before {
+  content: "📡 ";
+  margin-right: 3px;
+}
+
+/* SPI */
+.nav-folder-title-content[data-path="03-Protocol/SPI"] {
+  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+  color: #166534 !important;
+  padding: 3px 8px !important;
+  border-radius: 4px;
+  border-left: 3px solid #16a34a;
+}
+
+.nav-folder-title-content[data-path="03-Protocol/SPI"]::before {
+  content: "🔄 ";
+  margin-right: 3px;
+}
+
+/* UART */
+.nav-folder-title-content[data-path="03-Protocol/UART"] {
+  background: linear-gradient(135deg, #fee2e2, #fecaca);
+  color: #991b1b !important;
+  padding: 3px 8px !important;
+  border-radius: 4px;
+  border-left: 3px solid #dc2626;
+}
+
+.nav-folder-title-content[data-path="03-Protocol/UART"]::before {
+  content: "📨 ";
+  margin-right: 3px;
+}
+
+/* ── 工具子文件夹样式 ─────────────────────────────── */
+
+/* Linux */
+.nav-folder-title-content[data-path="04-Tools/Linux"] {
+  background: linear-gradient(135deg, #fef9c3, #fef08a);
+  color: #854d0e !important;
+  padding: 3px 8px !important;
+  border-radius: 4px;
+  border-left: 3px solid #ca8a04;
+}
+
+.nav-folder-title-content[data-path="04-Tools/Linux"]::before {
+  content: "🐧 ";
+  margin-right: 3px;
+}
+
+/* GVim */
+.nav-folder-title-content[data-path="04-Tools/GVim"] {
+  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+  color: #166534 !important;
+  padding: 3px 8px !important;
+  border-radius: 4px;
+  border-left: 3px solid #16a34a;
+}
+
+.nav-folder-title-content[data-path="04-Tools/GVim"]::before {
+  content: "📝 ";
+  margin-right: 3px;
+}
+
+/* xrun */
+.nav-folder-title-content[data-path="04-Tools/xrun"] {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  color: #1e40af !important;
+  padding: 3px 8px !important;
+  border-radius: 4px;
+  border-left: 3px solid #2563eb;
+}
+
+.nav-folder-title-content[data-path="04-Tools/xrun"]::before {
+  content: "🖥️ ";
+  margin-right: 3px;
+}
+
+/* imc */
+.nav-folder-title-content[data-path="04-Tools/imc"] {
+  background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+  color: #6d28d9 !important;
+  padding: 3px 8px !important;
+  border-radius: 4px;
+  border-left: 3px solid #7c3aed;
+}
+
+.nav-folder-title-content[data-path="04-Tools/imc"]::before {
+  content: "📊 ";
+  margin-right: 3px;
+}
+
+/* ── 特殊文件夹样式 ─────────────────────────────── */
+
+/* muyu工作站 */
+.nav-folder-title-content[data-path="muyu工作站"] {
+  background: linear-gradient(135deg, #fce7f3, #fbcfe8);
+  color: #9d174d !important;
+  padding: 4px 10px !important;
+  border-radius: 6px;
+  border-left: 4px solid #ec4899;
+  font-weight: 600;
+}
+
+.nav-folder-title-content[data-path="muyu工作站"]::before {
+  content: "💻 ";
+  margin-right: 4px;
+}
+
+/* ── 文件夹图标美化 ─────────────────────────────── */
+
+/* 折叠/展开图标美化 */
+.nav-folder-collapse-indicator svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.2s ease;
+  color: var(--text-muted);
+}
+
+.nav-folder.is-collapsed .nav-folder-collapse-indicator svg {
+  transform: rotate(-90deg);
+}
+
+/* 活动文件夹高亮 */
+.nav-folder.is-active > .nav-folder-title {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ── 文件夹计数显示 ─────────────────────────────── */
+
+.nav-folder-title::after {
+  content: attr(data-count);
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--background-modifier-border);
+  color: var(--text-muted);
+  font-size: 0.7em;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+/* ── 动画效果 ─────────────────────────────── */
+
+@keyframes folderPulse {
+  0% { opacity: 0.8; }
+  50% { opacity: 1; }
+  100% { opacity: 0.8; }
+}
+
+.nav-folder-title:hover {
+  animation: folderPulse 1.5s ease-in-out infinite;
+}
+
+/* ── 响应式调整 ─────────────────────────────── */
+
+@media (max-width: 768px) {
+  .nav-folder-title-content[data-path] {
+    padding: 3px 6px !important;
+    font-size: 0.9em;
+  }
+  
+  .nav-folder-title-content[data-path]::before {
+    margin-right: 2px;
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "sessionName": "通用模板",
+  "isStandalone": false,
+  "linkedNotes": [
+    {
+      "path": "muyu工作站/templates/通用模板.md",
+      "title": "通用模板",
+      "linkedAt": "2026-05-13T09:44:06.925Z",
+      "isPrimary": true
+    }
+  ],
+  "backend": "opencode",
+  "lastUsed": "2026-05-13T09:44:06.925Z",
+  "createdAt": "2026-05-13T09:44:06.925Z",
+  "messageCount": 1,
+  "notePath": "muyu工作站/templates/通用模板.md",
+  "noteTitle": "通用模板"
+}

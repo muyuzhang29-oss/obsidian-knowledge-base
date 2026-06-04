@@ -1,0 +1,66 @@
+{
+  "sessionName": "00-总索引",
+  "isStandalone": false,
+  "linkedNotes": [
+    {
+      "path": "muyu工作站/00-索引/00-总索引.md",
+      "title": "00-总索引",
+      "linkedAt": "2026-04-27T11:50:18.268Z",
+      "isPrimary": true
+    },
+    {
+      "path": "muyu工作站/10-Notes/时隙-TimeSlot.md",
+      "title": "时隙-TimeSlot",
+      "linkedAt": "2026-05-13T03:20:12.582Z",
+      "isPrimary": false
+    },
+    {
+      "path": "HOME.md",
+      "title": "HOME",
+      "linkedAt": "2026-05-13T10:33:34.078Z",
+      "isPrimary": false
+    },
+    {
+      "path": "00-工作台/00-主页.md",
+      "title": "00-主页",
+      "linkedAt": "2026-05-13T13:09:26.216Z",
+      "isPrimary": false
+    },
+    {
+      "path": "00-工作台/01-今日任务.md",
+      "title": "01-今日任务",
+      "linkedAt": "2026-05-13T13:09:26.216Z",
+      "isPrimary": false
+    },
+    {
+      "path": "00-工作台/02-学习进度.md",
+      "title": "02-学习进度",
+      "linkedAt": "2026-05-13T13:09:26.226Z",
+      "isPrimary": false
+    },
+    {
+      "path": "12-Life/01-日常规划/00-模板.md",
+      "title": "00-模板",
+      "linkedAt": "2026-05-13T13:09:26.234Z",
+      "isPrimary": false
+    },
+    {
+      "path": "12-Life/02-账本/00-模板.md",
+      "title": "00-模板",
+      "linkedAt": "2026-05-13T13:09:26.242Z",
+      "isPrimary": false
+    },
+    {
+      "path": "12-Life/02-账本/00-统计.md",
+      "title": "00-统计",
+      "linkedAt": "2026-05-13T13:09:26.250Z",
+      "isPrimary": false
+    }
+  ],
+  "backend": "opencode",
+  "lastUsed": "2026-05-13T13:06:48.704Z",
+  "createdAt": "2026-04-27T11:50:18.268Z",
+  "messageCount": 11,
+  "notePath": "muyu工作站/00-索引/00-总索引.md",
+  "noteTitle": "00-总索引"
+}

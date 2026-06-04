@@ -1,0 +1,20 @@
+{
+  "backend": "opencode",
+  "claudeCodePath": "",
+  "autoDetectPath": true,
+  "modelAlias": "",
+  "opencodePath": "D:\\opencode\\opencode-cli.exe",
+  "opencodeAutoDetect": false,
+  "opencodeModel": "",
+  "customSystemPrompt": "",
+  "preserveCursorPosition": true,
+  "timeoutSeconds": 300,
+  "autoAcceptChanges": false,
+  "allowVaultAccess": true,
+  "enablePermissionlessMode": false,
+  "anthropicBaseUrl": "",
+  "anthropicAuthToken": "",
+  "anthropicModel": "",
+  "anthropicSmallFastModel": "",
+  "language": "zh"
+}

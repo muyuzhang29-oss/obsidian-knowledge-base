@@ -1,0 +1,22 @@
+[
+  {
+    "role": "user",
+    "content": "我的目录树一直在很奇怪的内部移动是为什么",
+    "timestamp": "2026-05-13T09:51:33.593Z"
+  },
+  {
+    "role": "assistant",
+    "content": "这个问题比较模糊，能具体描述一下吗？\n\n**可能的原因包括：**\n\n1. **排序设置** — 检查文件浏览器的排序方式（文件资源管理器顶部有排序选项），是否设为\"按修改时间\"等动态排序\n2. **同步工具冲突** — OneDrive/Dropbox/iCloud 等同步工具可能会在后台移动文件\n3. **Obsidian Sync** — 如果你启用了 Obsidian Sync，可能有同步冲突\n4. **插件行为** — 某些插件（如 Custom Sort、Folder Note、Auto Note Mover）会自动移动文件\n5. **其他程序** — 其他编辑器或程序同时在操作 vault 中的文件\n\n**请补充：**\n- 是**文件夹/文件本身**在移动，还是**侧边栏显示顺序**在变？\n- 是否使用了同步工具或 Obsidian Sync？\n- 安装了哪些插件？\n\n这些信息能帮我定位问题。",
+    "timestamp": "2026-05-13T09:51:33.593Z"
+  },
+  {
+    "role": "user",
+    "content": "侧边栏显示，我每次打开子目录内容时候，子目录就会往里面方向移动",
+    "timestamp": "2026-05-13T09:53:15.960Z"
+  },
+  {
+    "role": "assistant",
+    "content": "让我检查一下你的 Obsidian 配置，看看是什么导致了这个行为。找到原因了。问题出在你的 CSS 片段 `knowledge-base-pro.css` 第 53 行：\n\n```css\ntransition: all 0.15s ease !important;\n```\n\n**原因分析：**\n\n`.nav-folder-title` 和 `.nav-file-title` 使用了 `transition: all`，这意味着**所有属性变化都会触发动画**。当你展开/折叠子目录时，Obsidian 会重新计算元素的布局（padding、border-radius、背景等），这些变化会被 `transition` 动画化，导致视觉上看起来像是在\"往里移动\"。\n\n**修复方案：**\n\n只对需要的属性设置过渡，而不是 `all`：已修复。改动：\n\n- `transition: all 0.15s ease` → `transition: background-color 0.15s ease`\n\n现在只对背景色做过渡动画，不会在展开/折叠目录时产生位移效果。重新加载 Obsidian（`Ctrl+R`）即可生效。",
+    "timestamp": "2026-05-13T09:53:15.960Z"
+  }
+]

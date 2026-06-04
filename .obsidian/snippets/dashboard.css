@@ -1,0 +1,142 @@
+/* ============================
+   仪表盘样式 (dashboard.css)
+   ============================ */
+
+.dashboard .markdown-preview-view {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard h1 {
+  color: var(--interactive-accent);
+  border-bottom: 3px solid var(--interactive-accent);
+  padding-bottom: 15px;
+  margin-bottom: 25px;
+}
+
+.dashboard .callout {
+  border-left: 4px solid var(--interactive-accent);
+  background: var(--background-secondary);
+  border-radius: 10px;
+  margin: 15px 0;
+  padding: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.dashboard .callout-title {
+  font-weight: bold;
+  color: var(--interactive-accent);
+  font-size: 1.1em;
+  margin-bottom: 10px;
+}
+
+.dashboard table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 20px 0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.dashboard th {
+  background: var(--interactive-accent);
+  color: white;
+  padding: 15px;
+  text-align: left;
+  font-weight: bold;
+  font-size: 0.95em;
+}
+
+.dashboard td {
+  padding: 12px 15px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  transition: background 0.2s;
+}
+
+.dashboard tr:hover td {
+  background: var(--background-secondary);
+}
+
+.dashboard tr:last-child td {
+  border-bottom: none;
+}
+
+.dashboard a {
+  color: var(--interactive-accent);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.dashboard a:hover {
+  color: var(--text-accent);
+  background: var(--background-secondary);
+  text-decoration: none;
+}
+
+.dashboard code {
+  background: var(--background-secondary);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.9em;
+  border: 1px solid var(--background-modifier-border);
+}
+
+.dashboard pre code {
+  background: transparent;
+  padding: 0;
+  border: none;
+  font-size: 0.85em;
+}
+
+.dashboard strong {
+  color: var(--interactive-accent);
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+.dashboard .task-list-item {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.dashboard .task-list-item:last-child {
+  border-bottom: none;
+}
+
+.dashboard .task-list-item-checkbox {
+  margin-right: 10px;
+}
+
+.dashboard .callout[data-callout="tip"] {
+  border-left-color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.dashboard .callout[data-callout="example"] {
+  border-left-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.dashboard .callout[data-callout="info"] {
+  border-left-color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.1);
+}
+
+@media (max-width: 768px) {
+  .dashboard .markdown-preview-view {
+    padding: 10px;
+  }
+  .dashboard table {
+    font-size: 0.9em;
+  }
+  .dashboard th, .dashboard td {
+    padding: 8px 10px;
+  }
+}

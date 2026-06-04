@@ -1,0 +1,12 @@
+{
+  "tabManagerState": {
+    "openTabs": [
+      {
+        "tabId": "tab-1778678290369-oedw4jw",
+        "conversationId": "conv-1780043431298-yu1lqhzvu"
+      }
+    ],
+    "activeTabId": "tab-1778678290369-oedw4jw"
+  },
+  "claudeCliPath": "C:\\Users\\MI\\AppData\\Local\\nodejs\\node-v22.16.0-win-x64\\node_modules\\@anthropic-ai\\claude-code\\cli-wrapper.cjs"
+}

@@ -1,0 +1,77 @@
+/* 取消侧边栏缩进特效 */
+
+/* 重置文件夹标题样式 */
+.nav-folder-title {
+  border-left: none !important;
+  transform: none !important;
+  padding: 4px 8px !important;
+  margin: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+.nav-folder-title:hover {
+  transform: none !important;
+  background: var(--background-modifier-hover) !important;
+  box-shadow: none !important;
+}
+
+/* 重置文件标题样式 */
+.nav-file-title {
+  border-left: none !important;
+  transform: none !important;
+  padding: 4px 8px !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+}
+
+.nav-file-title:hover {
+  transform: none !important;
+  background: var(--background-modifier-hover) !important;
+}
+
+/* 重置活动文件夹/文件样式 */
+.nav-folder.is-active > .nav-folder-title {
+  background: var(--background-modifier-hover) !important;
+  border-left: none !important;
+  box-shadow: none !important;
+}
+
+.nav-file.is-active .nav-file-title {
+  background: var(--background-modifier-hover) !important;
+  border-left: none !important;
+}
+
+/* 重置所有层级文件夹的缩进 */
+.nav-folder.mod-root > .nav-folder > .nav-folder-title,
+.nav-folder.mod-root > .nav-folder > .nav-folder > .nav-folder-title,
+.nav-folder.mod-root > .nav-folder > .nav-folder > .nav-folder > .nav-folder-title {
+  border-left-width: 0 !important;
+  padding: 4px 8px !important;
+  font-size: inherit !important;
+  background: transparent !important;
+  border-left-color: transparent !important;
+}
+
+/* 重置侧边栏背景 */
+.workspace-split .workspace-tabs .workspace-tab-content-container {
+  background: var(--background-primary) !important;
+}
+
+/* 重置折叠图标 */
+.nav-folder-collapse-indicator svg {
+  color: var(--text-muted) !important;
+  transition: none !important;
+}
+
+.nav-folder.is-collapsed .nav-folder-collapse-indicator svg {
+  transform: none !important;
+}
+
+/* 重置所有动画 */
+.nav-folder-title,
+.nav-file-title {
+  transition: none !important;
+}

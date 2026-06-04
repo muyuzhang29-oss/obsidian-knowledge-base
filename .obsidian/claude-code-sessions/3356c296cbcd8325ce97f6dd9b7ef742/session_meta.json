@@ -1,0 +1,18 @@
+{
+  "sessionName": "00-I2C",
+  "isStandalone": false,
+  "linkedNotes": [
+    {
+      "path": "muyu工作站/03-Protocol/I2C/00-I2C.md",
+      "title": "00-I2C",
+      "linkedAt": "2026-04-17T08:12:01.895Z",
+      "isPrimary": true
+    }
+  ],
+  "backend": "opencode",
+  "lastUsed": "2026-04-17T08:12:01.895Z",
+  "createdAt": "2026-04-17T08:12:01.895Z",
+  "messageCount": 1,
+  "notePath": "muyu工作站/03-Protocol/I2C/00-I2C.md",
+  "noteTitle": "00-I2C"
+}

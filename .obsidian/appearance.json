@@ -1,0 +1,11 @@
+{
+  "baseFontSize": 16,
+  "accentColor": "#89b4fa",
+  "theme": "obsidian",
+  "cssTheme": "",
+  "nativeMenus": false,
+  "translucency": true,
+  "enabledCssSnippets": [
+    "01-知识库美化"
+  ]
+}

@@ -1,0 +1,704 @@
+/* ============================================================
+   Obsidian 全面美化主题 — Knowledge Base Pro
+   覆盖：编辑器、侧边栏、标题、Callout、表格、代码块、UI
+   ============================================================ */
+
+/* ── 全局字体与排版 ─────────────────────────────── */
+
+:root {
+  /* 主色调 */
+  --accent-primary: #6366f1;
+  --accent-secondary: #8b5cf6;
+  --accent-success: #10b981;
+  --accent-warning: #f59e0b;
+  --accent-danger: #ef4444;
+  --accent-info: #3b82f6;
+
+  /* 表面色 */
+  --surface-0: #ffffff;
+  --surface-1: #f8fafc;
+  --surface-2: #f1f5f9;
+  --surface-3: #e2e8f0;
+
+  /* 文字色 */
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+
+  /* 间距 */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+}
+
+/* 暗色主题覆盖 */
+.theme-dark {
+  --surface-0: #0f172a;
+  --surface-1: #1e293b;
+  --surface-2: #334155;
+  --surface-3: #475569;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #64748b;
+}
+
+/* ── 侧边栏美化 ─────────────────────────────── */
+
+/* 文件列表行间距 */
+.nav-folder-title,
+.nav-file-title {
+  padding: 4px 8px !important;
+  border-radius: var(--radius-sm) !important;
+  transition: background-color 0.15s ease !important;
+}
+
+.nav-folder-title:hover,
+.nav-file-title:hover {
+  background: var(--background-modifier-hover) !important;
+}
+
+.nav-file-title.is-active {
+  background: var(--background-modifier-active-hover) !important;
+  font-weight: 600 !important;
+}
+
+/* 侧边栏面板标题 */
+.workspace-tabs .mod-active .workspace-tab-header {
+  border-bottom: 2px solid var(--accent-primary) !important;
+}
+
+/* ── 编辑器区域 ─────────────────────────────── */
+
+/* 阅读视图内容区 */
+.markdown-preview-view {
+  padding: 24px 32px !important;
+  line-height: 1.8 !important;
+  font-size: 15px !important;
+  color: var(--text-primary) !important;
+}
+
+/* 编辑器视图 */
+.markdown-source-view {
+  font-size: 14.5px !important;
+  line-height: 1.75 !important;
+}
+
+/* ── 标题样式 ─────────────────────────────── */
+
+.markdown-preview-view h1 {
+  font-size: 1.85em !important;
+  font-weight: 800 !important;
+  margin-top: 2.5em !important;
+  margin-bottom: 0.6em !important;
+  padding-bottom: 0.4em !important;
+  border-bottom: 3px solid var(--accent-primary) !important;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.markdown-preview-view h2 {
+  font-size: 1.5em !important;
+  font-weight: 700 !important;
+  margin-top: 2em !important;
+  margin-bottom: 0.5em !important;
+  padding-bottom: 0.3em !important;
+  border-bottom: 2px solid var(--accent-secondary) !important;
+  color: var(--accent-secondary) !important;
+}
+
+.markdown-preview-view h3 {
+  font-size: 1.25em !important;
+  font-weight: 700 !important;
+  margin-top: 1.8em !important;
+  margin-bottom: 0.4em !important;
+  color: var(--text-primary) !important;
+  position: relative;
+  padding-left: 16px !important;
+}
+
+.markdown-preview-view h3::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 4px !important;
+  bottom: 4px !important;
+  width: 4px !important;
+  background: var(--accent-primary) !important;
+  border-radius: 2px !important;
+}
+
+.markdown-preview-view h4 {
+  font-size: 1.1em !important;
+  font-weight: 600 !important;
+  margin-top: 1.5em !important;
+  margin-bottom: 0.3em !important;
+  color: var(--text-secondary) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* ── Callout 样式全面美化 ─────────────────────────────── */
+
+.callout {
+  border-radius: var(--radius-md) !important;
+  margin: 1.2em 0 !important;
+  border: 1px solid transparent !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+  transition: box-shadow 0.2s ease !important;
+}
+
+.callout:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+}
+
+.callout-title {
+  font-weight: 700 !important;
+  font-size: 0.95em !important;
+  padding: 10px 16px !important;
+}
+
+.callout-icon {
+  margin-right: 8px !important;
+}
+
+.callout-content {
+  padding: 8px 16px 12px !important;
+  font-size: 0.93em !important;
+  line-height: 1.7 !important;
+}
+
+/* 各类型 Callout 样式 */
+.callout[data-callout="info"] {
+  border-left: 4px solid var(--accent-info) !important;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), transparent) !important;
+}
+.callout[data-callout="info"] .callout-title {
+  color: var(--accent-info) !important;
+}
+
+.callout[data-callout="tip"],
+.callout[data-callout="hint"] {
+  border-left: 4px solid var(--accent-success) !important;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), transparent) !important;
+}
+.callout[data-callout="tip"] .callout-title,
+.callout[data-callout="hint"] .callout-title {
+  color: var(--accent-success) !important;
+}
+
+.callout[data-callout="warning"],
+.callout[data-callout="caution"] {
+  border-left: 4px solid var(--accent-warning) !important;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), transparent) !important;
+}
+.callout[data-callout="warning"] .callout-title,
+.callout[data-callout="caution"] .callout-title {
+  color: var(--accent-warning) !important;
+}
+
+.callout[data-callout="danger"] {
+  border-left: 4px solid var(--accent-danger) !important;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), transparent) !important;
+}
+.callout[data-callout="danger"] .callout-title {
+  color: var(--accent-danger) !important;
+}
+
+.callout[data-callout="example"] {
+  border-left: 4px solid var(--accent-secondary) !important;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), transparent) !important;
+}
+.callout[data-callout="example"] .callout-title {
+  color: var(--accent-secondary) !important;
+}
+
+.callout[data-callout="note"] {
+  border-left: 4px solid var(--text-muted) !important;
+  background: var(--surface-1) !important;
+}
+.callout[data-callout="note"] .callout-title {
+  color: var(--text-secondary) !important;
+}
+
+.callout[data-callout="abstract"],
+.callout[data-callout="summary"],
+.callout[data-callout="tldr"] {
+  border-left: 4px solid var(--accent-primary) !important;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), transparent) !important;
+}
+.callout[data-callout="abstract"] .callout-title,
+.callout[data-callout="summary"] .callout-title,
+.callout[data-callout="tldr"] .callout-title {
+  color: var(--accent-primary) !important;
+}
+
+.callout[data-callout="quote"] {
+  border-left: 4px solid var(--text-muted) !important;
+  background: var(--surface-1) !important;
+  font-style: italic !important;
+}
+
+.callout[data-callout="important"] {
+  border-left: 4px solid #ec4899 !important;
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.05), transparent) !important;
+}
+.callout[data-callout="important"] .callout-title {
+  color: #ec4899 !important;
+}
+
+/* 可折叠 Callout */
+.callout[data-callout*="-"] > .callout-title {
+  cursor: pointer !important;
+}
+
+/* ── 表格样式 ─────────────────────────────── */
+
+.markdown-preview-view table {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  width: 100% !important;
+  margin: 1.2em 0 !important;
+  font-size: 0.9em !important;
+  border-radius: var(--radius-md) !important;
+  overflow: hidden !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06) !important;
+}
+
+.markdown-preview-view thead tr {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)) !important;
+}
+
+.markdown-preview-view th {
+  background: transparent !important;
+  font-weight: 600 !important;
+  text-align: left !important;
+  padding: 12px 16px !important;
+  border: none !important;
+  color: white !important;
+  font-size: 0.88em !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.markdown-preview-view td {
+  padding: 10px 16px !important;
+  border: none !important;
+  border-bottom: 1px solid var(--surface-3) !important;
+  color: var(--text-primary) !important;
+}
+
+.markdown-preview-view tr:last-child td {
+  border-bottom: none !important;
+}
+
+.markdown-preview-view tbody tr:nth-child(even) {
+  background: var(--surface-1) !important;
+}
+
+.markdown-preview-view tbody tr:hover td {
+  background: rgba(99, 102, 241, 0.06) !important;
+}
+
+/* ── 代码块样式 ─────────────────────────────── */
+
+.markdown-preview-view pre {
+  border-radius: var(--radius-md) !important;
+  border: 1px solid var(--surface-3) !important;
+  margin: 1.2em 0 !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+  position: relative !important;
+}
+
+.markdown-preview-view pre code {
+  font-size: 0.85em !important;
+  line-height: 1.7 !important;
+  padding: 16px 20px !important;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace !important;
+}
+
+.markdown-preview-view code {
+  font-size: 0.88em !important;
+  padding: 2px 7px !important;
+  border-radius: 5px !important;
+  background: var(--surface-2) !important;
+  color: var(--accent-danger) !important;
+  font-weight: 500 !important;
+  border: 1px solid var(--surface-3) !important;
+}
+
+/* 代码块语言标签 */
+.markdown-preview-view pre[class*="language-"]::before {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  padding: 4px 12px !important;
+  font-size: 0.72em !important;
+  font-weight: 600 !important;
+  color: var(--text-muted) !important;
+  background: var(--surface-2) !important;
+  border-radius: 0 var(--radius-md) 0 var(--radius-sm) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+}
+
+pre.language-verilog::before,
+pre.language-systemverilog::before {
+  content: "Verilog" !important;
+}
+
+pre.language-python::before {
+  content: "Python" !important;
+}
+
+pre.language-mermaid::before {
+  content: "Mermaid" !important;
+}
+
+/* ── 引用块 ─────────────────────────────── */
+
+.markdown-preview-view blockquote {
+  border-left: 4px solid var(--accent-primary) !important;
+  padding: 12px 20px !important;
+  margin: 1.2em 0 !important;
+  background: var(--surface-1) !important;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0 !important;
+  color: var(--text-secondary) !important;
+  font-style: normal !important;
+}
+
+/* ── 分隔线 ─────────────────────────────── */
+
+.markdown-preview-view hr {
+  border: none !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, transparent, var(--accent-primary), var(--accent-secondary), transparent) !important;
+  margin: 2.5em 0 !important;
+  border-radius: 1px !important;
+}
+
+/* ── 高亮文本 ─────────────────────────────── */
+
+.markdown-preview-view mark,
+mark {
+  background: linear-gradient(120deg, rgba(251, 191, 36, 0.2) 0%, rgba(251, 191, 36, 0.4) 100%) !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  font-weight: 600 !important;
+  color: inherit !important;
+  border-bottom: 2px solid rgba(251, 191, 36, 0.6) !important;
+}
+
+/* ── 链接样式 ─────────────────────────────── */
+
+.internal-link {
+  color: var(--accent-primary) !important;
+  text-decoration: none !important;
+  border-bottom: 1px dashed var(--accent-primary) !important;
+  transition: all 0.2s ease !important;
+  font-weight: 500 !important;
+}
+
+.internal-link:hover {
+  color: var(--accent-secondary) !important;
+  border-bottom: 2px solid var(--accent-secondary) !important;
+  background: rgba(99, 102, 241, 0.06) !important;
+  border-radius: 2px !important;
+}
+
+/* 外部链接 */
+.external-link {
+  color: var(--accent-info) !important;
+  border-bottom: 1px dashed var(--accent-info) !important;
+}
+
+/* ── 标签样式 ─────────────────────────────── */
+
+.tag {
+  display: inline-block !important;
+  padding: 2px 10px !important;
+  border-radius: 12px !important;
+  font-size: 0.78em !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.3px !important;
+  transition: all 0.2s ease !important;
+  border: 1px solid transparent !important;
+}
+
+.tag:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+}
+
+.tag[href^="#UVM"] {
+  background: #dbeafe !important;
+  color: #1e40af !important;
+  border-color: #93c5fd !important;
+}
+.tag[href^="#SV"] {
+  background: #fce7f3 !important;
+  color: #9d174d !important;
+  border-color: #f9a8d4 !important;
+}
+.tag[href^="#AXI"],
+.tag[href^="#Protocol"] {
+  background: #ede9fe !important;
+  color: #6d28d9 !important;
+  border-color: #c4b5fd !important;
+}
+.tag[href^="#Bug"],
+.tag[href^="#Issue"] {
+  background: #fee2e2 !important;
+  color: #991b1b !important;
+  border-color: #fca5a5 !important;
+}
+.tag[href^="#Important"],
+.tag[href^="#核心"] {
+  background: #fef3c7 !important;
+  color: #92400e !important;
+  border-color: #fcd34d !important;
+}
+.tag[href^="#Verification"],
+.tag[href^="#验证"] {
+  background: #ccfbf1 !important;
+  color: #115e59 !important;
+  border-color: #6ee7b7 !important;
+}
+.tag[href^="#Tool"],
+.tag[href^="#工具"] {
+  background: #f0fdf4 !important;
+  color: #166534 !important;
+  border-color: #86efac !important;
+}
+.tag[href^="#Script"],
+.tag[href^="#脚本"] {
+  background: #f5f5f4 !important;
+  color: #44403c !important;
+  border-color: #d6d3d1 !important;
+}
+.tag[href^="#时序"],
+.tag[href^="#FIFO"] {
+  background: #fef7cd !important;
+  color: #854d0e !important;
+  border-color: #fde047 !important;
+}
+.tag[href^="#寄存器"] {
+  background: #e0e7ff !important;
+  color: #3730a3 !important;
+  border-color: #a5b4fc !important;
+}
+
+/* ── 列表样式 ─────────────────────────────── */
+
+.markdown-preview-view ul {
+  padding-left: 1.5em !important;
+}
+
+.markdown-preview-view ul li {
+  padding: 3px 0 !important;
+  line-height: 1.7 !important;
+}
+
+.markdown-preview-view ul li::marker {
+  color: var(--accent-primary) !important;
+  font-weight: 700 !important;
+}
+
+.markdown-preview-view ol li::marker {
+  color: var(--accent-primary) !important;
+  font-weight: 700 !important;
+}
+
+/* 任务列表 */
+.markdown-preview-view .task-list-item {
+  list-style: none !important;
+  margin-left: -1.5em !important;
+  padding: 4px 0 !important;
+}
+
+.markdown-preview-view .task-list-item-checkbox {
+  appearance: none !important;
+  width: 18px !important;
+  height: 18px !important;
+  border: 2px solid var(--accent-primary) !important;
+  border-radius: 4px !important;
+  position: relative !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  vertical-align: middle !important;
+  margin-right: 8px !important;
+}
+
+.markdown-preview-view .task-list-item-checkbox:checked {
+  background: var(--accent-success) !important;
+  border-color: var(--accent-success) !important;
+}
+
+.markdown-preview-view .task-list-item-checkbox:checked::after {
+  content: "✓" !important;
+  color: white !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+/* ── Mermaid 图表 ─────────────────────────────── */
+
+.markdown-preview-view .mermaid-wrapper,
+.markdown-preview-view .mermaid {
+  background: var(--surface-1) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 20px !important;
+  margin: 1.5em 0 !important;
+  border: 1px solid var(--surface-3) !important;
+  text-align: center !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* ── 数学公式 ─────────────────────────────── */
+
+.math-block {
+  background: var(--surface-1) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 16px 20px !important;
+  margin: 1.2em 0 !important;
+  border: 1px solid var(--surface-3) !important;
+  overflow-x: auto !important;
+}
+
+.markdown-preview-view .katex-display {
+  margin: 0.8em 0 !important;
+}
+
+/* ── 属性面板（Frontmatter） ─────────────────────────────── */
+
+.metadata-container {
+  background: var(--surface-1) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 16px !important;
+  margin-bottom: 24px !important;
+  border: 1px solid var(--surface-3) !important;
+}
+
+.metadata-property-title {
+  font-weight: 700 !important;
+  font-size: 0.85em !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  color: var(--text-muted) !important;
+}
+
+/* ── 搜索结果 ─────────────────────────────── */
+
+.search-result-container {
+  border-radius: var(--radius-md) !important;
+  overflow: hidden !important;
+}
+
+.search-result-file-title {
+  background: var(--surface-2) !important;
+  padding: 8px 12px !important;
+  font-weight: 600 !important;
+  border-radius: var(--radius-sm) !important;
+}
+
+/* ── 弹出预览（Hover Preview） ─────────────────────────────── */
+
+.popover {
+  border-radius: var(--radius-lg) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid var(--surface-3) !important;
+  overflow: hidden !important;
+}
+
+.popover .markdown-preview-view {
+  padding: 16px !important;
+}
+
+/* ── 状态栏 ─────────────────────────────── */
+
+.status-bar {
+  background: var(--surface-1) !important;
+  border-top: 1px solid var(--surface-3) !important;
+  font-size: 0.82em !important;
+}
+
+.status-bar-item {
+  padding: 4px 10px !important;
+}
+
+/* ── 标签页 ─────────────────────────────── */
+
+.workspace-tab-header {
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0 !important;
+}
+
+.workspace-tab-header.is-active {
+  background: var(--surface-0) !important;
+  border-bottom: 2px solid var(--accent-primary) !important;
+}
+
+/* ── 面包屑导航 ─────────────────────────────── */
+
+.breadcrumb {
+  font-size: 0.85em !important;
+  color: var(--text-muted) !important;
+}
+
+.breadcrumb-separator {
+  color: var(--text-muted) !important;
+  margin: 0 4px !important;
+}
+
+/* ── 滚动条美化 ─────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--surface-3) !important;
+  border-radius: 4px !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted) !important;
+}
+
+/* ── 动画过渡 ─────────────────────────────── */
+
+.markdown-preview-view * {
+  transition: background-color 0.15s ease, color 0.15s ease !important;
+}
+
+/* ── 打印样式 ─────────────────────────────── */
+
+@media print {
+  .callout {
+    break-inside: avoid !important;
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+  }
+
+  .markdown-preview-view table {
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+  }
+
+  .markdown-preview-view pre {
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+  }
+}

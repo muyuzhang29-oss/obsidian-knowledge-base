@@ -1,0 +1,13 @@
+{
+  "autoSaveInterval": 300,
+  "autoPullInterval": 300,
+  "autoPullOnBoot": true,
+  "autoCommitMessage": "vault backup: {{date}}",
+  "autoCommitOnFileChange": false,
+  "syncOnSave": false,
+  "pullUpdatesOnStartup": true,
+  "pushOnBackup": true,
+  "showStatusBar": true,
+  "showBranchInStatusBar": true,
+  "showCommitHashInStatusBar": false
+}

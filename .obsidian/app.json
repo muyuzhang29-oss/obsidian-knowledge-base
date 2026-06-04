@@ -1,0 +1,27 @@
+{
+  "interfaceFontSize": 14,
+  "lightTheme": "obsidian",
+  "darkTheme": "obsidian",
+  "cssSnippets": [
+    "01-知识库美化"
+  ],
+  "alwaysUpdateLinks": true,
+  "detectAllFiles": true,
+  "showUnsupportedFiles": true,
+  "pdfExportSettings": {
+    "pageWidth": 8.5,
+    "pageHeight": 11,
+    "marginTop": 0.75,
+    "marginBottom": 0.75,
+    "marginLeft": 0.75,
+    "marginRight": 0.75
+  },
+  "showFrontmatter": false,
+  "livePreview": true,
+  "strictLineBreaks": false,
+  "readableLineLength": true,
+  "defaultViewMode": "source",
+  "attachmentFolderPath": "附件",
+  "newFileLocation": "folder",
+  "newFileFolderPath": "00-收件箱"
+}

@@ -1,0 +1,172 @@
+/* ============================
+   标题样式优化
+   ============================ */
+
+.markdown-preview-view h1 {
+  font-size: 1.8em;
+  font-weight: 700;
+  margin-top: 2em;
+  margin-bottom: 0.5em;
+  padding-bottom: 0.3em;
+  border-bottom: 3px solid var(--h1-color);
+}
+
+.markdown-preview-view h2 {
+  font-size: 1.5em;
+  font-weight: 600;
+  margin-top: 1.8em;
+  margin-bottom: 0.4em;
+  padding-bottom: 0.25em;
+  border-bottom: 2px solid var(--h2-color);
+}
+
+.markdown-preview-view h3 {
+  font-size: 1.25em;
+  font-weight: 600;
+  margin-top: 1.5em;
+  margin-bottom: 0.3em;
+}
+
+.markdown-preview-view h4 {
+  font-size: 1.1em;
+  font-weight: 600;
+  margin-top: 1.2em;
+}
+
+/* 标题编号装饰 */
+.markdown-preview-view h3::before {
+  content: "§ ";
+  opacity: 0.4;
+  font-weight: 400;
+}
+
+/* ============================
+   Callout 样式增强
+   ============================ */
+
+.callout {
+  border-radius: 8px;
+  margin: 1em 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.callout-title {
+  font-weight: 600;
+  font-size: 0.95em;
+}
+
+.callout-content {
+  font-size: 0.92em;
+  line-height: 1.6;
+}
+
+/* 验证要点特殊样式 */
+.callout[data-callout="tip"] {
+  border-left-color: #2f9e44;
+}
+
+/* 设计警告特殊样式 */
+.callout[data-callout="danger"] {
+  border-left-color: #e03131;
+  background: linear-gradient(135deg, rgba(224, 49, 49, 0.03), transparent);
+}
+
+/* ============================
+   代码块样式增强
+   (已移至 01-知识库美化.css 统一管理)
+   ============================ */
+
+/* 代码块样式由 01-知识库美化.css 中的 Catppuccin Mocha 主题管理 */
+
+/* ============================
+   表格样式优化
+   ============================ */
+
+.markdown-preview-view table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+  font-size: 0.9em;
+}
+
+.markdown-preview-view th {
+  background: var(--background-secondary);
+  font-weight: 600;
+  text-align: left;
+  padding: 10px 12px;
+  border: 1px solid var(--background-modifier-border);
+}
+
+.markdown-preview-view td {
+  padding: 8px 12px;
+  border: 1px solid var(--background-modifier-border);
+}
+
+.markdown-preview-view tr:hover td {
+  background: var(--background-secondary);
+}
+
+/* ============================
+   引用块样式
+   ============================ */
+
+blockquote {
+  border-left: 4px solid var(--text-faint);
+  padding: 0.5em 1em;
+  margin: 1em 0;
+  color: var(--text-muted);
+  background: var(--background-secondary);
+  border-radius: 0 6px 6px 0;
+}
+
+/* ============================
+   水平分隔线
+   ============================ */
+
+hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--text-faint), transparent);
+  margin: 2em 0;
+}
+
+/* ============================
+   高亮文本
+   ============================ */
+
+mark {
+  background: linear-gradient(120deg, #fef3c7 0%, #fde68a 100%);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+/* ============================
+   任务列表样式
+   ============================ */
+
+input[type="checkbox"] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--text-faint);
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+input[type="checkbox"]:checked {
+  background: var(--interactive-accent);
+  border-color: var(--interactive-accent);
+}
+
+input[type="checkbox"]:checked::after {
+  content: "✓";
+  color: white;
+  font-size: 12px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

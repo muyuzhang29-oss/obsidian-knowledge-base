@@ -1,0 +1,18 @@
+{
+  "sessionName": "时隙-TimeSlot",
+  "isStandalone": false,
+  "linkedNotes": [
+    {
+      "path": "muyu工作站/10-Notes/时隙-TimeSlot.md",
+      "title": "时隙-TimeSlot",
+      "linkedAt": "2026-05-13T08:22:02.439Z",
+      "isPrimary": true
+    }
+  ],
+  "backend": "opencode",
+  "lastUsed": "2026-05-13T08:29:38.548Z",
+  "createdAt": "2026-05-13T08:22:02.439Z",
+  "messageCount": 2,
+  "notePath": "muyu工作站/10-Notes/时隙-TimeSlot.md",
+  "noteTitle": "时隙-TimeSlot"
+}
