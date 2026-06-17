@@ -8,7 +8,7 @@ updated: 2026-06-02
 
 > 组装 driver + sequencer + monitor，对外暴露统一接口
 
-```systemverilog
+```verilog
 `ifndef SPI_AGENT_SV
 `define SPI_AGENT_SV
 

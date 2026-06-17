@@ -8,7 +8,7 @@ updated: 2026-06-02
 
 > 从 vif 采集 DUT 输出，填入 transaction 的输出字段，发送给 scoreboard
 
-```systemverilog
+```verilog
 `ifndef SPI_MON_SV
 `define SPI_MON_SV
 

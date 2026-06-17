@@ -98,7 +98,7 @@ assign PSLVERR = (state == ERROR);
 
 ### APB Transaction
 
-```systemverilog
+```verilog
 class apb_transaction extends uvm_sequence_item;
     rand bit [31:0] addr;
     rand bit [31:0] data;
@@ -115,7 +115,7 @@ endclass
 
 ### APB Driver
 
-```systemverilog
+```verilog
 class apb_driver extends uvm_driver #(apb_transaction);
     virtual apb_if vif;
 

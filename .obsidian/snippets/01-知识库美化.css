@@ -1723,3 +1723,3170 @@ a.external-link {
     border-bottom: none;
   }
 }
+
+
+/* ============================================================
+   20. Sidebar Pro + Theme Polish
+   更新: 2026-06-10
+   目标:
+   - 修复文件浏览器三级目录缩进不清晰的问题
+   - 用单一覆盖层统一侧边栏、面板、搜索和活动态
+   - 保持工程知识库风格：克制、清晰、适合长期阅读
+   ============================================================ */
+
+:root {
+  --kb-sidebar-bg: #f6f8fb;
+  --kb-sidebar-panel: #ffffff;
+  --kb-sidebar-panel-soft: #eef3f8;
+  --kb-sidebar-border: #d8e1ec;
+  --kb-sidebar-line: rgba(100, 116, 139, 0.22);
+  --kb-sidebar-hover: rgba(14, 165, 233, 0.08);
+  --kb-sidebar-active: rgba(14, 165, 233, 0.14);
+  --kb-sidebar-active-border: #0ea5e9;
+  --kb-sidebar-text: #263445;
+  --kb-sidebar-muted: #6b7a8d;
+  --kb-sidebar-radius: 7px;
+  --kb-sidebar-indent: 17px;
+  --kb-sidebar-item-height: 28px;
+
+  --kb-domain-index: #2563eb;
+  --kb-domain-sv: #0891b2;
+  --kb-domain-uvm: #7c3aed;
+  --kb-domain-protocol: #059669;
+  --kb-domain-tools: #d97706;
+  --kb-domain-verification: #db2777;
+  --kb-domain-projects: #0f766e;
+}
+
+.theme-dark {
+  --kb-sidebar-bg: #151922;
+  --kb-sidebar-panel: #1b2130;
+  --kb-sidebar-panel-soft: #222a3a;
+  --kb-sidebar-border: #303a4d;
+  --kb-sidebar-line: rgba(148, 163, 184, 0.18);
+  --kb-sidebar-hover: rgba(56, 189, 248, 0.09);
+  --kb-sidebar-active: rgba(56, 189, 248, 0.16);
+  --kb-sidebar-active-border: #38bdf8;
+  --kb-sidebar-text: #d7dee8;
+  --kb-sidebar-muted: #8b98aa;
+}
+
+/* App shell */
+.workspace {
+  background: var(--kb-bg-primary);
+}
+
+.workspace-ribbon,
+.workspace-sidedock-vault-profile,
+.workspace-split.mod-left-split,
+.workspace-split.mod-right-split {
+  background: var(--kb-sidebar-bg) !important;
+}
+
+.workspace-split.mod-left-split .workspace-tabs,
+.workspace-split.mod-right-split .workspace-tabs {
+  background: var(--kb-sidebar-bg) !important;
+}
+
+.workspace-split.mod-left-split .workspace-tab-container,
+.workspace-split.mod-right-split .workspace-tab-container,
+.workspace-split.mod-left-split .workspace-tab-content-container,
+.workspace-split.mod-right-split .workspace-tab-content-container {
+  background: var(--kb-sidebar-bg) !important;
+}
+
+.workspace-leaf-content[data-type="file-explorer"] .view-content,
+.workspace-leaf-content[data-type="search"] .view-content,
+.workspace-leaf-content[data-type="tag"] .view-content,
+.workspace-leaf-content[data-type="outline"] .view-content,
+.workspace-leaf-content[data-type="bookmarks"] .view-content {
+  background: var(--kb-sidebar-bg);
+  padding: 8px 7px;
+}
+
+/* Panel headers and tabs */
+.workspace-tab-header-container {
+  background: var(--kb-sidebar-bg) !important;
+  border-bottom: 1px solid var(--kb-sidebar-border);
+}
+
+.workspace-tab-header {
+  color: var(--kb-sidebar-muted);
+  border-radius: var(--kb-sidebar-radius) var(--kb-sidebar-radius) 0 0;
+  transition: background var(--kb-transition-fast), color var(--kb-transition-fast);
+}
+
+.workspace-tab-header:hover {
+  background: var(--kb-sidebar-hover);
+  color: var(--kb-sidebar-text);
+}
+
+.workspace-tab-header.is-active {
+  color: var(--kb-sidebar-active-border);
+  background: var(--kb-sidebar-panel);
+}
+
+.workspace-tab-header.is-active::before,
+.workspace-tab-header.is-active::after {
+  display: none;
+}
+
+.view-header {
+  background: var(--kb-sidebar-bg);
+  border-bottom: 1px solid var(--kb-sidebar-border);
+}
+
+.view-header-title {
+  color: var(--kb-sidebar-text);
+  font-weight: 650;
+}
+
+/* File explorer reset */
+.nav-files-container {
+  padding: 2px 0 12px;
+}
+
+.nav-folder.mod-root > .nav-folder-children {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+.nav-folder,
+.nav-file {
+  position: relative;
+}
+
+.nav-folder-title,
+.nav-file-title {
+  min-height: var(--kb-sidebar-item-height);
+  line-height: 1.35;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 1px 2px !important;
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+  padding-right: 7px !important;
+  border-radius: var(--kb-sidebar-radius) !important;
+  color: var(--kb-sidebar-text);
+  transition:
+    background var(--kb-transition-fast),
+    color var(--kb-transition-fast),
+    box-shadow var(--kb-transition-fast),
+    border-color var(--kb-transition-fast);
+}
+
+.nav-folder-title:hover,
+.nav-file-title:hover {
+  background: var(--kb-sidebar-hover) !important;
+  color: var(--kb-sidebar-text) !important;
+}
+
+.nav-folder-title-content,
+.nav-file-title-content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Deterministic tree indent. The third level stays clearly offset. */
+.nav-folder-children {
+  margin-left: 0 !important;
+  padding-left: var(--kb-sidebar-indent) !important;
+  border-left: 1px solid var(--kb-sidebar-line);
+}
+
+.nav-folder.mod-root > .nav-folder-children {
+  border-left: none;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children {
+  margin-left: 8px !important;
+  padding-left: var(--kb-sidebar-indent) !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-children {
+  margin-left: 8px !important;
+  padding-left: calc(var(--kb-sidebar-indent) + 2px) !important;
+  border-left-color: rgba(14, 165, 233, 0.32);
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-children {
+  padding-left: calc(var(--kb-sidebar-indent) + 1px) !important;
+  border-left-style: dashed;
+}
+
+.nav-folder-children .nav-folder::before,
+.nav-folder-children .nav-file::before {
+  content: "";
+  position: absolute;
+  left: calc(-1 * var(--kb-sidebar-indent) + 1px);
+  top: 14px;
+  width: 10px;
+  height: 1px;
+  background: var(--kb-sidebar-line);
+  pointer-events: none;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder::before,
+.nav-folder.mod-root > .nav-folder-children > .nav-file::before {
+  display: none;
+}
+
+/* File and folder spacing per level */
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title {
+  margin-top: 5px !important;
+  margin-bottom: 3px !important;
+  padding-left: 8px !important;
+  font-size: 0.94em;
+  font-weight: 720;
+  letter-spacing: 0;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-title {
+  padding-left: 7px !important;
+  font-size: 0.91em;
+  font-weight: 650;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-title {
+  padding-left: 7px !important;
+  font-size: 0.89em;
+  font-weight: 610;
+  background: rgba(100, 116, 139, 0.06);
+}
+
+.nav-file-title {
+  padding-left: 8px !important;
+  font-size: 0.88em;
+  font-weight: 450;
+}
+
+.nav-folder-title.is-being-renamed,
+.nav-file-title.is-being-renamed {
+  box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.28);
+}
+
+/* Collapse indicators */
+.nav-folder-collapse-indicator {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1px;
+  border-radius: 5px;
+  color: var(--kb-sidebar-muted);
+  transition:
+    background var(--kb-transition-fast),
+    color var(--kb-transition-fast),
+    transform var(--kb-transition-fast);
+}
+
+.nav-folder-title:hover .nav-folder-collapse-indicator {
+  background: rgba(14, 165, 233, 0.12);
+  color: var(--kb-sidebar-active-border);
+}
+
+.nav-folder.is-collapsed > .nav-folder-title .nav-folder-collapse-indicator {
+  transform: rotate(-90deg);
+}
+
+/* Active file */
+.nav-file-title.is-active,
+.nav-file.is-active > .nav-file-title {
+  background: var(--kb-sidebar-active) !important;
+  color: var(--kb-sidebar-active-border) !important;
+  font-weight: 650;
+  box-shadow: inset 3px 0 0 var(--kb-sidebar-active-border);
+}
+
+.nav-file-title.is-active .nav-file-title-content,
+.nav-file.is-active > .nav-file-title .nav-file-title-content {
+  color: inherit;
+}
+
+/* Top-level domain colors for this vault */
+.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(1) > .nav-folder-title {
+  color: var(--kb-domain-index);
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(2) > .nav-folder-title,
+.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(3) > .nav-folder-title {
+  color: var(--kb-domain-index);
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(4) > .nav-folder-title {
+  color: var(--kb-domain-sv);
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(5) > .nav-folder-title {
+  color: var(--kb-domain-uvm);
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(6) > .nav-folder-title {
+  color: var(--kb-domain-protocol);
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(7) > .nav-folder-title {
+  color: var(--kb-domain-tools);
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(8) > .nav-folder-title {
+  color: var(--kb-domain-verification);
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(11) > .nav-folder-title {
+  color: var(--kb-domain-projects);
+}
+
+/* Domain labels: subtle left rail on top-level folders */
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title {
+  box-shadow: inset 3px 0 0 currentColor;
+  background: color-mix(in srgb, currentColor 8%, transparent);
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title:hover {
+  background: color-mix(in srgb, currentColor 13%, transparent) !important;
+}
+
+@supports not (background: color-mix(in srgb, red 8%, transparent)) {
+  .nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title {
+    background: var(--kb-sidebar-panel-soft);
+  }
+}
+
+/* Tag pane */
+.tag-pane-tag {
+  margin: 2px 3px;
+  padding: 4px 8px;
+  border-radius: var(--kb-radius-full);
+  background: var(--kb-sidebar-panel);
+  color: var(--kb-sidebar-text);
+  border: 1px solid var(--kb-sidebar-border);
+}
+
+.tag-pane-tag:hover {
+  background: var(--kb-sidebar-hover);
+  color: var(--kb-sidebar-active-border);
+}
+
+.tag-pane-tag-count {
+  color: var(--kb-sidebar-muted);
+  background: var(--kb-sidebar-panel-soft);
+  border-radius: var(--kb-radius-full);
+  padding: 0 6px;
+}
+
+/* Search pane */
+.search-input-container {
+  margin: 2px 2px 10px;
+  border-radius: var(--kb-sidebar-radius);
+  border: 1px solid var(--kb-sidebar-border);
+  background: var(--kb-sidebar-panel);
+}
+
+.search-input-container:focus-within {
+  border-color: var(--kb-sidebar-active-border);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--kb-sidebar-active-border) 18%, transparent);
+}
+
+.search-result-file-title,
+.tree-item-self {
+  border-radius: var(--kb-sidebar-radius);
+}
+
+.search-result-file-title:hover,
+.tree-item-self:hover {
+  background: var(--kb-sidebar-hover);
+}
+
+/* Outline and bookmarks */
+.outline .tree-item-self,
+.bookmarks .tree-item-self,
+.backlink-pane .tree-item-self {
+  min-height: 26px;
+  margin: 1px 2px;
+  color: var(--kb-sidebar-text);
+}
+
+.outline .tree-item-self.is-clickable:hover,
+.bookmarks .tree-item-self.is-clickable:hover,
+.backlink-pane .tree-item-self.is-clickable:hover {
+  background: var(--kb-sidebar-hover);
+  color: var(--kb-sidebar-active-border);
+}
+
+.outline .tree-item-children {
+  border-left: 1px solid var(--kb-sidebar-line);
+  margin-left: 9px;
+  padding-left: 9px;
+}
+
+/* Main editor polish */
+.workspace-leaf.mod-active .view-header {
+  border-bottom-color: color-mix(in srgb, var(--kb-sidebar-active-border) 35%, var(--kb-sidebar-border));
+}
+
+.markdown-source-view.mod-cm6 .cm-scroller,
+.markdown-preview-view {
+  background:
+    linear-gradient(180deg, rgba(14, 165, 233, 0.025), transparent 170px),
+    var(--kb-bg-primary);
+}
+
+.status-bar {
+  background: var(--kb-sidebar-bg);
+  border-top: 1px solid var(--kb-sidebar-border);
+  color: var(--kb-sidebar-muted);
+}
+
+
+/* ============================================================
+   21. Sidebar Pro v2 Refinement
+   更新: 2026-06-10
+   反馈调整:
+   - 保留三级目录缩进
+   - 文件夹标题改为标签式分隔块
+   - 正文区域取消额外背景氛围层，恢复原生可读背景
+   ============================================================ */
+
+:root {
+  --kb-folder-chip-bg: #ffffff;
+  --kb-folder-chip-hover: #eef6ff;
+  --kb-folder-chip-border: #d7e2ee;
+  --kb-folder-chip-shadow: 0 1px 1px rgba(15, 23, 42, 0.04);
+  --kb-folder-chip-text: #243244;
+  --kb-file-hover-bg: rgba(14, 165, 233, 0.07);
+}
+
+.theme-dark {
+  --kb-folder-chip-bg: #202738;
+  --kb-folder-chip-hover: #273145;
+  --kb-folder-chip-border: #354259;
+  --kb-folder-chip-shadow: none;
+  --kb-folder-chip-text: #dce3ee;
+  --kb-file-hover-bg: rgba(56, 189, 248, 0.09);
+}
+
+/* Restore editor background. Keep content readable and native. */
+.markdown-source-view.mod-cm6 .cm-scroller,
+.markdown-preview-view {
+  background: var(--background-primary) !important;
+}
+
+.workspace-leaf.mod-active .view-header {
+  border-bottom-color: var(--background-modifier-border);
+}
+
+/* Folder chips: each directory becomes a clear separated label. */
+.nav-folder-title {
+  background: var(--kb-folder-chip-bg) !important;
+  border: 1px solid var(--kb-folder-chip-border) !important;
+  box-shadow: var(--kb-folder-chip-shadow);
+  color: var(--kb-folder-chip-text) !important;
+  margin: 4px 2px 3px !important;
+  min-height: 29px;
+}
+
+.nav-folder-title:hover {
+  background: var(--kb-folder-chip-hover) !important;
+  border-color: color-mix(in srgb, var(--kb-sidebar-active-border) 40%, var(--kb-folder-chip-border)) !important;
+  color: var(--kb-folder-chip-text) !important;
+}
+
+.nav-folder-title-content {
+  font-weight: inherit;
+}
+
+/* Top-level folders look like section labels instead of flat rows. */
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title {
+  background:
+    linear-gradient(90deg, color-mix(in srgb, currentColor 13%, transparent), transparent 78%),
+    var(--kb-folder-chip-bg) !important;
+  border-color: color-mix(in srgb, currentColor 38%, var(--kb-folder-chip-border)) !important;
+  box-shadow:
+    inset 3px 0 0 currentColor,
+    var(--kb-folder-chip-shadow);
+  margin-top: 7px !important;
+  margin-bottom: 5px !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title:hover {
+  background:
+    linear-gradient(90deg, color-mix(in srgb, currentColor 18%, transparent), transparent 78%),
+    var(--kb-folder-chip-hover) !important;
+}
+
+/* Nested folders are quieter chips so the tree remains scannable. */
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-title {
+  background: var(--kb-folder-chip-bg) !important;
+  border-style: solid !important;
+  border-color: var(--kb-folder-chip-border) !important;
+  box-shadow: var(--kb-folder-chip-shadow);
+  color: var(--kb-sidebar-text) !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-title {
+  background: color-mix(in srgb, var(--kb-folder-chip-bg) 86%, var(--kb-sidebar-panel-soft)) !important;
+  border-color: var(--kb-sidebar-line) !important;
+  color: var(--kb-sidebar-muted) !important;
+}
+
+/* File rows stay flatter than folders to preserve hierarchy. */
+.nav-file-title {
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  box-shadow: none !important;
+  margin-top: 1px !important;
+  margin-bottom: 1px !important;
+}
+
+.nav-file-title:hover {
+  background: var(--kb-file-hover-bg) !important;
+  border-color: transparent !important;
+}
+
+.nav-file-title.is-active,
+.nav-file.is-active > .nav-file-title {
+  background: var(--kb-sidebar-active) !important;
+  border-color: color-mix(in srgb, var(--kb-sidebar-active-border) 42%, transparent) !important;
+  box-shadow: inset 3px 0 0 var(--kb-sidebar-active-border) !important;
+}
+
+/* Make the connector lines feel intentional beside folder chips. */
+.nav-folder-children {
+  border-left-color: color-mix(in srgb, var(--kb-sidebar-line) 70%, transparent);
+}
+
+.nav-folder-children .nav-folder::before,
+.nav-folder-children .nav-file::before {
+  background: color-mix(in srgb, var(--kb-sidebar-line) 78%, transparent);
+}
+
+/* Fallback for older Obsidian/Electron builds without color-mix. */
+@supports not (background: color-mix(in srgb, red 8%, transparent)) {
+  .nav-folder-title:hover {
+    border-color: var(--kb-sidebar-active-border) !important;
+  }
+
+  .nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title,
+  .nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title:hover {
+    background: var(--kb-folder-chip-bg) !important;
+  }
+
+  .nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-title {
+    background: var(--kb-sidebar-panel-soft) !important;
+  }
+}
+
+
+/* ============================================================
+   22. Blue Topaz Inspired v3
+   更新: 2026-06-10
+   目标:
+   - 借鉴 Blue Topaz 的浅蓝、柔和卡片、低对比阴影
+   - 降低 v2 方框的硬边界
+   - 正文背景保持 Obsidian 原生，视觉重点留给内容组件
+   ============================================================ */
+
+:root {
+  --btz-sidebar-bg: #f2f7fd;
+  --btz-sidebar-bg-2: #eaf3fb;
+  --btz-chip-bg: rgba(255, 255, 255, 0.84);
+  --btz-chip-bg-hover: rgba(240, 248, 255, 0.96);
+  --btz-chip-border: rgba(124, 174, 215, 0.28);
+  --btz-chip-border-hover: rgba(83, 151, 205, 0.42);
+  --btz-chip-shadow: 0 1px 2px rgba(31, 74, 112, 0.06), 0 8px 24px rgba(111, 159, 198, 0.08);
+  --btz-chip-shadow-hover: 0 2px 5px rgba(31, 74, 112, 0.08), 0 10px 28px rgba(111, 159, 198, 0.12);
+  --btz-line: rgba(92, 132, 168, 0.2);
+  --btz-blue: #4d8fc8;
+  --btz-sky: #62b6e8;
+  --btz-mint: #57b8a5;
+  --btz-lavender: #8d8bd9;
+  --btz-rose: #d6789f;
+  --btz-gold: #d6a64c;
+  --btz-text: #294057;
+  --btz-muted: #6f8498;
+  --btz-active-bg: rgba(94, 174, 232, 0.16);
+}
+
+.theme-dark {
+  --btz-sidebar-bg: #141c28;
+  --btz-sidebar-bg-2: #182233;
+  --btz-chip-bg: rgba(31, 42, 59, 0.78);
+  --btz-chip-bg-hover: rgba(38, 52, 73, 0.94);
+  --btz-chip-border: rgba(113, 151, 185, 0.24);
+  --btz-chip-border-hover: rgba(125, 188, 237, 0.36);
+  --btz-chip-shadow: 0 1px 2px rgba(0, 0, 0, 0.16);
+  --btz-chip-shadow-hover: 0 2px 7px rgba(0, 0, 0, 0.2);
+  --btz-line: rgba(153, 180, 206, 0.16);
+  --btz-blue: #7ab8e8;
+  --btz-sky: #84d4ff;
+  --btz-mint: #7bd6c4;
+  --btz-lavender: #aaa7ff;
+  --btz-rose: #ee9abd;
+  --btz-gold: #e6c06f;
+  --btz-text: #dbe8f4;
+  --btz-muted: #91a6ba;
+  --btz-active-bg: rgba(132, 212, 255, 0.14);
+}
+
+/* Keep document canvas native and calm. */
+.markdown-source-view.mod-cm6 .cm-scroller,
+.markdown-preview-view,
+.workspace-leaf-content[data-type="markdown"] .view-content {
+  background: var(--background-primary) !important;
+}
+
+/* Soft Blue Topaz-like side panels. */
+.workspace-ribbon,
+.workspace-sidedock-vault-profile,
+.workspace-split.mod-left-split,
+.workspace-split.mod-right-split,
+.workspace-split.mod-left-split .workspace-tabs,
+.workspace-split.mod-right-split .workspace-tabs,
+.workspace-split.mod-left-split .workspace-tab-container,
+.workspace-split.mod-right-split .workspace-tab-container,
+.workspace-split.mod-left-split .workspace-tab-content-container,
+.workspace-split.mod-right-split .workspace-tab-content-container,
+.workspace-leaf-content[data-type="file-explorer"] .view-content,
+.workspace-leaf-content[data-type="search"] .view-content,
+.workspace-leaf-content[data-type="tag"] .view-content,
+.workspace-leaf-content[data-type="outline"] .view-content,
+.workspace-leaf-content[data-type="bookmarks"] .view-content {
+  background:
+    linear-gradient(180deg, var(--btz-sidebar-bg), var(--btz-sidebar-bg-2)) !important;
+}
+
+.workspace-tab-header-container,
+.view-header,
+.status-bar {
+  background: var(--btz-sidebar-bg) !important;
+  border-color: var(--btz-chip-border) !important;
+}
+
+.view-header-title,
+.workspace-tab-header.is-active {
+  color: var(--btz-blue) !important;
+}
+
+/* Top-level folders: soft cards with quiet colored rail. */
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title {
+  min-height: 32px;
+  margin: 7px 3px 5px !important;
+  padding: 6px 9px !important;
+  border: 1px solid var(--btz-chip-border) !important;
+  border-radius: 9px !important;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, currentColor 10%, transparent), transparent 72%),
+    var(--btz-chip-bg) !important;
+  box-shadow:
+    inset 3px 0 0 color-mix(in srgb, currentColor 72%, transparent),
+    var(--btz-chip-shadow) !important;
+  color: currentColor !important;
+  backdrop-filter: blur(8px);
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title:hover {
+  border-color: var(--btz-chip-border-hover) !important;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, currentColor 14%, transparent), transparent 72%),
+    var(--btz-chip-bg-hover) !important;
+  box-shadow:
+    inset 3px 0 0 color-mix(in srgb, currentColor 82%, transparent),
+    var(--btz-chip-shadow-hover) !important;
+}
+
+/* Stable domain colors, using direct order in this vault. */
+.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(1) > .nav-folder-title,
+.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(2) > .nav-folder-title,
+.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(3) > .nav-folder-title {
+  color: var(--btz-blue) !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(4) > .nav-folder-title {
+  color: var(--btz-sky) !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(5) > .nav-folder-title {
+  color: var(--btz-lavender) !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(6) > .nav-folder-title {
+  color: var(--btz-mint) !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(7) > .nav-folder-title {
+  color: var(--btz-gold) !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(8) > .nav-folder-title {
+  color: var(--btz-rose) !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(11) > .nav-folder-title {
+  color: var(--btz-mint) !important;
+}
+
+/* Nested folders: pill cards, less prominent than top level. */
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-title {
+  min-height: 29px;
+  margin: 4px 2px 3px !important;
+  padding: 5px 8px !important;
+  border: 1px solid color-mix(in srgb, var(--btz-chip-border) 80%, transparent) !important;
+  border-radius: 8px !important;
+  background: color-mix(in srgb, var(--btz-chip-bg) 88%, transparent) !important;
+  color: var(--btz-text) !important;
+  box-shadow: 0 1px 1px rgba(31, 74, 112, 0.04) !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-title:hover {
+  background: var(--btz-chip-bg-hover) !important;
+  border-color: var(--btz-chip-border-hover) !important;
+}
+
+/* Third-level folders remain separated but lighter. */
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-title {
+  min-height: 27px;
+  margin: 3px 2px 2px !important;
+  padding: 4px 8px !important;
+  border-radius: 7px !important;
+  border: 1px solid color-mix(in srgb, var(--btz-line) 82%, transparent) !important;
+  background: color-mix(in srgb, var(--btz-chip-bg) 70%, transparent) !important;
+  color: var(--btz-muted) !important;
+  box-shadow: none !important;
+}
+
+/* Files are deliberately flat, so folders read as separators. */
+.nav-file-title {
+  color: var(--btz-text) !important;
+  border: 1px solid transparent !important;
+  background: transparent !important;
+  border-radius: 7px !important;
+  margin: 1px 2px !important;
+}
+
+.nav-file-title:hover {
+  color: var(--btz-blue) !important;
+  background: rgba(98, 182, 232, 0.09) !important;
+}
+
+.nav-file-title.is-active,
+.nav-file.is-active > .nav-file-title {
+  color: var(--btz-blue) !important;
+  background: var(--btz-active-bg) !important;
+  border-color: color-mix(in srgb, var(--btz-blue) 22%, transparent) !important;
+  box-shadow: inset 3px 0 0 var(--btz-blue) !important;
+}
+
+/* Softer tree connectors. */
+.nav-folder-children {
+  border-left-color: var(--btz-line) !important;
+}
+
+.nav-folder-children .nav-folder::before,
+.nav-folder-children .nav-file::before {
+  background: var(--btz-line) !important;
+}
+
+.nav-folder-collapse-indicator {
+  color: color-mix(in srgb, currentColor 70%, var(--btz-muted)) !important;
+}
+
+.nav-folder-title:hover .nav-folder-collapse-indicator {
+  background: color-mix(in srgb, currentColor 12%, transparent) !important;
+  color: currentColor !important;
+}
+
+/* Search, tags and outline use the same soft card vocabulary. */
+.search-input-container,
+.tag-pane-tag,
+.search-result-file-title {
+  background: var(--btz-chip-bg) !important;
+  border: 1px solid var(--btz-chip-border) !important;
+  box-shadow: var(--btz-chip-shadow);
+}
+
+.search-input-container:focus-within {
+  border-color: var(--btz-chip-border-hover) !important;
+  box-shadow: 0 0 0 2px rgba(98, 182, 232, 0.18) !important;
+}
+
+.tag-pane-tag:hover,
+.search-result-file-title:hover,
+.tree-item-self:hover {
+  background: var(--btz-chip-bg-hover) !important;
+  color: var(--btz-blue) !important;
+}
+
+/* Fallback for older Obsidian/Electron builds without color-mix. */
+@supports not (background: color-mix(in srgb, red 8%, transparent)) {
+  .nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title,
+  .nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title:hover,
+  .nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-title,
+  .nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-title {
+    background: var(--btz-chip-bg) !important;
+  }
+}
+
+
+/* ============================================================
+   23. Blue Topaz Inspired v4
+   更新: 2026-06-11
+   目标:
+   - 用 data-path 替代 nth-child，让目录配色不依赖排序
+   - 给正文标题、callout、表格加轻量精致感
+   - 保持正文背景原生，不做整页渐变/图片背景
+   ============================================================ */
+
+:root {
+  --btz-content-card: rgba(255, 255, 255, 0.7);
+  --btz-content-border: rgba(124, 174, 215, 0.22);
+  --btz-content-shadow: 0 1px 2px rgba(31, 74, 112, 0.04);
+}
+
+.theme-dark {
+  --btz-content-card: rgba(31, 42, 59, 0.44);
+  --btz-content-border: rgba(113, 151, 185, 0.18);
+  --btz-content-shadow: none;
+}
+
+/* Stable folder colors by vault path. */
+.nav-folder-title[data-path^="00-工作台"],
+.nav-folder-title[data-path^="00-收件箱"],
+.nav-folder-title[data-path^="00-索引"] {
+  color: var(--btz-blue) !important;
+}
+
+.nav-folder-title[data-path^="01-SV语法"] {
+  color: var(--btz-sky) !important;
+}
+
+.nav-folder-title[data-path^="02-UVM"],
+.nav-folder-title[data-path^="11-UVM源码学习"] {
+  color: var(--btz-lavender) !important;
+}
+
+.nav-folder-title[data-path^="03-Protocol"] {
+  color: var(--btz-mint) !important;
+}
+
+.nav-folder-title[data-path^="04-Tools"],
+.nav-folder-title[data-path^="06-Environment"],
+.nav-folder-title[data-path^="07-Scripts"] {
+  color: var(--btz-gold) !important;
+}
+
+.nav-folder-title[data-path^="05-Verification"],
+.nav-folder-title[data-path^="09-Issues"] {
+  color: var(--btz-rose) !important;
+}
+
+.nav-folder-title[data-path^="08-Projects"] {
+  color: var(--btz-mint) !important;
+}
+
+.nav-folder-title[data-path^="10-Notes"],
+.nav-folder-title[data-path^="12-Life"] {
+  color: var(--btz-muted) !important;
+}
+
+/* Keep nested folder text readable after path color assignment. */
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children .nav-folder-title {
+  color: var(--btz-text) !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-children .nav-folder-title {
+  color: var(--btz-muted) !important;
+}
+
+/* Slightly cleaner explorer density. */
+.nav-files-container {
+  padding-right: 4px;
+}
+
+.nav-folder-title-content,
+.nav-file-title-content {
+  letter-spacing: 0;
+}
+
+.nav-file-title {
+  min-height: 26px;
+}
+
+/* Content polish without changing the page background. */
+.markdown-preview-view h1 {
+  border-bottom: 1px solid color-mix(in srgb, var(--btz-blue) 42%, var(--background-modifier-border)) !important;
+  padding-bottom: 0.45em;
+}
+
+.markdown-preview-view h1::after {
+  content: "";
+  display: block;
+  width: 58px;
+  height: 3px;
+  margin-top: 0.42em;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--btz-blue), var(--btz-sky));
+}
+
+.markdown-preview-view h2 {
+  border-bottom: 1px solid color-mix(in srgb, var(--btz-blue) 24%, var(--background-modifier-border)) !important;
+}
+
+.markdown-preview-view h3 {
+  border-left-color: var(--btz-blue) !important;
+  background: color-mix(in srgb, var(--btz-blue) 6%, transparent);
+  border-radius: 0 7px 7px 0;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.callout {
+  border-radius: 9px !important;
+  border: 1px solid var(--btz-content-border) !important;
+  box-shadow: var(--btz-content-shadow);
+}
+
+.callout-title {
+  letter-spacing: 0;
+}
+
+.markdown-preview-view table,
+.dataview.table-view-table {
+  border: 1px solid var(--btz-content-border);
+  border-radius: 9px;
+  overflow: hidden;
+  box-shadow: var(--btz-content-shadow);
+}
+
+.markdown-preview-view th,
+.dataview.table-view-table th {
+  background: color-mix(in srgb, var(--btz-blue) 10%, var(--background-secondary)) !important;
+}
+
+.markdown-preview-view tr:nth-child(even) td,
+.dataview.table-view-table tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--btz-blue) 3%, transparent);
+}
+
+.markdown-preview-view tr:hover td,
+.dataview.table-view-table tr:hover td {
+  background: color-mix(in srgb, var(--btz-blue) 8%, transparent) !important;
+}
+
+.markdown-preview-view code:not(pre code) {
+  border: 1px solid color-mix(in srgb, var(--btz-blue) 16%, transparent);
+  border-radius: 5px;
+}
+
+/* Fallback for older Obsidian/Electron builds without color-mix. */
+@supports not (background: color-mix(in srgb, red 8%, transparent)) {
+  .markdown-preview-view h3 {
+    background: transparent;
+  }
+
+  .markdown-preview-view th,
+  .dataview.table-view-table th {
+    background: var(--background-secondary) !important;
+  }
+}
+
+
+/* ============================================================
+   24. Light Topaz v5
+   更新: 2026-06-11
+   目标:
+   - 将整体观感切到亮色系
+   - 即使 Obsidian 处于 dark mode，也让知识库主体保持明亮
+   - 继续保留 Blue Topaz 风格的蓝白、柔和卡片和低对比边界
+   ============================================================ */
+
+:root,
+.theme-dark,
+.theme-light {
+  --btz-sidebar-bg: #f7fbff;
+  --btz-sidebar-bg-2: #eef7ff;
+  --btz-chip-bg: rgba(255, 255, 255, 0.92);
+  --btz-chip-bg-hover: #f2f9ff;
+  --btz-chip-border: rgba(116, 166, 207, 0.24);
+  --btz-chip-border-hover: rgba(72, 139, 194, 0.4);
+  --btz-chip-shadow: 0 1px 2px rgba(44, 92, 132, 0.05), 0 8px 22px rgba(128, 174, 211, 0.08);
+  --btz-chip-shadow-hover: 0 2px 5px rgba(44, 92, 132, 0.08), 0 10px 26px rgba(128, 174, 211, 0.12);
+  --btz-line: rgba(88, 130, 166, 0.22);
+  --btz-blue: #377fba;
+  --btz-sky: #2798cf;
+  --btz-mint: #2f9d8f;
+  --btz-lavender: #746fd0;
+  --btz-rose: #c85f8e;
+  --btz-gold: #bc8424;
+  --btz-text: #20344a;
+  --btz-muted: #64788e;
+  --btz-active-bg: rgba(75, 154, 216, 0.14);
+  --btz-content-card: rgba(255, 255, 255, 0.86);
+  --btz-content-border: rgba(116, 166, 207, 0.24);
+  --btz-content-shadow: 0 1px 2px rgba(44, 92, 132, 0.04);
+
+  --kb-sidebar-bg: var(--btz-sidebar-bg);
+  --kb-sidebar-panel: #ffffff;
+  --kb-sidebar-panel-soft: #edf6ff;
+  --kb-sidebar-border: rgba(116, 166, 207, 0.28);
+  --kb-sidebar-line: var(--btz-line);
+  --kb-sidebar-hover: rgba(75, 154, 216, 0.1);
+  --kb-sidebar-active: var(--btz-active-bg);
+  --kb-sidebar-active-border: var(--btz-blue);
+  --kb-sidebar-text: var(--btz-text);
+  --kb-sidebar-muted: var(--btz-muted);
+
+  --kb-bg-primary: #ffffff;
+  --kb-bg-secondary: #f7fbff;
+  --kb-bg-tertiary: #edf6ff;
+  --kb-border-color: #dce9f5;
+  --kb-heading-color: #20344a;
+  --kb-text-primary: #24364a;
+  --kb-text-secondary: #5f7187;
+  --kb-text-muted: #8192a5;
+  --kb-accent-color: var(--btz-blue);
+  --kb-accent-light: #74b9e6;
+  --kb-accent-bg: rgba(75, 154, 216, 0.08);
+  --kb-heading-h1-border: var(--btz-blue);
+  --kb-heading-h2-border: #6bb7df;
+  --kb-heading-h3-border: var(--btz-blue);
+}
+
+/* Force bright canvas for this vault without changing Obsidian settings. */
+.theme-dark .workspace,
+.theme-dark .workspace-leaf,
+.theme-dark .workspace-leaf-content,
+.theme-dark .markdown-source-view.mod-cm6 .cm-scroller,
+.theme-dark .markdown-preview-view,
+.theme-dark .workspace-leaf-content[data-type="markdown"] .view-content,
+.theme-light .workspace,
+.theme-light .workspace-leaf,
+.theme-light .workspace-leaf-content,
+.theme-light .markdown-source-view.mod-cm6 .cm-scroller,
+.theme-light .markdown-preview-view,
+.theme-light .workspace-leaf-content[data-type="markdown"] .view-content {
+  background: #ffffff !important;
+  color: var(--btz-text) !important;
+}
+
+.theme-dark .markdown-preview-view,
+.theme-dark .markdown-source-view,
+.theme-dark .cm-s-obsidian,
+.theme-dark .cm-line {
+  color: var(--btz-text) !important;
+}
+
+.workspace-ribbon,
+.workspace-sidedock-vault-profile,
+.workspace-split.mod-left-split,
+.workspace-split.mod-right-split,
+.workspace-split.mod-left-split .workspace-tabs,
+.workspace-split.mod-right-split .workspace-tabs,
+.workspace-split.mod-left-split .workspace-tab-container,
+.workspace-split.mod-right-split .workspace-tab-container,
+.workspace-split.mod-left-split .workspace-tab-content-container,
+.workspace-split.mod-right-split .workspace-tab-content-container,
+.workspace-leaf-content[data-type="file-explorer"] .view-content,
+.workspace-leaf-content[data-type="search"] .view-content,
+.workspace-leaf-content[data-type="tag"] .view-content,
+.workspace-leaf-content[data-type="outline"] .view-content,
+.workspace-leaf-content[data-type="bookmarks"] .view-content {
+  background:
+    linear-gradient(180deg, #f9fcff 0%, #eef7ff 100%) !important;
+}
+
+.workspace-tab-header-container,
+.view-header,
+.status-bar {
+  background: #f7fbff !important;
+  border-color: rgba(116, 166, 207, 0.24) !important;
+  color: var(--btz-muted) !important;
+}
+
+.workspace-tab-header,
+.view-header-title,
+.status-bar-item {
+  color: var(--btz-muted) !important;
+}
+
+.workspace-tab-header.is-active,
+.view-header-title {
+  color: var(--btz-blue) !important;
+}
+
+/* Brighter folder cards. */
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title,
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-title,
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-title,
+.search-input-container,
+.tag-pane-tag,
+.search-result-file-title {
+  background: rgba(255, 255, 255, 0.94) !important;
+  border-color: rgba(116, 166, 207, 0.24) !important;
+  box-shadow: var(--btz-chip-shadow) !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title:hover,
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-title:hover,
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-title:hover,
+.search-result-file-title:hover,
+.tag-pane-tag:hover,
+.tree-item-self:hover {
+  background: #f2f9ff !important;
+  border-color: rgba(72, 139, 194, 0.38) !important;
+}
+
+.nav-file-title {
+  color: var(--btz-text) !important;
+}
+
+.nav-file-title:hover {
+  color: var(--btz-blue) !important;
+  background: rgba(75, 154, 216, 0.09) !important;
+}
+
+.nav-file-title.is-active,
+.nav-file.is-active > .nav-file-title {
+  color: var(--btz-blue) !important;
+  background: rgba(75, 154, 216, 0.14) !important;
+  border-color: rgba(75, 154, 216, 0.24) !important;
+  box-shadow: inset 3px 0 0 var(--btz-blue) !important;
+}
+
+/* Bright content components. */
+.markdown-preview-view h1,
+.markdown-preview-view h2,
+.markdown-preview-view h3,
+.markdown-preview-view h4,
+.markdown-preview-view h5,
+.markdown-preview-view h6 {
+  color: #20344a !important;
+}
+
+.markdown-preview-view p,
+.markdown-preview-view li,
+.markdown-preview-view td {
+  color: #24364a;
+}
+
+.callout,
+.markdown-preview-view table,
+.dataview.table-view-table {
+  background: rgba(255, 255, 255, 0.86) !important;
+  border-color: rgba(116, 166, 207, 0.24) !important;
+}
+
+.markdown-preview-view th,
+.dataview.table-view-table th {
+  color: #20344a !important;
+  background: #eef7ff !important;
+}
+
+.markdown-preview-view code:not(pre code) {
+  color: #276f9f !important;
+  background: #eef7ff !important;
+  border-color: rgba(75, 154, 216, 0.18) !important;
+}
+
+
+/* ============================================================
+   25. Adaptive Topaz v6
+   更新: 2026-06-11
+   目标:
+   - 撤销 v5 的强制白底
+   - 跟随当前 Obsidian 主题，只做轻微提亮和柔化
+   - 暗色模式比原主题亮一点，浅色模式保持干净
+   ============================================================ */
+
+:root {
+  --atp-panel-bg: color-mix(in srgb, var(--background-secondary) 82%, #ffffff 18%);
+  --atp-panel-bg-2: color-mix(in srgb, var(--background-secondary-alt) 78%, #ffffff 22%);
+  --atp-chip-bg: color-mix(in srgb, var(--background-primary) 88%, #ffffff 12%);
+  --atp-chip-hover: color-mix(in srgb, var(--background-primary) 76%, var(--btz-blue) 8%);
+  --atp-border: color-mix(in srgb, var(--background-modifier-border) 72%, var(--btz-blue) 28%);
+  --atp-border-hover: color-mix(in srgb, var(--background-modifier-border) 48%, var(--btz-blue) 52%);
+  --atp-text: var(--text-normal);
+  --atp-muted: var(--text-muted);
+  --atp-shadow: 0 1px 2px rgba(44, 92, 132, 0.05);
+  --atp-active: color-mix(in srgb, var(--background-primary) 78%, var(--btz-blue) 12%);
+}
+
+.theme-dark {
+  --atp-panel-bg: #202838;
+  --atp-panel-bg-2: #1c2432;
+  --atp-chip-bg: rgba(38, 48, 66, 0.88);
+  --atp-chip-hover: rgba(48, 61, 82, 0.94);
+  --atp-border: rgba(134, 166, 197, 0.22);
+  --atp-border-hover: rgba(133, 190, 234, 0.34);
+  --atp-text: #d9e2ee;
+  --atp-muted: #9aaabc;
+  --atp-shadow: none;
+  --atp-active: rgba(98, 182, 232, 0.13);
+}
+
+.theme-light {
+  --atp-panel-bg: #f6f9fd;
+  --atp-panel-bg-2: #eef5fb;
+  --atp-chip-bg: rgba(255, 255, 255, 0.88);
+  --atp-chip-hover: #f2f8fe;
+  --atp-border: rgba(116, 166, 207, 0.22);
+  --atp-border-hover: rgba(72, 139, 194, 0.36);
+  --atp-text: #20344a;
+  --atp-muted: #65788c;
+  --atp-shadow: 0 1px 2px rgba(44, 92, 132, 0.04);
+  --atp-active: rgba(75, 154, 216, 0.12);
+}
+
+/* Follow current theme canvas instead of forcing a white app. */
+.theme-dark .workspace,
+.theme-dark .workspace-leaf,
+.theme-dark .workspace-leaf-content,
+.theme-dark .markdown-source-view.mod-cm6 .cm-scroller,
+.theme-dark .markdown-preview-view,
+.theme-dark .workspace-leaf-content[data-type="markdown"] .view-content,
+.theme-light .workspace,
+.theme-light .workspace-leaf,
+.theme-light .workspace-leaf-content,
+.theme-light .markdown-source-view.mod-cm6 .cm-scroller,
+.theme-light .markdown-preview-view,
+.theme-light .workspace-leaf-content[data-type="markdown"] .view-content {
+  background: var(--background-primary) !important;
+  color: var(--text-normal) !important;
+}
+
+.theme-dark .markdown-preview-view,
+.theme-dark .markdown-source-view,
+.theme-dark .cm-s-obsidian,
+.theme-dark .cm-line {
+  color: var(--text-normal) !important;
+}
+
+.workspace-ribbon,
+.workspace-sidedock-vault-profile,
+.workspace-split.mod-left-split,
+.workspace-split.mod-right-split,
+.workspace-split.mod-left-split .workspace-tabs,
+.workspace-split.mod-right-split .workspace-tabs,
+.workspace-split.mod-left-split .workspace-tab-container,
+.workspace-split.mod-right-split .workspace-tab-container,
+.workspace-split.mod-left-split .workspace-tab-content-container,
+.workspace-split.mod-right-split .workspace-tab-content-container,
+.workspace-leaf-content[data-type="file-explorer"] .view-content,
+.workspace-leaf-content[data-type="search"] .view-content,
+.workspace-leaf-content[data-type="tag"] .view-content,
+.workspace-leaf-content[data-type="outline"] .view-content,
+.workspace-leaf-content[data-type="bookmarks"] .view-content {
+  background: linear-gradient(180deg, var(--atp-panel-bg), var(--atp-panel-bg-2)) !important;
+}
+
+.workspace-tab-header-container,
+.view-header,
+.status-bar {
+  background: var(--atp-panel-bg) !important;
+  border-color: var(--atp-border) !important;
+  color: var(--atp-muted) !important;
+}
+
+.workspace-tab-header,
+.view-header-title,
+.status-bar-item {
+  color: var(--atp-muted) !important;
+}
+
+.workspace-tab-header.is-active,
+.view-header-title {
+  color: var(--btz-blue) !important;
+}
+
+/* Theme-adaptive folder cards. */
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title,
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-title,
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-title,
+.search-input-container,
+.tag-pane-tag,
+.search-result-file-title {
+  background: var(--atp-chip-bg) !important;
+  border-color: var(--atp-border) !important;
+  box-shadow: var(--atp-shadow) !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title:hover,
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-title:hover,
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-title:hover,
+.search-result-file-title:hover,
+.tag-pane-tag:hover,
+.tree-item-self:hover {
+  background: var(--atp-chip-hover) !important;
+  border-color: var(--atp-border-hover) !important;
+}
+
+.nav-file-title,
+.markdown-preview-view p,
+.markdown-preview-view li,
+.markdown-preview-view td {
+  color: var(--text-normal) !important;
+}
+
+.nav-file-title:hover {
+  color: var(--btz-blue) !important;
+  background: color-mix(in srgb, var(--background-primary) 84%, var(--btz-blue) 10%) !important;
+}
+
+.nav-file-title.is-active,
+.nav-file.is-active > .nav-file-title {
+  color: var(--btz-blue) !important;
+  background: var(--atp-active) !important;
+  border-color: var(--atp-border-hover) !important;
+  box-shadow: inset 3px 0 0 var(--btz-blue) !important;
+}
+
+.markdown-preview-view h1,
+.markdown-preview-view h2,
+.markdown-preview-view h3,
+.markdown-preview-view h4,
+.markdown-preview-view h5,
+.markdown-preview-view h6 {
+  color: var(--text-normal) !important;
+}
+
+.callout,
+.markdown-preview-view table,
+.dataview.table-view-table {
+  background: color-mix(in srgb, var(--background-primary) 90%, var(--btz-blue) 3%) !important;
+  border-color: var(--atp-border) !important;
+}
+
+.markdown-preview-view th,
+.dataview.table-view-table th {
+  color: var(--text-normal) !important;
+  background: color-mix(in srgb, var(--background-secondary) 86%, var(--btz-blue) 8%) !important;
+}
+
+.markdown-preview-view code:not(pre code) {
+  color: var(--btz-blue) !important;
+  background: color-mix(in srgb, var(--background-secondary) 88%, var(--btz-blue) 7%) !important;
+  border-color: var(--atp-border) !important;
+}
+
+@supports not (background: color-mix(in srgb, red 8%, transparent)) {
+  :root {
+    --atp-panel-bg: var(--background-secondary);
+    --atp-panel-bg-2: var(--background-secondary);
+    --atp-chip-bg: var(--background-primary);
+    --atp-chip-hover: var(--background-modifier-hover);
+    --atp-border: var(--background-modifier-border);
+    --atp-border-hover: var(--interactive-accent);
+    --atp-active: var(--background-modifier-hover);
+  }
+}
+
+
+/* ============================================================
+   26. Neutral Topaz v7
+   更新: 2026-06-11
+   目标:
+   - 去掉蓝黑混搭的大面积观感
+   - 侧边栏回到中性灰阶，只保留少量蓝色强调
+   - 适配当前主题，不强制整库变亮或变白
+   ============================================================ */
+
+:root {
+  --ntz-panel-bg: color-mix(in srgb, var(--background-secondary) 88%, var(--background-primary) 12%);
+  --ntz-panel-bg-2: color-mix(in srgb, var(--background-secondary) 94%, var(--background-primary) 6%);
+  --ntz-chip-bg: color-mix(in srgb, var(--background-primary) 92%, var(--background-secondary) 8%);
+  --ntz-chip-hover: color-mix(in srgb, var(--background-primary) 86%, var(--background-modifier-hover) 14%);
+  --ntz-border: color-mix(in srgb, var(--background-modifier-border) 86%, var(--text-muted) 14%);
+  --ntz-border-hover: color-mix(in srgb, var(--background-modifier-border) 70%, var(--text-muted) 30%);
+  --ntz-text: var(--text-normal);
+  --ntz-muted: var(--text-muted);
+  --ntz-accent: #4f8fbd;
+  --ntz-accent-soft: color-mix(in srgb, var(--background-primary) 86%, var(--ntz-accent) 10%);
+  --ntz-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.theme-dark {
+  --ntz-panel-bg: #242832;
+  --ntz-panel-bg-2: #20242d;
+  --ntz-chip-bg: #2a2f3a;
+  --ntz-chip-hover: #303642;
+  --ntz-border: rgba(150, 160, 174, 0.18);
+  --ntz-border-hover: rgba(170, 180, 194, 0.28);
+  --ntz-text: #d8dee8;
+  --ntz-muted: #9ba5b3;
+  --ntz-accent: #6aa6d6;
+  --ntz-accent-soft: rgba(106, 166, 214, 0.12);
+  --ntz-shadow: none;
+}
+
+.theme-light {
+  --ntz-panel-bg: #f4f5f7;
+  --ntz-panel-bg-2: #eef1f4;
+  --ntz-chip-bg: #ffffff;
+  --ntz-chip-hover: #f5f7fa;
+  --ntz-border: #d9e0e7;
+  --ntz-border-hover: #c4ced8;
+  --ntz-text: #263241;
+  --ntz-muted: #667281;
+  --ntz-accent: #3f83b8;
+  --ntz-accent-soft: rgba(63, 131, 184, 0.1);
+  --ntz-shadow: 0 1px 2px rgba(31, 41, 55, 0.04);
+}
+
+/* Neutral shell: no large blue/black areas. */
+.workspace-ribbon,
+.workspace-sidedock-vault-profile,
+.workspace-split.mod-left-split,
+.workspace-split.mod-right-split,
+.workspace-split.mod-left-split .workspace-tabs,
+.workspace-split.mod-right-split .workspace-tabs,
+.workspace-split.mod-left-split .workspace-tab-container,
+.workspace-split.mod-right-split .workspace-tab-container,
+.workspace-split.mod-left-split .workspace-tab-content-container,
+.workspace-split.mod-right-split .workspace-tab-content-container,
+.workspace-leaf-content[data-type="file-explorer"] .view-content,
+.workspace-leaf-content[data-type="search"] .view-content,
+.workspace-leaf-content[data-type="tag"] .view-content,
+.workspace-leaf-content[data-type="outline"] .view-content,
+.workspace-leaf-content[data-type="bookmarks"] .view-content {
+  background: linear-gradient(180deg, var(--ntz-panel-bg), var(--ntz-panel-bg-2)) !important;
+}
+
+.workspace-tab-header-container,
+.view-header,
+.status-bar {
+  background: var(--ntz-panel-bg) !important;
+  border-color: var(--ntz-border) !important;
+  color: var(--ntz-muted) !important;
+}
+
+.workspace-tab-header,
+.view-header-title,
+.status-bar-item {
+  color: var(--ntz-muted) !important;
+}
+
+.workspace-tab-header.is-active,
+.view-header-title {
+  color: var(--ntz-text) !important;
+}
+
+/* Folders become neutral cards. Accent only appears as a subtle rail. */
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title,
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-title,
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-title,
+.search-input-container,
+.tag-pane-tag,
+.search-result-file-title {
+  background: var(--ntz-chip-bg) !important;
+  border-color: var(--ntz-border) !important;
+  box-shadow: var(--ntz-shadow) !important;
+  color: var(--ntz-text) !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title {
+  box-shadow:
+    inset 3px 0 0 color-mix(in srgb, currentColor 50%, var(--ntz-accent) 50%),
+    var(--ntz-shadow) !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title:hover,
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-title:hover,
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-children > .nav-folder > .nav-folder-title:hover,
+.search-result-file-title:hover,
+.tag-pane-tag:hover,
+.tree-item-self:hover {
+  background: var(--ntz-chip-hover) !important;
+  border-color: var(--ntz-border-hover) !important;
+}
+
+/* Desaturate folder colors. Keep category hints, not full-color blocks. */
+.nav-folder-title[data-path^="00-工作台"],
+.nav-folder-title[data-path^="00-收件箱"],
+.nav-folder-title[data-path^="00-索引"],
+.nav-folder-title[data-path^="01-SV语法"],
+.nav-folder-title[data-path^="02-UVM"],
+.nav-folder-title[data-path^="03-Protocol"],
+.nav-folder-title[data-path^="04-Tools"],
+.nav-folder-title[data-path^="05-Verification"],
+.nav-folder-title[data-path^="06-Environment"],
+.nav-folder-title[data-path^="07-Scripts"],
+.nav-folder-title[data-path^="08-Projects"],
+.nav-folder-title[data-path^="09-Issues"],
+.nav-folder-title[data-path^="10-Notes"],
+.nav-folder-title[data-path^="11-UVM源码学习"],
+.nav-folder-title[data-path^="12-Life"] {
+  color: var(--ntz-text) !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title .nav-folder-title-content {
+  color: var(--ntz-text) !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children .nav-folder-title,
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children .nav-folder-title-content {
+  color: var(--ntz-muted) !important;
+}
+
+.nav-file-title,
+.markdown-preview-view p,
+.markdown-preview-view li,
+.markdown-preview-view td {
+  color: var(--text-normal) !important;
+}
+
+.nav-file-title:hover {
+  color: var(--ntz-text) !important;
+  background: var(--ntz-chip-hover) !important;
+}
+
+.nav-file-title.is-active,
+.nav-file.is-active > .nav-file-title {
+  color: var(--ntz-accent) !important;
+  background: var(--ntz-accent-soft) !important;
+  border-color: color-mix(in srgb, var(--ntz-accent) 32%, transparent) !important;
+  box-shadow: inset 3px 0 0 var(--ntz-accent) !important;
+}
+
+.nav-folder-children,
+.nav-folder-children .nav-folder::before,
+.nav-folder-children .nav-file::before {
+  border-left-color: var(--ntz-border) !important;
+  background-color: var(--ntz-border) !important;
+}
+
+/* Content stays theme-native; blue becomes a minor accent. */
+.markdown-preview-view h1,
+.markdown-preview-view h2,
+.markdown-preview-view h3,
+.markdown-preview-view h4,
+.markdown-preview-view h5,
+.markdown-preview-view h6 {
+  color: var(--text-normal) !important;
+}
+
+.markdown-preview-view h1::after {
+  background: linear-gradient(90deg, var(--ntz-accent), color-mix(in srgb, var(--ntz-accent) 40%, var(--text-muted) 60%)) !important;
+}
+
+.markdown-preview-view h3 {
+  border-left-color: var(--ntz-accent) !important;
+  background: color-mix(in srgb, var(--background-primary) 92%, var(--ntz-accent) 4%) !important;
+}
+
+.callout,
+.markdown-preview-view table,
+.dataview.table-view-table {
+  background: color-mix(in srgb, var(--background-primary) 96%, var(--background-secondary) 4%) !important;
+  border-color: var(--ntz-border) !important;
+}
+
+.markdown-preview-view th,
+.dataview.table-view-table th {
+  color: var(--text-normal) !important;
+  background: color-mix(in srgb, var(--background-secondary) 94%, var(--ntz-accent) 4%) !important;
+}
+
+.markdown-preview-view code:not(pre code) {
+  color: var(--ntz-accent) !important;
+  background: color-mix(in srgb, var(--background-secondary) 94%, var(--ntz-accent) 4%) !important;
+  border-color: var(--ntz-border) !important;
+}
+
+
+/* ============================================================
+   27. Content Comfort + Colorful Sidebar v8
+   更新: 2026-06-11
+   目标:
+   - 正文恢复主题原生舒适色，不再强行改文字/背景
+   - 侧边栏保留多彩目录提示
+   - 只用轻量边框和小面积强调提升可读性
+   ============================================================ */
+
+:root {
+  --cc-accent-blue: #4f8fbd;
+  --cc-accent-sky: #3f9fc9;
+  --cc-accent-green: #4d9c7c;
+  --cc-accent-purple: #8a7ccf;
+  --cc-accent-pink: #c36a8f;
+  --cc-accent-amber: #b48738;
+  --cc-soft-border: color-mix(in srgb, var(--background-modifier-border) 84%, var(--text-muted) 16%);
+  --cc-soft-bg: color-mix(in srgb, var(--background-primary) 97%, var(--background-secondary) 3%);
+}
+
+.theme-dark {
+  --cc-accent-blue: #78acd5;
+  --cc-accent-sky: #7ec7e2;
+  --cc-accent-green: #80c7ad;
+  --cc-accent-purple: #aaa0ea;
+  --cc-accent-pink: #df91ae;
+  --cc-accent-amber: #d0a95d;
+  --cc-soft-border: rgba(160, 168, 180, 0.2);
+  --cc-soft-bg: color-mix(in srgb, var(--background-primary) 96%, #ffffff 4%);
+}
+
+.theme-light {
+  --cc-accent-blue: #3f83b8;
+  --cc-accent-sky: #2b91bc;
+  --cc-accent-green: #3e8d70;
+  --cc-accent-purple: #7566c2;
+  --cc-accent-pink: #b85b83;
+  --cc-accent-amber: #a47624;
+  --cc-soft-border: #d8dee6;
+  --cc-soft-bg: #ffffff;
+}
+
+/* Restore content color comfort. */
+.markdown-source-view.mod-cm6 .cm-scroller,
+.markdown-preview-view,
+.workspace-leaf-content[data-type="markdown"] .view-content {
+  background: var(--background-primary) !important;
+  color: var(--text-normal) !important;
+}
+
+.markdown-preview-view,
+.markdown-source-view,
+.cm-s-obsidian,
+.cm-line,
+.markdown-preview-view p,
+.markdown-preview-view li,
+.markdown-preview-view td {
+  color: var(--text-normal) !important;
+}
+
+.markdown-preview-view h1,
+.markdown-preview-view h2,
+.markdown-preview-view h3,
+.markdown-preview-view h4,
+.markdown-preview-view h5,
+.markdown-preview-view h6 {
+  color: var(--text-normal) !important;
+}
+
+/* Softer content structure, no tinted page. */
+.markdown-preview-view h1 {
+  border-bottom-color: var(--background-modifier-border) !important;
+}
+
+.markdown-preview-view h1::after {
+  background: linear-gradient(90deg, var(--interactive-accent), color-mix(in srgb, var(--interactive-accent) 35%, var(--text-muted) 65%)) !important;
+  opacity: 0.72;
+}
+
+.markdown-preview-view h2 {
+  border-bottom-color: var(--background-modifier-border) !important;
+}
+
+.markdown-preview-view h3 {
+  background: transparent !important;
+  border-left-color: var(--interactive-accent) !important;
+}
+
+.callout {
+  background: var(--background-secondary) !important;
+  border-color: var(--cc-soft-border) !important;
+  box-shadow: none !important;
+}
+
+.markdown-preview-view table,
+.dataview.table-view-table {
+  background: transparent !important;
+  border-color: var(--cc-soft-border) !important;
+  box-shadow: none !important;
+}
+
+.markdown-preview-view th,
+.dataview.table-view-table th {
+  color: var(--text-normal) !important;
+  background: var(--background-secondary) !important;
+}
+
+.markdown-preview-view tr:nth-child(even) td,
+.dataview.table-view-table tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--background-secondary) 45%, transparent) !important;
+}
+
+.markdown-preview-view tr:hover td,
+.dataview.table-view-table tr:hover td {
+  background: var(--background-modifier-hover) !important;
+}
+
+.markdown-preview-view code:not(pre code) {
+  color: var(--text-accent) !important;
+  background: var(--background-secondary) !important;
+  border-color: var(--background-modifier-border) !important;
+}
+
+/* Keep sidebars neutral panels but restore colorful category rails. */
+.workspace-ribbon,
+.workspace-sidedock-vault-profile,
+.workspace-split.mod-left-split,
+.workspace-split.mod-right-split,
+.workspace-split.mod-left-split .workspace-tabs,
+.workspace-split.mod-right-split .workspace-tabs,
+.workspace-split.mod-left-split .workspace-tab-container,
+.workspace-split.mod-right-split .workspace-tab-container,
+.workspace-split.mod-left-split .workspace-tab-content-container,
+.workspace-split.mod-right-split .workspace-tab-content-container,
+.workspace-leaf-content[data-type="file-explorer"] .view-content,
+.workspace-leaf-content[data-type="search"] .view-content,
+.workspace-leaf-content[data-type="tag"] .view-content,
+.workspace-leaf-content[data-type="outline"] .view-content,
+.workspace-leaf-content[data-type="bookmarks"] .view-content {
+  background: linear-gradient(180deg, var(--ntz-panel-bg), var(--ntz-panel-bg-2)) !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title {
+  color: var(--cc-accent-blue) !important;
+}
+
+.nav-folder-title[data-path^="00-工作台"],
+.nav-folder-title[data-path^="00-收件箱"],
+.nav-folder-title[data-path^="00-索引"] {
+  color: var(--cc-accent-blue) !important;
+}
+
+.nav-folder-title[data-path^="01-SV语法"] {
+  color: var(--cc-accent-sky) !important;
+}
+
+.nav-folder-title[data-path^="02-UVM"],
+.nav-folder-title[data-path^="11-UVM源码学习"] {
+  color: var(--cc-accent-purple) !important;
+}
+
+.nav-folder-title[data-path^="03-Protocol"] {
+  color: var(--cc-accent-green) !important;
+}
+
+.nav-folder-title[data-path^="04-Tools"],
+.nav-folder-title[data-path^="06-Environment"],
+.nav-folder-title[data-path^="07-Scripts"] {
+  color: var(--cc-accent-amber) !important;
+}
+
+.nav-folder-title[data-path^="05-Verification"],
+.nav-folder-title[data-path^="09-Issues"] {
+  color: var(--cc-accent-pink) !important;
+}
+
+.nav-folder-title[data-path^="08-Projects"] {
+  color: var(--cc-accent-green) !important;
+}
+
+.nav-folder-title[data-path^="10-Notes"],
+.nav-folder-title[data-path^="12-Life"] {
+  color: var(--text-muted) !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title .nav-folder-title-content {
+  color: currentColor !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title {
+  box-shadow:
+    inset 3px 0 0 currentColor,
+    var(--ntz-shadow) !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children .nav-folder-title,
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children .nav-folder-title-content {
+  color: var(--text-muted) !important;
+}
+
+.nav-file-title:hover {
+  color: var(--text-normal) !important;
+  background: var(--background-modifier-hover) !important;
+}
+
+.nav-file-title.is-active,
+.nav-file.is-active > .nav-file-title {
+  color: var(--text-accent) !important;
+  background: color-mix(in srgb, var(--background-primary) 86%, var(--interactive-accent) 12%) !important;
+  border-color: color-mix(in srgb, var(--background-modifier-border) 65%, var(--interactive-accent) 35%) !important;
+  box-shadow: inset 3px 0 0 var(--interactive-accent) !important;
+}
+
+@supports not (background: color-mix(in srgb, red 8%, transparent)) {
+  .markdown-preview-view tr:nth-child(even) td,
+  .dataview.table-view-table tr:nth-child(even) td {
+    background: transparent !important;
+  }
+}
+
+/* ============================================================
+   28. Warm Vivid Reading + Code v9
+   更新: 2026-06-11
+   目标:
+   - 正文和代码块避开蓝黑主调
+   - 阅读区使用温和纸色，代码块使用浅暖色面板
+   - 语法高亮稍鲜艳，但保持长时间阅读舒适
+   ============================================================ */
+
+:root,
+.theme-light,
+.theme-dark {
+  --wv-page: #fbf5ed;
+  --wv-page-soft: #f7eadf;
+  --wv-surface: #fffaf3;
+  --wv-surface-2: #f3e2d4;
+  --wv-text: #3f342d;
+  --wv-muted: #7b6a60;
+  --wv-border: #e2cbb8;
+  --wv-shadow: 0 10px 28px rgba(118, 84, 57, 0.08);
+
+  --cb-bg: #fff7ed;
+  --cb-bg-darker: #f1dccb;
+  --cb-text: #3c312b;
+  --cb-border: #dfbda6;
+  --cb-line-active: #f7e2d1;
+  --cb-gutter-text: #9a7a68;
+  --cb-gutter-active: #6f4f3d;
+
+  --cb-keyword: #b13f73;
+  --cb-type: #b86b13;
+  --cb-string: #257a52;
+  --cb-number: #b95f1d;
+  --cb-comment: #8c776c;
+  --cb-function: #7a4fb3;
+  --cb-variable: #9b3f4d;
+  --cb-operator: #8e5332;
+  --cb-punctuation: #665247;
+  --cb-preprocessor: #c14361;
+  --cb-property: #2f8173;
+  --cb-constant: #c66a1c;
+  --cb-boolean: #a54e9f;
+  --cb-tag: #b13f73;
+  --cb-attr-name: #9a641b;
+  --cb-attr-value: #257a52;
+  --cb-class-name: #8a5a15;
+  --cb-regex: #b44c91;
+  --cb-decorator: #bf475f;
+  --cb-important: #bf475f;
+  --cb-inserted: #2f8b57;
+  --cb-deleted: #c94545;
+
+  --cb-copy-btn-bg: #f2dfce;
+  --cb-copy-btn-hover: #e8c9b5;
+  --cb-copy-btn-text: #6f4f3d;
+}
+
+/* Warm reading canvas. */
+.markdown-source-view.mod-cm6 .cm-scroller,
+.markdown-preview-view,
+.workspace-leaf-content[data-type="markdown"] .view-content {
+  background:
+    linear-gradient(180deg, var(--wv-page), color-mix(in srgb, var(--wv-page) 88%, #ffffff 12%)) !important;
+  color: var(--wv-text) !important;
+}
+
+.markdown-preview-view,
+.markdown-source-view,
+.cm-s-obsidian,
+.cm-line,
+.markdown-preview-view p,
+.markdown-preview-view li,
+.markdown-preview-view td {
+  color: var(--wv-text) !important;
+}
+
+.markdown-preview-view h1,
+.markdown-preview-view h2,
+.markdown-preview-view h3,
+.markdown-preview-view h4,
+.markdown-preview-view h5,
+.markdown-preview-view h6 {
+  color: #59382f !important;
+}
+
+.markdown-preview-view h1::after {
+  background: linear-gradient(90deg, #d5526f, #d49b39, #3e9a71) !important;
+  opacity: 0.78;
+}
+
+.markdown-preview-view h2 {
+  border-bottom-color: var(--wv-border) !important;
+}
+
+.markdown-preview-view h3 {
+  border-left-color: #d5526f !important;
+}
+
+.markdown-preview-view strong,
+.cm-strong {
+  color: #8e3e35 !important;
+}
+
+.markdown-preview-view a,
+.markdown-preview-view .internal-link,
+.cm-hmd-internal-link,
+.cm-link {
+  color: #8b4bb3 !important;
+}
+
+.markdown-preview-view blockquote {
+  background: color-mix(in srgb, var(--wv-surface) 76%, #f0d4bf 24%) !important;
+  border-left-color: #d49b39 !important;
+  color: #5d4a3f !important;
+}
+
+.callout {
+  background: var(--wv-surface) !important;
+  border-color: var(--wv-border) !important;
+  box-shadow: var(--wv-shadow) !important;
+}
+
+.markdown-preview-view table,
+.dataview.table-view-table {
+  background: var(--wv-surface) !important;
+  border-color: var(--wv-border) !important;
+  box-shadow: var(--wv-shadow) !important;
+}
+
+.markdown-preview-view th,
+.dataview.table-view-table th {
+  color: #5b3b2f !important;
+  background: var(--wv-page-soft) !important;
+}
+
+.markdown-preview-view tr:nth-child(even) td,
+.dataview.table-view-table tr:nth-child(even) td {
+  background: rgba(218, 157, 105, 0.08) !important;
+}
+
+.markdown-preview-view tr:hover td,
+.dataview.table-view-table tr:hover td {
+  background: rgba(213, 82, 111, 0.08) !important;
+}
+
+/* Inline code and fenced code blocks. */
+.markdown-preview-view code:not(pre code),
+.cm-inline-code {
+  color: #a43d58 !important;
+  background: #f7dfcf !important;
+  border: 1px solid #e5bca5 !important;
+  border-radius: 5px !important;
+}
+
+.markdown-preview-view pre,
+.markdown-preview-view pre code,
+.markdown-reading-view .codeblock-customizer,
+.markdown-reading-view .codeblock-customizer .codeblock-customizer-code {
+  background: var(--cb-bg) !important;
+  color: var(--cb-text) !important;
+  border-color: var(--cb-border) !important;
+}
+
+.markdown-preview-view pre {
+  box-shadow: var(--wv-shadow) !important;
+}
+
+.markdown-preview-view pre::before {
+  background: linear-gradient(90deg, #d5526f, #d49b39, #3e9a71, #8b4bb3) !important;
+  opacity: 0.86;
+}
+
+.markdown-preview-view pre .code-block-language,
+.codeblock-customizer .codeblock-customizer-header-language-tag {
+  background: #e9c7b2 !important;
+  color: #6d3b33 !important;
+  border-color: #d8aa91 !important;
+}
+
+.codeblock-customizer .codeblock-customizer-line-number,
+.codeblock-customizer .codeblock-customizer-line-number-specific,
+.markdown-preview-view pre .code-block-linenumbers {
+  color: var(--cb-gutter-text) !important;
+  background: var(--cb-bg-darker) !important;
+  border-right-color: #dfbda6 !important;
+}
+
+.codeblock-customizer .codeblock-customizer-copy-code-button,
+.markdown-preview-view pre button.copy-code-button {
+  background: var(--cb-copy-btn-bg) !important;
+  color: var(--cb-copy-btn-text) !important;
+  border-color: var(--cb-border) !important;
+}
+
+.codeblock-customizer .codeblock-customizer-copy-code-button:hover,
+.markdown-preview-view pre button.copy-code-button:hover {
+  background: var(--cb-copy-btn-hover) !important;
+}
+
+.markdown-preview-view pre::-webkit-scrollbar-track {
+  background: var(--cb-bg-darker) !important;
+}
+
+.markdown-preview-view pre::-webkit-scrollbar-thumb {
+  background: #d3a48c !important;
+}
+
+.markdown-preview-view pre::selection,
+.markdown-preview-view pre code::selection,
+.markdown-preview-view pre code *::selection {
+  background: rgba(213, 82, 111, 0.22) !important;
+  color: inherit !important;
+}
+
+/* ============================================================
+   29. Warm Canvas Background Fix v10
+   更新: 2026-06-11
+   目标:
+   - 修正最外层工作区/编辑器容器仍显示纯黑的问题
+   - 保留 v9 的代码块内部配色
+   ============================================================ */
+
+body.theme-dark,
+body.theme-light,
+.theme-dark,
+.theme-light {
+  --background-primary: #fbf5ed !important;
+  --background-primary-alt: #f7ecdf !important;
+  --background-secondary: #f1dfcf !important;
+  --background-secondary-alt: #ead2bf !important;
+  --background-modifier-border: #dec5b2 !important;
+  --background-modifier-border-hover: #d0ad97 !important;
+  --background-modifier-hover: rgba(190, 104, 79, 0.12) !important;
+  --background-modifier-active-hover: rgba(190, 104, 79, 0.18) !important;
+  --text-normal: #3f342d !important;
+  --text-muted: #7a685d !important;
+  --text-faint: #9b897d !important;
+  --text-accent: #a74667 !important;
+  --text-accent-hover: #8b4bb3 !important;
+  --interactive-accent: #c85b6e !important;
+  --interactive-accent-hover: #b34f72 !important;
+  --wv-app-bg: #f0dfd0;
+  --wv-editor-bg: #fbf5ed;
+  --wv-editor-panel: #fffaf3;
+}
+
+body,
+.app-container,
+.horizontal-main-container,
+.workspace,
+.workspace-split,
+.workspace-split.mod-root,
+.workspace-tabs,
+.workspace-tab-container,
+.workspace-tab-content-container,
+.workspace-leaf,
+.workspace-leaf-content,
+.workspace-leaf-content .view-content {
+  background: var(--wv-app-bg) !important;
+  color: var(--text-normal) !important;
+}
+
+.workspace-leaf-content[data-type="markdown"],
+.workspace-leaf-content[data-type="markdown"] .view-content,
+.markdown-reading-view,
+.markdown-source-view,
+.markdown-preview-view,
+.markdown-preview-sizer,
+.markdown-source-view.mod-cm6,
+.markdown-source-view.mod-cm6 .cm-editor,
+.markdown-source-view.mod-cm6 .cm-scroller,
+.markdown-source-view.mod-cm6 .cm-content,
+.markdown-source-view.mod-cm6 .cm-contentContainer {
+  background: var(--wv-editor-bg) !important;
+  color: var(--text-normal) !important;
+}
+
+.markdown-reading-view .markdown-preview-view,
+.markdown-source-view.mod-cm6 .cm-editor {
+  background:
+    linear-gradient(180deg, var(--wv-editor-bg), var(--wv-editor-panel)) !important;
+}
+
+.workspace-leaf-content[data-type="markdown"] .view-header,
+.workspace-tab-header-container,
+.titlebar,
+.status-bar {
+  background: #ead2bf !important;
+  color: var(--text-normal) !important;
+  border-color: var(--background-modifier-border) !important;
+}
+
+/* ============================================================
+   30. Contrast + Warm Sidebar Fix v11
+   更新: 2026-06-11
+   目标:
+   - 拉开正文、块状元素、侧边栏的层级
+   - 修复元素和背景颜色过近导致“隐身”
+   - 侧边栏改为同体系暖灰，不再纯黑
+   ============================================================ */
+
+body.theme-dark,
+body.theme-light,
+.theme-dark,
+.theme-light {
+  --wv-app-bg: #e5d6c8;
+  --wv-editor-bg: #fbf4ea;
+  --wv-editor-panel: #fffaf2;
+  --wv-sidebar-bg: #d9c8b9;
+  --wv-sidebar-bg-2: #cdb8a8;
+  --wv-block-bg: #fff9ef;
+  --wv-block-bg-2: #f3e1d1;
+  --wv-block-border: #c9a58e;
+  --wv-block-shadow: 0 8px 22px rgba(93, 61, 38, 0.13);
+  --wv-chip-bg: #f0d7c5;
+  --wv-chip-border: #c79d84;
+  --wv-sidebar-text: #4b3c34;
+  --wv-sidebar-muted: #6f5b50;
+}
+
+/* App shell and sidebars: remove black panels, keep clear contrast. */
+body,
+.app-container,
+.horizontal-main-container,
+.workspace,
+.workspace-split,
+.workspace-split.mod-root {
+  background: var(--wv-app-bg) !important;
+}
+
+.workspace-ribbon,
+.workspace-sidedock-vault-profile,
+.mod-left-split,
+.mod-right-split,
+.workspace-split.mod-left-split,
+.workspace-split.mod-right-split,
+.workspace-split.mod-left-split .workspace-tabs,
+.workspace-split.mod-right-split .workspace-tabs,
+.workspace-split.mod-left-split .workspace-tab-container,
+.workspace-split.mod-right-split .workspace-tab-container,
+.workspace-split.mod-left-split .workspace-tab-content-container,
+.workspace-split.mod-right-split .workspace-tab-content-container,
+.workspace-leaf-content[data-type="file-explorer"],
+.workspace-leaf-content[data-type="file-explorer"] .view-content,
+.workspace-leaf-content[data-type="search"],
+.workspace-leaf-content[data-type="search"] .view-content,
+.workspace-leaf-content[data-type="tag"],
+.workspace-leaf-content[data-type="tag"] .view-content,
+.workspace-leaf-content[data-type="outline"],
+.workspace-leaf-content[data-type="outline"] .view-content,
+.workspace-leaf-content[data-type="bookmarks"],
+.workspace-leaf-content[data-type="bookmarks"] .view-content {
+  background:
+    linear-gradient(180deg, var(--wv-sidebar-bg), var(--wv-sidebar-bg-2)) !important;
+  color: var(--wv-sidebar-text) !important;
+  border-color: rgba(94, 67, 50, 0.18) !important;
+}
+
+.workspace-ribbon .clickable-icon,
+.workspace-tab-header,
+.workspace-tab-header-inner,
+.view-header-title,
+.nav-header,
+.nav-buttons-container,
+.search-input-container input {
+  color: var(--wv-sidebar-text) !important;
+}
+
+.workspace-tab-header-container,
+.workspace-leaf-content[data-type="markdown"] .view-header,
+.titlebar,
+.status-bar {
+  background: #d2bead !important;
+  color: var(--wv-sidebar-text) !important;
+  border-color: rgba(94, 67, 50, 0.2) !important;
+}
+
+/* Reading/editor surface: keep it light, but separated from app shell. */
+.workspace-leaf-content[data-type="markdown"],
+.workspace-leaf-content[data-type="markdown"] .view-content,
+.markdown-reading-view,
+.markdown-source-view,
+.markdown-preview-view,
+.markdown-preview-sizer,
+.markdown-source-view.mod-cm6,
+.markdown-source-view.mod-cm6 .cm-editor,
+.markdown-source-view.mod-cm6 .cm-scroller,
+.markdown-source-view.mod-cm6 .cm-content,
+.markdown-source-view.mod-cm6 .cm-contentContainer {
+  background: var(--wv-editor-bg) !important;
+  color: #3c3029 !important;
+}
+
+.markdown-reading-view .markdown-preview-view,
+.markdown-source-view.mod-cm6 .cm-editor {
+  background:
+    linear-gradient(180deg, var(--wv-editor-bg), #fff8ef 68%, #f7eadf) !important;
+}
+
+.markdown-preview-view hr {
+  border-color: var(--wv-block-border) !important;
+}
+
+/* Block elements: visible panels, not same-color patches. */
+.callout,
+.markdown-preview-view blockquote,
+.markdown-preview-view table,
+.dataview.table-view-table,
+.markdown-embed,
+.file-embed,
+.internal-embed,
+.markdown-preview-view .mermaid,
+.markdown-preview-view .math,
+.markdown-preview-view mjx-container,
+.markdown-preview-view mark {
+  background: var(--wv-block-bg) !important;
+  color: #46372f !important;
+  border: 1px solid var(--wv-block-border) !important;
+  box-shadow: var(--wv-block-shadow) !important;
+}
+
+.callout {
+  border-left-width: 4px !important;
+}
+
+.callout-title,
+.callout-content,
+.callout-content p,
+.markdown-preview-view blockquote p,
+.markdown-embed-content,
+.markdown-embed-title,
+.file-embed-title {
+  color: #46372f !important;
+}
+
+.markdown-preview-view th,
+.dataview.table-view-table th {
+  background: var(--wv-block-bg-2) !important;
+  color: #4d3429 !important;
+  border-color: var(--wv-block-border) !important;
+}
+
+.markdown-preview-view td,
+.dataview.table-view-table td {
+  border-color: #dbc0ad !important;
+}
+
+.markdown-preview-view tr:nth-child(even) td,
+.dataview.table-view-table tr:nth-child(even) td {
+  background: #f8eadf !important;
+}
+
+.markdown-preview-view tr:hover td,
+.dataview.table-view-table tr:hover td {
+  background: #efd3c2 !important;
+}
+
+.markdown-preview-view code:not(pre code),
+.cm-inline-code {
+  background: var(--wv-chip-bg) !important;
+  color: #91364f !important;
+  border-color: var(--wv-chip-border) !important;
+}
+
+/* Sidebar file tree: readable warm panels with existing colorful rails. */
+.nav-files-container,
+.tree-item,
+.nav-folder,
+.nav-file {
+  color: var(--wv-sidebar-text) !important;
+}
+
+.nav-folder-title,
+.nav-file-title {
+  background: rgba(255, 250, 242, 0.28) !important;
+  color: var(--wv-sidebar-text) !important;
+  border-color: rgba(94, 67, 50, 0.13) !important;
+}
+
+.nav-folder-title-content,
+.nav-file-title-content,
+.tree-item-inner {
+  color: inherit !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title {
+  background: rgba(255, 250, 242, 0.46) !important;
+}
+
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children .nav-folder-title,
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-children .nav-folder-title-content,
+.nav-file-title {
+  color: var(--wv-sidebar-muted) !important;
+}
+
+.nav-folder-title:hover,
+.nav-file-title:hover {
+  background: rgba(255, 250, 242, 0.68) !important;
+  color: #3e3029 !important;
+}
+
+.nav-file-title.is-active,
+.nav-file.is-active > .nav-file-title {
+  background: #fff4e8 !important;
+  color: #8d3552 !important;
+  border-color: #c99a83 !important;
+  box-shadow: inset 3px 0 0 #c85b6e, 0 4px 12px rgba(93, 61, 38, 0.12) !important;
+}
+
+.search-input-container input {
+  background: #f3e1d1 !important;
+  color: #3f342d !important;
+  border: 1px solid #c9a58e !important;
+}
+
+/* ============================================================
+   31. Dashboard Card Readability Fix v12
+   更新: 2026-06-11
+   目标:
+   - 修复工作台主页 dashboard 方块内部文字不可见
+   - 单独处理 dashboard callout / table / dataview / link
+   - 不影响普通笔记的代码块高亮
+   ============================================================ */
+
+.markdown-preview-view.dashboard,
+.dashboard .markdown-preview-view {
+  background: #f8efe4 !important;
+  color: #3a2e28 !important;
+}
+
+.markdown-preview-view.dashboard .callout,
+.dashboard .callout {
+  --callout-color: 176, 87, 104 !important;
+  background: #fffaf2 !important;
+  color: #3a2e28 !important;
+  border: 1px solid #cda890 !important;
+  border-left: 5px solid #b85768 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 20px rgba(91, 57, 35, 0.14) !important;
+  overflow: hidden !important;
+}
+
+.markdown-preview-view.dashboard .callout-title,
+.dashboard .callout-title {
+  background: linear-gradient(90deg, #b85768, #c98742) !important;
+  color: #fffaf2 !important;
+  -webkit-text-fill-color: #fffaf2 !important;
+  border-bottom: 1px solid rgba(91, 57, 35, 0.16) !important;
+  padding: 10px 14px !important;
+}
+
+.markdown-preview-view.dashboard .callout-title *,
+.dashboard .callout-title *,
+.markdown-preview-view.dashboard .callout-title-icon,
+.dashboard .callout-title-icon,
+.markdown-preview-view.dashboard .callout-title-icon svg,
+.dashboard .callout-title-icon svg {
+  color: #fffaf2 !important;
+  stroke: #fffaf2 !important;
+  fill: none !important;
+  -webkit-text-fill-color: #fffaf2 !important;
+}
+
+.markdown-preview-view.dashboard .callout-content,
+.dashboard .callout-content {
+  background: #fffaf2 !important;
+  color: #3a2e28 !important;
+  -webkit-text-fill-color: #3a2e28 !important;
+}
+
+.markdown-preview-view.dashboard .callout-content p,
+.markdown-preview-view.dashboard .callout-content li,
+.markdown-preview-view.dashboard .callout-content div,
+.markdown-preview-view.dashboard .callout-content span,
+.markdown-preview-view.dashboard .callout-content td,
+.dashboard .callout-content p,
+.dashboard .callout-content li,
+.dashboard .callout-content div,
+.dashboard .callout-content span,
+.dashboard .callout-content td {
+  color: #3a2e28 !important;
+  -webkit-text-fill-color: #3a2e28 !important;
+}
+
+.markdown-preview-view.dashboard .callout-content h1,
+.markdown-preview-view.dashboard .callout-content h2,
+.markdown-preview-view.dashboard .callout-content h3,
+.dashboard .callout-content h1,
+.dashboard .callout-content h2,
+.dashboard .callout-content h3 {
+  background: none !important;
+  color: #6b342f !important;
+  -webkit-text-fill-color: #6b342f !important;
+  text-shadow: none !important;
+}
+
+.markdown-preview-view.dashboard .callout-content strong,
+.dashboard .callout-content strong {
+  color: #8f3f32 !important;
+  -webkit-text-fill-color: #8f3f32 !important;
+}
+
+.markdown-preview-view.dashboard .callout-content em,
+.dashboard .callout-content em {
+  color: #6b5b50 !important;
+  -webkit-text-fill-color: #6b5b50 !important;
+}
+
+.markdown-preview-view.dashboard .internal-link,
+.markdown-preview-view.dashboard .external-link,
+.markdown-preview-view.dashboard a,
+.dashboard .internal-link,
+.dashboard .external-link,
+.dashboard a {
+  color: #8742a0 !important;
+  -webkit-text-fill-color: #8742a0 !important;
+  background: rgba(135, 66, 160, 0.08) !important;
+  border-bottom: 1px solid rgba(135, 66, 160, 0.32) !important;
+}
+
+.markdown-preview-view.dashboard .internal-link:hover,
+.markdown-preview-view.dashboard .external-link:hover,
+.markdown-preview-view.dashboard a:hover,
+.dashboard .internal-link:hover,
+.dashboard .external-link:hover,
+.dashboard a:hover {
+  color: #6f337f !important;
+  -webkit-text-fill-color: #6f337f !important;
+  background: rgba(135, 66, 160, 0.16) !important;
+}
+
+.markdown-preview-view.dashboard table,
+.markdown-preview-view.dashboard .dataview.table-view-table,
+.dashboard table,
+.dashboard .dataview.table-view-table {
+  background: #fffdf8 !important;
+  color: #3a2e28 !important;
+  border: 1px solid #d1ac94 !important;
+  box-shadow: none !important;
+}
+
+.markdown-preview-view.dashboard th,
+.markdown-preview-view.dashboard .dataview.table-view-table th,
+.dashboard th,
+.dashboard .dataview.table-view-table th {
+  background: #ead2c0 !important;
+  color: #4a3229 !important;
+  -webkit-text-fill-color: #4a3229 !important;
+  border-color: #d1ac94 !important;
+}
+
+.markdown-preview-view.dashboard td,
+.markdown-preview-view.dashboard .dataview.table-view-table td,
+.dashboard td,
+.dashboard .dataview.table-view-table td {
+  background: #fffaf2 !important;
+  color: #3a2e28 !important;
+  -webkit-text-fill-color: #3a2e28 !important;
+  border-color: #e2c8b6 !important;
+}
+
+.markdown-preview-view.dashboard tr:nth-child(even) td,
+.dashboard tr:nth-child(even) td {
+  background: #f6e8dc !important;
+}
+
+.markdown-preview-view.dashboard tr:hover td,
+.dashboard tr:hover td {
+  background: #eed2c1 !important;
+}
+
+.markdown-preview-view.dashboard .dataview,
+.markdown-preview-view.dashboard .dataview-container,
+.dashboard .dataview,
+.dashboard .dataview-container {
+  color: #3a2e28 !important;
+  -webkit-text-fill-color: #3a2e28 !important;
+}
+
+.markdown-preview-view.dashboard code:not(pre code),
+.dashboard code:not(pre code) {
+  background: #efd3c2 !important;
+  color: #8e364f !important;
+  -webkit-text-fill-color: #8e364f !important;
+  border: 1px solid #cda890 !important;
+}
+
+.markdown-preview-view.dashboard .callout[data-callout="dashboard-title"],
+.dashboard .callout[data-callout="dashboard-title"] {
+  background: linear-gradient(135deg, #fff7ee, #f4ddcf) !important;
+  border-left-color: #8f4a5f !important;
+}
+
+.markdown-preview-view.dashboard .callout[data-callout="dashboard-title"] .callout-content,
+.dashboard .callout[data-callout="dashboard-title"] .callout-content {
+  background: transparent !important;
+}
+
+.markdown-preview-view.dashboard .callout[data-callout="dashboard-status"],
+.dashboard .callout[data-callout="dashboard-status"],
+.markdown-preview-view.dashboard .callout[data-callout="info"],
+.dashboard .callout[data-callout="info"] {
+  border-left-color: #9d6441 !important;
+}
+
+.markdown-preview-view.dashboard .callout[data-callout="example"],
+.dashboard .callout[data-callout="example"] {
+  border-left-color: #8a5bb5 !important;
+}
+
+.markdown-preview-view.dashboard .callout[data-callout="success"],
+.dashboard .callout[data-callout="success"],
+.markdown-preview-view.dashboard .callout[data-callout="tip"],
+.dashboard .callout[data-callout="tip"] {
+  border-left-color: #438662 !important;
+}
+
+.markdown-preview-view.dashboard .callout[data-callout="warning"],
+.dashboard .callout[data-callout="warning"],
+.markdown-preview-view.dashboard .callout[data-callout="important"],
+.dashboard .callout[data-callout="important"] {
+  border-left-color: #b57a2e !important;
+}
+
+.markdown-preview-view.dashboard .callout[data-callout="bug"],
+.dashboard .callout[data-callout="bug"] {
+  border-left-color: #b94c4c !important;
+}
+
+.markdown-preview-view.dashboard .callout[data-callout="abstract"],
+.dashboard .callout[data-callout="abstract"],
+.markdown-preview-view.dashboard .callout[data-callout="note"],
+.dashboard .callout[data-callout="note"] {
+  border-left-color: #7d6d64 !important;
+}
+
+/* ============================================================
+   32. Workbench Pages Hard Fix v13
+   更新: 2026-06-11
+   目标:
+   - 精准修复 00-主页 / 02-学习进度 / 03-仪表盘
+   - 用 kb-workbench 页面类强制卡片内容可读
+   ============================================================ */
+
+.markdown-preview-view.kb-workbench,
+.kb-workbench .markdown-preview-view {
+  background: #f6eadf !important;
+  color: #332923 !important;
+}
+
+.markdown-preview-view.kb-workbench *,
+.kb-workbench .markdown-preview-view * {
+  -webkit-text-fill-color: initial;
+}
+
+.markdown-preview-view.kb-workbench h1,
+.markdown-preview-view.kb-workbench h2,
+.markdown-preview-view.kb-workbench h3,
+.markdown-preview-view.kb-workbench h4,
+.kb-workbench .markdown-preview-view h1,
+.kb-workbench .markdown-preview-view h2,
+.kb-workbench .markdown-preview-view h3,
+.kb-workbench .markdown-preview-view h4 {
+  background: none !important;
+  color: #58382f !important;
+  -webkit-text-fill-color: #58382f !important;
+  text-shadow: none !important;
+}
+
+.markdown-preview-view.kb-workbench p,
+.markdown-preview-view.kb-workbench li,
+.markdown-preview-view.kb-workbench div,
+.markdown-preview-view.kb-workbench span,
+.markdown-preview-view.kb-workbench td,
+.markdown-preview-view.kb-workbench .dataview,
+.markdown-preview-view.kb-workbench .dataview-container,
+.markdown-preview-view.kb-workbench .dataview-result-list-root-ul,
+.markdown-preview-view.kb-workbench .task-list-item,
+.kb-workbench .markdown-preview-view p,
+.kb-workbench .markdown-preview-view li,
+.kb-workbench .markdown-preview-view div,
+.kb-workbench .markdown-preview-view span,
+.kb-workbench .markdown-preview-view td,
+.kb-workbench .markdown-preview-view .dataview,
+.kb-workbench .markdown-preview-view .dataview-container,
+.kb-workbench .markdown-preview-view .dataview-result-list-root-ul,
+.kb-workbench .markdown-preview-view .task-list-item {
+  color: #332923 !important;
+  -webkit-text-fill-color: #332923 !important;
+}
+
+.markdown-preview-view.kb-workbench .callout,
+.kb-workbench .markdown-preview-view .callout {
+  background: #fffbf5 !important;
+  color: #332923 !important;
+  border: 1px solid #bd9279 !important;
+  border-left-width: 5px !important;
+  border-radius: 9px !important;
+  box-shadow: 0 7px 18px rgba(78, 48, 30, 0.14) !important;
+  opacity: 1 !important;
+}
+
+.markdown-preview-view.kb-workbench .callout-title,
+.kb-workbench .markdown-preview-view .callout-title {
+  background: #dcc0ab !important;
+  color: #402d25 !important;
+  -webkit-text-fill-color: #402d25 !important;
+  border-bottom: 1px solid #bd9279 !important;
+}
+
+.markdown-preview-view.kb-workbench .callout-title *,
+.markdown-preview-view.kb-workbench .callout-title-icon,
+.markdown-preview-view.kb-workbench .callout-title-icon svg,
+.kb-workbench .markdown-preview-view .callout-title *,
+.kb-workbench .markdown-preview-view .callout-title-icon,
+.kb-workbench .markdown-preview-view .callout-title-icon svg {
+  color: #402d25 !important;
+  stroke: #402d25 !important;
+  -webkit-text-fill-color: #402d25 !important;
+}
+
+.markdown-preview-view.kb-workbench .callout-content,
+.kb-workbench .markdown-preview-view .callout-content {
+  background: #fffbf5 !important;
+  color: #332923 !important;
+  -webkit-text-fill-color: #332923 !important;
+}
+
+.markdown-preview-view.kb-workbench .callout-content *,
+.kb-workbench .markdown-preview-view .callout-content * {
+  color: #332923 !important;
+  -webkit-text-fill-color: #332923 !important;
+}
+
+.markdown-preview-view.kb-workbench .callout-content strong,
+.kb-workbench .markdown-preview-view .callout-content strong,
+.markdown-preview-view.kb-workbench strong,
+.kb-workbench .markdown-preview-view strong {
+  color: #7e372f !important;
+  -webkit-text-fill-color: #7e372f !important;
+}
+
+.markdown-preview-view.kb-workbench .callout-content em,
+.kb-workbench .markdown-preview-view .callout-content em,
+.markdown-preview-view.kb-workbench em,
+.kb-workbench .markdown-preview-view em {
+  color: #69564b !important;
+  -webkit-text-fill-color: #69564b !important;
+}
+
+.markdown-preview-view.kb-workbench table,
+.markdown-preview-view.kb-workbench .dataview.table-view-table,
+.kb-workbench .markdown-preview-view table,
+.kb-workbench .markdown-preview-view .dataview.table-view-table {
+  background: #fffdf9 !important;
+  color: #332923 !important;
+  border: 1px solid #cba48c !important;
+  box-shadow: none !important;
+}
+
+.markdown-preview-view.kb-workbench th,
+.markdown-preview-view.kb-workbench .dataview.table-view-table th,
+.kb-workbench .markdown-preview-view th,
+.kb-workbench .markdown-preview-view .dataview.table-view-table th {
+  background: #ead0bc !important;
+  color: #3d2b24 !important;
+  -webkit-text-fill-color: #3d2b24 !important;
+  border-color: #cba48c !important;
+}
+
+.markdown-preview-view.kb-workbench td,
+.markdown-preview-view.kb-workbench .dataview.table-view-table td,
+.kb-workbench .markdown-preview-view td,
+.kb-workbench .markdown-preview-view .dataview.table-view-table td {
+  background: #fffbf5 !important;
+  color: #332923 !important;
+  -webkit-text-fill-color: #332923 !important;
+  border-color: #e0c5b2 !important;
+}
+
+.markdown-preview-view.kb-workbench tr:nth-child(even) td,
+.kb-workbench .markdown-preview-view tr:nth-child(even) td {
+  background: #f6e7da !important;
+}
+
+.markdown-preview-view.kb-workbench tr:hover td,
+.kb-workbench .markdown-preview-view tr:hover td {
+  background: #efd3c0 !important;
+}
+
+.markdown-preview-view.kb-workbench a,
+.markdown-preview-view.kb-workbench .internal-link,
+.markdown-preview-view.kb-workbench .external-link,
+.kb-workbench .markdown-preview-view a,
+.kb-workbench .markdown-preview-view .internal-link,
+.kb-workbench .markdown-preview-view .external-link {
+  color: #7b3f98 !important;
+  -webkit-text-fill-color: #7b3f98 !important;
+  background: rgba(123, 63, 152, 0.08) !important;
+  border-radius: 4px !important;
+}
+
+.markdown-preview-view.kb-workbench code:not(pre code),
+.kb-workbench .markdown-preview-view code:not(pre code) {
+  background: #efd3c0 !important;
+  color: #8a3449 !important;
+  -webkit-text-fill-color: #8a3449 !important;
+  border: 1px solid #cba48c !important;
+}
+
+.markdown-preview-view.kb-workbench .callout[data-callout="dashboard-title"],
+.kb-workbench .markdown-preview-view .callout[data-callout="dashboard-title"] {
+  background: #fff6ed !important;
+  border-left-color: #8c4a5f !important;
+}
+
+.markdown-preview-view.kb-workbench .callout[data-callout="dashboard-title"] .callout-title,
+.kb-workbench .markdown-preview-view .callout[data-callout="dashboard-title"] .callout-title {
+  display: none !important;
+}
+
+.markdown-preview-view.kb-workbench .callout[data-callout="dashboard-title"] h1,
+.kb-workbench .markdown-preview-view .callout[data-callout="dashboard-title"] h1 {
+  color: #68362f !important;
+  -webkit-text-fill-color: #68362f !important;
+  border: none !important;
+}
+
+.markdown-preview-view.kb-workbench .callout[data-callout="dashboard-status"],
+.kb-workbench .markdown-preview-view .callout[data-callout="dashboard-status"] {
+  border-left-color: #9b6541 !important;
+}
+
+/* ============================================================
+   33. Callout Readability Clamp v14
+   更新: 2026-06-11
+   目标:
+   - 解决 callout / table 内部文字被旧 dashboard/admonition 规则压成浅色
+   - 不依赖 dashboard/kb-workbench 页面类是否命中
+   - 避免影响代码块内部 token 高亮
+   ============================================================ */
+
+.markdown-preview-view .callout {
+  background: #fffaf3 !important;
+  color: #332923 !important;
+  border-color: #c9a58e !important;
+  box-shadow: 0 7px 18px rgba(78, 48, 30, 0.12) !important;
+  opacity: 1 !important;
+}
+
+.markdown-preview-view .callout-title {
+  background: #dcc0ab !important;
+  color: #402d25 !important;
+  -webkit-text-fill-color: #402d25 !important;
+  border-bottom: 1px solid #c9a58e !important;
+}
+
+.markdown-preview-view .callout-title *,
+.markdown-preview-view .callout-title-icon,
+.markdown-preview-view .callout-title-icon svg {
+  color: #402d25 !important;
+  stroke: #402d25 !important;
+  -webkit-text-fill-color: #402d25 !important;
+}
+
+.markdown-preview-view .callout-content {
+  background: #fffaf3 !important;
+  color: #332923 !important;
+  -webkit-text-fill-color: #332923 !important;
+  opacity: 1 !important;
+}
+
+.markdown-preview-view .callout-content :is(p, li, span, div, td, dd, dt),
+.markdown-preview-view .callout-content table :is(td, span, div),
+.markdown-preview-view .callout-content .dataview,
+.markdown-preview-view .callout-content .dataview-container,
+.markdown-preview-view .callout-content .dataview-result-list-root-ul,
+.markdown-preview-view .callout-content .task-list-item {
+  color: #332923 !important;
+  -webkit-text-fill-color: #332923 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.markdown-preview-view .callout-content h1,
+.markdown-preview-view .callout-content h2,
+.markdown-preview-view .callout-content h3,
+.markdown-preview-view .callout-content h4,
+.markdown-preview-view .callout-content strong {
+  color: #6d382f !important;
+  -webkit-text-fill-color: #6d382f !important;
+  opacity: 1 !important;
+}
+
+.markdown-preview-view .callout-content em {
+  color: #6f5d53 !important;
+  -webkit-text-fill-color: #6f5d53 !important;
+}
+
+.markdown-preview-view .callout-content a,
+.markdown-preview-view .callout-content .internal-link,
+.markdown-preview-view .callout-content .external-link {
+  color: #7b3f98 !important;
+  -webkit-text-fill-color: #7b3f98 !important;
+  background: rgba(123, 63, 152, 0.08) !important;
+  border-radius: 4px !important;
+}
+
+.markdown-preview-view .callout-content table,
+.markdown-preview-view .callout-content .dataview.table-view-table {
+  background: #fffdf8 !important;
+  color: #332923 !important;
+  border: 1px solid #c9a58e !important;
+  box-shadow: none !important;
+}
+
+.markdown-preview-view .callout-content th,
+.markdown-preview-view .callout-content .dataview.table-view-table th {
+  background: #ead0bc !important;
+  color: #3d2b24 !important;
+  -webkit-text-fill-color: #3d2b24 !important;
+  border-color: #c9a58e !important;
+}
+
+.markdown-preview-view .callout-content td,
+.markdown-preview-view .callout-content .dataview.table-view-table td {
+  background: #fffaf3 !important;
+  color: #332923 !important;
+  -webkit-text-fill-color: #332923 !important;
+  border-color: #e0c5b2 !important;
+}
+
+.markdown-preview-view .callout-content tr:nth-child(even) td {
+  background: #f6e7da !important;
+}
+
+.markdown-preview-view .callout-content tr:hover td {
+  background: #efd3c0 !important;
+}
+
+.markdown-preview-view .callout-content code:not(pre code) {
+  background: #efd3c0 !important;
+  color: #8a3449 !important;
+  -webkit-text-fill-color: #8a3449 !important;
+  border: 1px solid #c9a58e !important;
+}
+
+/* ============================================================
+   34. Admonition Plugin Readability Clamp v15
+   更新: 2026-06-11
+   目标:
+   - 修复 Admonition 插件渲染的 .admonition 方块
+   - 这些方块来自 > [!note] / > [!info] / > [!tip] 等提示块
+   - 覆盖 .admonition-content，而不只覆盖原生 .callout-content
+   ============================================================ */
+
+.markdown-preview-view .admonition,
+.markdown-reading-view .admonition,
+.markdown-source-view.mod-cm6 .admonition {
+  background: #fffaf3 !important;
+  color: #332923 !important;
+  border: 1px solid #c9a58e !important;
+  border-left: 5px solid #b85a68 !important;
+  box-shadow: 0 7px 18px rgba(78, 48, 30, 0.12) !important;
+  opacity: 1 !important;
+}
+
+.markdown-preview-view .admonition-title,
+.markdown-reading-view .admonition-title,
+.markdown-source-view.mod-cm6 .admonition-title {
+  background: #dcc0ab !important;
+  color: #402d25 !important;
+  -webkit-text-fill-color: #402d25 !important;
+  border-bottom: 1px solid #c9a58e !important;
+}
+
+.markdown-preview-view .admonition-title *,
+.markdown-preview-view .admonition-title-icon,
+.markdown-preview-view .admonition-title-icon svg,
+.markdown-reading-view .admonition-title *,
+.markdown-reading-view .admonition-title-icon,
+.markdown-reading-view .admonition-title-icon svg,
+.markdown-source-view.mod-cm6 .admonition-title *,
+.markdown-source-view.mod-cm6 .admonition-title-icon,
+.markdown-source-view.mod-cm6 .admonition-title-icon svg {
+  color: #402d25 !important;
+  stroke: #402d25 !important;
+  -webkit-text-fill-color: #402d25 !important;
+}
+
+.markdown-preview-view .admonition-content,
+.markdown-reading-view .admonition-content,
+.markdown-source-view.mod-cm6 .admonition-content {
+  background: #fffaf3 !important;
+  color: #332923 !important;
+  -webkit-text-fill-color: #332923 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.markdown-preview-view .admonition-content :is(p, li, span, div, td, dd, dt),
+.markdown-preview-view .admonition-content table :is(td, span, div),
+.markdown-preview-view .admonition-content .dataview,
+.markdown-preview-view .admonition-content .dataview-container,
+.markdown-preview-view .admonition-content .dataview-result-list-root-ul,
+.markdown-preview-view .admonition-content .task-list-item,
+.markdown-reading-view .admonition-content :is(p, li, span, div, td, dd, dt),
+.markdown-reading-view .admonition-content table :is(td, span, div),
+.markdown-reading-view .admonition-content .dataview,
+.markdown-reading-view .admonition-content .dataview-container,
+.markdown-reading-view .admonition-content .dataview-result-list-root-ul,
+.markdown-reading-view .admonition-content .task-list-item,
+.markdown-source-view.mod-cm6 .admonition-content :is(p, li, span, div, td, dd, dt),
+.markdown-source-view.mod-cm6 .admonition-content table :is(td, span, div),
+.markdown-source-view.mod-cm6 .admonition-content .dataview,
+.markdown-source-view.mod-cm6 .admonition-content .dataview-container,
+.markdown-source-view.mod-cm6 .admonition-content .dataview-result-list-root-ul,
+.markdown-source-view.mod-cm6 .admonition-content .task-list-item {
+  color: #332923 !important;
+  -webkit-text-fill-color: #332923 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.markdown-preview-view .admonition-content h1,
+.markdown-preview-view .admonition-content h2,
+.markdown-preview-view .admonition-content h3,
+.markdown-preview-view .admonition-content h4,
+.markdown-preview-view .admonition-content strong,
+.markdown-reading-view .admonition-content h1,
+.markdown-reading-view .admonition-content h2,
+.markdown-reading-view .admonition-content h3,
+.markdown-reading-view .admonition-content h4,
+.markdown-reading-view .admonition-content strong,
+.markdown-source-view.mod-cm6 .admonition-content h1,
+.markdown-source-view.mod-cm6 .admonition-content h2,
+.markdown-source-view.mod-cm6 .admonition-content h3,
+.markdown-source-view.mod-cm6 .admonition-content h4,
+.markdown-source-view.mod-cm6 .admonition-content strong {
+  color: #6d382f !important;
+  -webkit-text-fill-color: #6d382f !important;
+  opacity: 1 !important;
+}
+
+.markdown-preview-view .admonition-content em,
+.markdown-reading-view .admonition-content em,
+.markdown-source-view.mod-cm6 .admonition-content em {
+  color: #6f5d53 !important;
+  -webkit-text-fill-color: #6f5d53 !important;
+}
+
+.markdown-preview-view .admonition-content a,
+.markdown-preview-view .admonition-content .internal-link,
+.markdown-preview-view .admonition-content .external-link,
+.markdown-reading-view .admonition-content a,
+.markdown-reading-view .admonition-content .internal-link,
+.markdown-reading-view .admonition-content .external-link,
+.markdown-source-view.mod-cm6 .admonition-content a,
+.markdown-source-view.mod-cm6 .admonition-content .internal-link,
+.markdown-source-view.mod-cm6 .admonition-content .external-link {
+  color: #7b3f98 !important;
+  -webkit-text-fill-color: #7b3f98 !important;
+  background: rgba(123, 63, 152, 0.08) !important;
+  border-radius: 4px !important;
+}
+
+.markdown-preview-view .admonition-content table,
+.markdown-preview-view .admonition-content .dataview.table-view-table,
+.markdown-reading-view .admonition-content table,
+.markdown-reading-view .admonition-content .dataview.table-view-table,
+.markdown-source-view.mod-cm6 .admonition-content table,
+.markdown-source-view.mod-cm6 .admonition-content .dataview.table-view-table {
+  background: #fffdf8 !important;
+  color: #332923 !important;
+  border: 1px solid #c9a58e !important;
+  box-shadow: none !important;
+}
+
+.markdown-preview-view .admonition-content th,
+.markdown-preview-view .admonition-content .dataview.table-view-table th,
+.markdown-reading-view .admonition-content th,
+.markdown-reading-view .admonition-content .dataview.table-view-table th,
+.markdown-source-view.mod-cm6 .admonition-content th,
+.markdown-source-view.mod-cm6 .admonition-content .dataview.table-view-table th {
+  background: #ead0bc !important;
+  color: #3d2b24 !important;
+  -webkit-text-fill-color: #3d2b24 !important;
+  border-color: #c9a58e !important;
+}
+
+.markdown-preview-view .admonition-content td,
+.markdown-preview-view .admonition-content .dataview.table-view-table td,
+.markdown-reading-view .admonition-content td,
+.markdown-reading-view .admonition-content .dataview.table-view-table td,
+.markdown-source-view.mod-cm6 .admonition-content td,
+.markdown-source-view.mod-cm6 .admonition-content .dataview.table-view-table td {
+  background: #fffaf3 !important;
+  color: #332923 !important;
+  -webkit-text-fill-color: #332923 !important;
+  border-color: #e0c5b2 !important;
+}
+
+.markdown-preview-view .admonition-content code:not(pre code),
+.markdown-reading-view .admonition-content code:not(pre code),
+.markdown-source-view.mod-cm6 .admonition-content code:not(pre code) {
+  background: #efd3c0 !important;
+  color: #8a3449 !important;
+  -webkit-text-fill-color: #8a3449 !important;
+  border: 1px solid #c9a58e !important;
+}
+
+/* ============================================================
+   35. Reading Callout Visibility Clamp v16
+   Update: 2026-06-11
+   Scope: reading-mode prompt/callout cards only.
+   Notes:
+   - Do not touch fenced code blocks or syntax highlighting.
+   - Reset blend/opacity styles that can make light callouts disappear.
+   ============================================================ */
+
+.markdown-reading-view :is(.callout, .admonition),
+.markdown-reading-view .markdown-rendered :is(.callout, .admonition),
+.markdown-reading-view .markdown-preview-view :is(.callout, .admonition) {
+  background: #fff9ef !important;
+  color: #3f3029 !important;
+  -webkit-text-fill-color: #3f3029 !important;
+  border: 1px solid #d5aa8f !important;
+  border-left-width: 5px !important;
+  border-radius: 9px !important;
+  box-shadow: 0 8px 22px rgba(93, 61, 38, 0.13) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+.markdown-reading-view .callout[data-callout="success"],
+.markdown-reading-view .callout[data-callout="tip"] {
+  border-left-color: #39a96b !important;
+}
+
+.markdown-reading-view .callout[data-callout="info"],
+.markdown-reading-view .callout[data-callout="dashboard-status"] {
+  border-left-color: #d08a3e !important;
+}
+
+.markdown-reading-view .callout[data-callout="example"] {
+  border-left-color: #9b67c8 !important;
+}
+
+.markdown-reading-view .callout[data-callout="warning"],
+.markdown-reading-view .callout[data-callout="important"] {
+  border-left-color: #d59a2e !important;
+}
+
+.markdown-reading-view .callout[data-callout="bug"],
+.markdown-reading-view .callout[data-callout="danger"],
+.markdown-reading-view .callout[data-callout="error"],
+.markdown-reading-view .callout[data-callout="failure"] {
+  border-left-color: #c95555 !important;
+}
+
+.markdown-reading-view .callout[data-callout="note"],
+.markdown-reading-view .callout[data-callout="abstract"] {
+  border-left-color: #8d7567 !important;
+}
+
+.markdown-reading-view :is(.callout-title, .admonition-title) {
+  background: transparent !important;
+  color: #44342d !important;
+  -webkit-text-fill-color: #44342d !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+.markdown-reading-view :is(.callout-title *, .callout-title-icon, .callout-title-icon svg,
+.admonition-title *, .admonition-title-icon, .admonition-title-icon svg) {
+  color: #44342d !important;
+  stroke: #44342d !important;
+  -webkit-text-fill-color: #44342d !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+.markdown-reading-view :is(.callout:not(.is-collapsed) > .callout-content,
+.admonition:not(.is-collapsed) > .admonition-content) {
+  background: transparent !important;
+  color: #3f3029 !important;
+  -webkit-text-fill-color: #3f3029 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+  max-height: none !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+.markdown-reading-view :is(.callout-content, .admonition-content)
+  :is(p, li, div, span, td, th, dd, dt, strong, em, mark, small, summary),
+.markdown-reading-view :is(.callout-content, .admonition-content)
+  :is(.task-list-item, .contains-task-list, .dataview, .dataview-container, .dataview-result-list-root-ul) {
+  color: #3f3029 !important;
+  -webkit-text-fill-color: #3f3029 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+.markdown-reading-view :is(.callout-content, .admonition-content) strong {
+  color: #684137 !important;
+  -webkit-text-fill-color: #684137 !important;
+}
+
+.markdown-reading-view :is(.callout-content, .admonition-content) em {
+  color: #6e5b50 !important;
+  -webkit-text-fill-color: #6e5b50 !important;
+}
+
+.markdown-reading-view :is(.callout-content, .admonition-content)
+  :is(a, .internal-link, .external-link) {
+  color: #2f74b8 !important;
+  -webkit-text-fill-color: #2f74b8 !important;
+  background: transparent !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+.markdown-reading-view :is(.callout-content, .admonition-content) table,
+.markdown-reading-view :is(.callout-content, .admonition-content) .dataview.table-view-table {
+  background: rgba(255, 253, 248, 0.82) !important;
+  color: #3f3029 !important;
+  -webkit-text-fill-color: #3f3029 !important;
+  border: 1px solid #d8b79f !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+.markdown-reading-view :is(.callout-content, .admonition-content) th,
+.markdown-reading-view :is(.callout-content, .admonition-content) .dataview.table-view-table th {
+  background: rgba(239, 219, 203, 0.74) !important;
+  color: #3d2b24 !important;
+  -webkit-text-fill-color: #3d2b24 !important;
+  border-color: #d8b79f !important;
+}
+
+.markdown-reading-view :is(.callout-content, .admonition-content) td,
+.markdown-reading-view :is(.callout-content, .admonition-content) .dataview.table-view-table td {
+  background: rgba(255, 250, 242, 0.68) !important;
+  color: #3f3029 !important;
+  -webkit-text-fill-color: #3f3029 !important;
+  border-color: #ead6c7 !important;
+}
+
+.markdown-reading-view :is(.callout-content, .admonition-content) tr:nth-child(even) td {
+  background: rgba(246, 231, 218, 0.72) !important;
+}
+
+.markdown-reading-view :is(.callout-content, .admonition-content) input[type="checkbox"] {
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}

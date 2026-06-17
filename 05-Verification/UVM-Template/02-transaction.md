@@ -13,7 +13,7 @@ updated: 2026-06-02
 - 输出字段：monitor 填实际值，ref_model 填期望值
 - scoreboard 比对两个 transaction 的输出字段
 
-```systemverilog
+```verilog
 `ifndef SPI_TRANS_SV
 `define SPI_TRANS_SV
 

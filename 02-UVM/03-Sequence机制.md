@@ -36,7 +36,7 @@ updated: 2026-06-02
 
 ## 1. Transaction 定义
 
-```systemverilog
+```verilog
 class my_transaction extends uvm_sequence_item;
     rand bit [31:0] addr;
     rand bit [31:0] data;
@@ -58,7 +58,7 @@ endclass
 
 ## 2. Sequence 定义
 
-```systemverilog
+```verilog
 class my_sequence extends uvm_sequence #(my_transaction);
     `uvm_object_utils(my_sequence)
 
@@ -92,7 +92,7 @@ endclass
 
 ### 示例
 
-```systemverilog
+```verilog
 // 基本
 `uvm_do(req)
 
@@ -111,7 +111,7 @@ assert(req.randomize() with { addr == 0; });
 
 ### 方式1：config_db
 
-```systemverilog
+```verilog
 class my_test extends uvm_test;
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
@@ -125,7 +125,7 @@ endclass
 
 ### 方式2：start()
 
-```systemverilog
+```verilog
 class my_test extends uvm_test;
     my_sequence seq;
     function void start_of_simulation_phase(uvm_phase phase);
@@ -139,7 +139,7 @@ endclass
 
 ## 5. Sequencer 仲裁
 
-```systemverilog
+```verilog
 // 设置仲裁模式
 sqr.set_arbitration(UVM_SEQ_ARB_STRICT_RANDOM);  // 随机
 sqr.set_arbitration(UVM_SEQ_ARB_FIFO);          // FIFO

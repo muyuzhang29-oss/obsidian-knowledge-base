@@ -33,7 +33,7 @@ updated: 2026-06-02
 
 ### 关键方法
 
-```systemverilog
+```verilog
 // uvm-1.2中的关键方法
 task run_test(string test_name="");
 ```

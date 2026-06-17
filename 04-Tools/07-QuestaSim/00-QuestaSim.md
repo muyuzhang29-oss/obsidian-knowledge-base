@@ -413,7 +413,7 @@ coverage exclude -du fsm_module -toggle out_signal[7]
 
 ### SystemVerilog 覆盖组编写
 
-```systemverilog
+```verilog
 // 在 testbench 中定义覆盖组
 class my_transaction;
     rand bit [7:0] data;

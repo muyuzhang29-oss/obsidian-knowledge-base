@@ -8,7 +8,7 @@ updated: 2026-06-02
 
 > 将 transaction 转换为 vif 上的信号
 
-```systemverilog
+```verilog
 `ifndef SPI_DRV_SV
 `define SPI_DRV_SV
 

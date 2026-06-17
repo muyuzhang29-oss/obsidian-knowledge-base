@@ -53,8 +53,15 @@ IGNORE_DIRS = {
     ".trash",
 }
 
+# 这些是历史审计记录，保留原文但不纳入当前断链/孤立笔记判断。
+IGNORE_LINK_CHECK_FILES = {
+    "00-索引/03-健康报告.md",
+    "00-索引/04-健康报告-修复后.md",
+    "00-索引/05-修复总结.md",
+}
+
 # Frontmatter 正则：匹配 --- 包裹的 YAML 块
-FRONTMATTER_RE = re.compile(r"^---\s*\n(.*?)\n---\s*\n", re.DOTALL)
+FRONTMATTER_RE = re.compile(r"^\ufeff?---\s*\r?\n(.*?)\r?\n---\s*(?:\r?\n|$)", re.DOTALL)
 
 # Obsidian wiki 链接: [[target]] 或 [[target|alias]]
 # 排除嵌入 ![[...]] 和代码块中的链接
@@ -92,6 +99,17 @@ def collect_markdown_files(kb_dir: Path) -> list[Path]:
     return sorted(md_files)
 
 
+def normalize_rel_path(path: Path) -> str:
+    """将路径转换为 Obsidian 常用的 / 分隔相对路径"""
+    return str(path).replace("\\", "/")
+
+
+def is_link_check_ignored(path: Path, kb_dir: Path) -> bool:
+    """判断某文件是否跳过链接网络检查"""
+    rel = normalize_rel_path(path.relative_to(kb_dir))
+    return rel in IGNORE_LINK_CHECK_FILES
+
+
 def read_file_safe(path: Path) -> str:
     """安全读取文件内容，失败返回空字符串"""
     try:
@@ -123,7 +141,7 @@ def extract_frontmatter(content: str) -> dict | None:
 def extract_wikilinks(content: str) -> set[str]:
     """提取文件中所有 wiki 链接的目标名称"""
     links = set()
-    # 排除代码块中的链接
+    # 排除代码块和行内代码中的链接
     in_code_block = False
     lines = content.split("\n")
     for line in lines:
@@ -133,6 +151,7 @@ def extract_wikilinks(content: str) -> set[str]:
             continue
         if in_code_block:
             continue
+        line = re.sub(r"`[^`\n]+`", "", line)
         # 排除 dataview 代码块内容
         for m in WIKILINK_RE.finditer(line):
             target = m.group(1).strip()
@@ -170,7 +189,11 @@ def resolve_link(link_target: str, note_index: dict[str, Path], current_file: Pa
       - 短名称: [[Phase机制]]
       - 带路径: [[02-UVM/01-Phase机制]]
       - 同目录相对: [[01-数据类型]] (在 01-SV语法/ 下)
+      - 附件: [[03-Protocol/HSMT/spec.pdf]]
     """
+    link_target = link_target.strip().strip("\\")
+    link_target = re.sub(r"\.md$", "", link_target)
+
     # 1. 直接查找完整路径
     if link_target in note_index and note_index[link_target] is not None:
         return note_index[link_target]
@@ -181,7 +204,21 @@ def resolve_link(link_target: str, note_index: dict[str, Path], current_file: Pa
     if candidate in note_index and note_index[candidate] is not None:
         return note_index[candidate]
 
-    # 3. 遍历所有可能的路径前缀
+    # 3. 尝试附件或非 Markdown 文件
+    raw_candidates = [
+        kb_dir / link_target,
+        current_file.parent / link_target,
+    ]
+    for candidate_path in raw_candidates:
+        try:
+            resolved_candidate = candidate_path.resolve()
+            resolved_candidate.relative_to(kb_dir)
+        except (OSError, ValueError):
+            continue
+        if resolved_candidate.is_file():
+            return resolved_candidate
+
+    # 4. 遍历所有可能的路径前缀
     for key, val in note_index.items():
         if val is None:
             continue
@@ -253,6 +290,8 @@ def check_broken_links(md_files: list[Path], kb_dir: Path) -> list[dict]:
     issues = []
 
     for p in md_files:
+        if is_link_check_ignored(p, kb_dir):
+            continue
         content = read_file_safe(p)
         links = extract_wikilinks(content)
         for link in links:
@@ -280,6 +319,8 @@ def check_orphan_notes(md_files: list[Path], kb_dir: Path) -> list[dict]:
     note_index = build_note_index(md_files, kb_dir)
 
     for p in md_files:
+        if is_link_check_ignored(p, kb_dir):
+            continue
         content = read_file_safe(p)
         links = extract_wikilinks(content)
         out_links[p] = links
@@ -290,6 +331,8 @@ def check_orphan_notes(md_files: list[Path], kb_dir: Path) -> list[dict]:
 
     issues = []
     for p in md_files:
+        if is_link_check_ignored(p, kb_dir):
+            continue
         has_out = len(out_links.get(p, set())) > 0
         has_in = len(in_links.get(p, set())) > 0
         # 跳过索引文件和首页

@@ -8,7 +8,7 @@ updated: 2026-06-02
 
 > 连接 DUT 和验证环境，所有信号在这里集中定义
 
-```systemverilog
+```verilog
 `ifndef SPI_IF_SV
 `define SPI_IF_SV
 

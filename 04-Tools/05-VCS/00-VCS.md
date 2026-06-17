@@ -351,7 +351,7 @@ verdi -ssf wave.fsdb -dbdir simv.daidir/kdb &
 
 ### 波形转储控制
 
-```systemverilog
+```verilog
 // SystemVerilog 中控制波形转储
 initial begin
     $vcdpluson;              // 开始转储所有信号

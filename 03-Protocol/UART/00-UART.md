@@ -81,7 +81,7 @@ STOP:    if (baud_tick) state <= IDLE;
 
 ### UART Transaction
 
-```systemverilog
+```verilog
 class uart_transaction extends uvm_sequence_item;
     typedef enum {NONE, ODD, EVEN} parity_e;
 
@@ -106,7 +106,7 @@ endclass
 
 ### UART Monitor
 
-```systemverilog
+```verilog
 class uart_monitor extends uvm_monitor;
     virtual uart_if vif;
     uvm_analysis_port #(uart_transaction) ap;
@@ -176,7 +176,7 @@ endclass
 
 ### UART Scoreboard
 
-```systemverilog
+```verilog
 class uart_scoreboard extends uvm_scoreboard;
     uvm_analysis_export #(uart_transaction) tx_export;
     uvm_analysis_export #(uart_transaction) rx_export;
@@ -198,8 +198,8 @@ endclass
 ## ✅ 验证要点
 
 ### 基础功能
-- [ ] 正确接收字节
-- [ ] 起始位检测
+- [x] 正确接收字节
+- [x] 起始位检测
 - [ ] 停止位验证
 - [ ] 波特率精度
 

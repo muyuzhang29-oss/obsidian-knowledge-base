@@ -466,7 +466,7 @@ void SPI_Write_Reg(uint8_t addr, uint32_t temp)
 
 ### SPI Transaction
 
-```systemverilog
+```verilog
 class spi_transaction extends uvm_sequence_item;
     typedef enum {SPI_MODE_0, SPI_MODE_1, SPI_MODE_2, SPI_MODE_3} spi_mode_e;
 
@@ -485,7 +485,7 @@ endclass
 
 ### SPI Interface
 
-```systemverilog
+```verilog
 interface spi_if (
     input logic clk,
     input logic rst_n,
@@ -510,7 +510,7 @@ endinterface
 
 ### SPI Scoreboard
 
-```systemverilog
+```verilog
 class spi_scoreboard extends uvm_scoreboard;
     uvm_analysis_export #(spi_transaction) expected_export;
     uvm_analysis_export #(spi_transaction) actual_export;

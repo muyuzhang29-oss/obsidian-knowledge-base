@@ -6,6 +6,7 @@
   "nativeMenus": false,
   "translucency": true,
   "enabledCssSnippets": [
-    "01-知识库美化"
+    "01-知识库美化",
+    "99-workbench-safe"
   ]
 }

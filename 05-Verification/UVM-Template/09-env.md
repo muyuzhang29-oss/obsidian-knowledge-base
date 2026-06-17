@@ -8,7 +8,7 @@ updated: 2026-06-02
 
 > 组装 agent + scoreboard + reference_model，连接数据流
 
-```systemverilog
+```verilog
 `ifndef SPI_ENV_SV
 `define SPI_ENV_SV
 

@@ -8,7 +8,7 @@ updated: 2026-06-02
 
 > 负责生成激励，定义"要发哪些 transaction，以什么顺序发"
 
-```systemverilog
+```verilog
 `ifndef SPI_SEQ_SV
 `define SPI_SEQ_SV
 

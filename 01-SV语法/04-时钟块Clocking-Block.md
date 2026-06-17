@@ -32,7 +32,7 @@ updated: 2026-06-02
 
 ### 2.1 定义
 
-```systemverilog
+```verilog
 interface spi_if(input logic clk);
 
     logic cs_n, sclk, mosi, miso;
@@ -62,7 +62,7 @@ endinterface
 
 **常用 skew 组合：**
 
-```systemverilog
+```verilog
 // 保守采样（推荐）
 clocking cb @(posedge clk);
     default input #1step output #0;
@@ -85,7 +85,7 @@ endclocking
 
 ### 3.1 采样（input）
 
-```systemverilog
+```verilog
 // 通过 clocking block 采样
 @(posedge clk);                    // 等待时钟边沿
 data = vif.mon_cb.cmd_data_o;      // 采样值（带 skew）
@@ -106,7 +106,7 @@ data = vif.mon_cb.cmd_data_o;      // 采样值（带 skew）
 
 ### 3.2 驱动（output）
 
-```systemverilog
+```verilog
 // 通过 clocking block 驱动
 vif.drv_cb.cs_n <= 1'b0;           // 驱动值（带 skew）
 @(posedge clk);                    // 等待时钟边沿
@@ -133,7 +133,7 @@ vif.drv_cb.cs_n <= 1'b0;           // 驱动值（带 skew）
 ### 4.1 不要混用 clocking block 和直接信号访问
 
 **错误写法：**
-```systemverilog
+```verilog
 // ❌ 混用 mon_cb 和直接时钟等待
 forever begin
     trans.data = vif.mon_cb.data;   // 用 mon_cb 采样
@@ -145,7 +145,7 @@ end
 **问题：** `mon_cb` 的 skew 和 `@(posedge vif.clk)` 不一致，导致采样时序错位。
 
 **正确写法：**
-```systemverilog
+```verilog
 // ✅ 统一用 clocking block
 forever begin
     trans.data = vif.mon_cb.data;   // 用 mon_cb 采样
@@ -157,14 +157,14 @@ end
 ### 4.2 不要在 clocking block 事件后立即采样
 
 **错误写法：**
-```systemverilog
+```verilog
 // ❌ 等待后立即采样（可能采到旧值）
 @(posedge clk);
 data = vif.signal;  // signal 可能还没更新
 ```
 
 **正确写法：**
-```systemverilog
+```verilog
 // ✅ 用 clocking block 采样
 @(vif.mon_cb);
 data = vif.mon_cb.signal;  // 保证采样时序正确
@@ -191,7 +191,7 @@ data = vif.mon_cb.signal;  // 保证采样时序正确
 
 **解决：** 统一用 `@(vif.mon_cb)` 等待。
 
-```systemverilog
+```verilog
 // ✅ 正确写法
 forever begin
     @(vif.mon_cb);                          // 先等待
@@ -209,7 +209,7 @@ end
 
 **解决：** 使用 `#1step` skew，在时钟边沿前一个时间步采样。
 
-```systemverilog
+```verilog
 clocking cb @(posedge clk);
     default input #1step;  // 在时钟边沿前采样，避免毛刺
 endclocking
@@ -223,7 +223,7 @@ endclocking
 
 **解决：** 使用 `output #1` skew，在时钟边沿后驱动。
 
-```systemverilog
+```verilog
 clocking drv_cb @(posedge clk);
     default output #1;  // 在时钟边沿后驱动，避免冲突
 endclocking
@@ -235,7 +235,7 @@ endclocking
 
 ### 6.1 Monitor 采样模式
 
-```systemverilog
+```verilog
 // 推荐模式：先等待，再判断，最后采样
 forever begin
     @(vif.mon_cb);                                    // 1. 等待时钟块事件
@@ -247,7 +247,7 @@ end
 
 ### 6.2 Driver 驱动模式
 
-```systemverilog
+```verilog
 // 推荐模式：先赋值，再等待
 vif.drv_cb.cs_n <= 1'b0;   // 1. 赋值（在当前 skew 时间点驱动）
 @(vif.drv_cb);               // 2. 等待下一个时钟块事件
@@ -266,7 +266,7 @@ vif.drv_cb.mosi <= data;    // 3. 继续驱动
 
 ## 七、完整示例
 
-```systemverilog
+```verilog
 interface spi_if(input logic clk, input logic rst_n);
 
     logic cs_n, sclk, mosi, miso;

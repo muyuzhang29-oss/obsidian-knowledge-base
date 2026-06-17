@@ -8,7 +8,7 @@ updated: 2026-06-02
 
 > 配置环境并启动 sequence，是用户直接编写的部分
 
-```systemverilog
+```verilog
 `ifndef SPI_TEST_SV
 `define SPI_TEST_SV
 

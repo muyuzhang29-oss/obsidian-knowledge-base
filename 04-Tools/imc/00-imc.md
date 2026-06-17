@@ -231,7 +231,7 @@ cov_clean:
 
 ### 功能覆盖率 (Functional Coverage)
 
-```systemverilog
+```verilog
 // 覆盖组定义
 covergroup my_cg @(posedge clk);
     option.per_instance = 1;

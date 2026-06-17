@@ -14,7 +14,7 @@ updated: 2026-06-02
 
 UVM 的 `uvm_analysis_port` 是**一对多广播**：一个 `ap.write(tr)` 会自动调用所有连接的 `write(tr)` 函数。
 
-```systemverilog
+```verilog
 // driver 侧：广播
 ap.write(tr);  // tr 是 driver 的原始输入 trans
 
@@ -67,7 +67,7 @@ rx_trans         exp_trans
 
 ## 四、Transaction 字段分工
 
-```systemverilog
+```verilog
 class spi_trans extends uvm_sequence_item;
     // 输入字段：driver 填，ref_model 读
     rand cmd_t  cmd;
@@ -94,7 +94,7 @@ endclass
 
 ## 五、连接关系（env connect_phase）
 
-```systemverilog
+```verilog
 function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
 
@@ -110,7 +110,7 @@ endfunction
 ```
 
 **agent 内部连接：**
-```systemverilog
+```verilog
 function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
     drv.seq_item_port.connect(seqr.seq_item_export);  // driver ↔ sequencer

@@ -1,0 +1,374 @@
+/* ============================================================
+   Workbench Safe Theme
+   Scope: pages with cssclasses: [kb-workbench]
+   Purpose: keep 00-主页 / 02-学习进度 / 03-仪表盘 readable.
+   ============================================================ */
+
+.markdown-preview-view.kb-workbench,
+.markdown-reading-view.kb-workbench,
+.kb-workbench .markdown-preview-view,
+.kb-workbench .markdown-reading-view {
+  --wb-page: #f7efe6;
+  --wb-surface: #fffaf3;
+  --wb-surface-soft: #f2dfcf;
+  --wb-border: #c9a58e;
+  --wb-text: #332923;
+  --wb-muted: #6f5d53;
+  --wb-title: #5a382f;
+  --wb-link: #7b3f98;
+  --wb-accent: #b85a68;
+
+  background: var(--wb-page) !important;
+  color: var(--wb-text) !important;
+}
+
+.markdown-preview-view.kb-workbench *,
+.markdown-reading-view.kb-workbench *,
+.kb-workbench .markdown-preview-view *,
+.kb-workbench .markdown-reading-view * {
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+.markdown-preview-view.kb-workbench h1,
+.markdown-preview-view.kb-workbench h2,
+.markdown-preview-view.kb-workbench h3,
+.markdown-preview-view.kb-workbench h4,
+.markdown-reading-view.kb-workbench h1,
+.markdown-reading-view.kb-workbench h2,
+.markdown-reading-view.kb-workbench h3,
+.markdown-reading-view.kb-workbench h4,
+.kb-workbench .markdown-preview-view h1,
+.kb-workbench .markdown-preview-view h2,
+.kb-workbench .markdown-preview-view h3,
+.kb-workbench .markdown-preview-view h4,
+.kb-workbench .markdown-reading-view h1,
+.kb-workbench .markdown-reading-view h2,
+.kb-workbench .markdown-reading-view h3,
+.kb-workbench .markdown-reading-view h4 {
+  background: none !important;
+  color: var(--wb-title) !important;
+  -webkit-text-fill-color: var(--wb-title) !important;
+  border-color: var(--wb-border) !important;
+}
+
+.markdown-preview-view.kb-workbench p,
+.markdown-preview-view.kb-workbench li,
+.markdown-preview-view.kb-workbench td,
+.markdown-preview-view.kb-workbench span,
+.markdown-preview-view.kb-workbench div,
+.kb-workbench .markdown-preview-view p,
+.kb-workbench .markdown-preview-view li,
+.kb-workbench .markdown-preview-view td,
+.kb-workbench .markdown-preview-view span,
+.kb-workbench .markdown-preview-view div {
+  color: var(--wb-text) !important;
+  -webkit-text-fill-color: var(--wb-text) !important;
+}
+
+.markdown-preview-view.kb-workbench .callout,
+.kb-workbench .markdown-preview-view .callout {
+  background: var(--wb-surface) !important;
+  color: var(--wb-text) !important;
+  border: 1px solid var(--wb-border) !important;
+  border-left: 5px solid var(--wb-accent) !important;
+  border-radius: 9px !important;
+  box-shadow: 0 8px 20px rgba(82, 50, 32, 0.13) !important;
+  overflow: hidden !important;
+}
+
+.markdown-preview-view.kb-workbench .callout-title,
+.kb-workbench .markdown-preview-view .callout-title {
+  background: var(--wb-surface-soft) !important;
+  color: var(--wb-title) !important;
+  -webkit-text-fill-color: var(--wb-title) !important;
+  border-bottom: 1px solid var(--wb-border) !important;
+}
+
+.markdown-preview-view.kb-workbench .callout-title *,
+.markdown-preview-view.kb-workbench .callout-title-icon,
+.markdown-preview-view.kb-workbench .callout-title-icon svg,
+.kb-workbench .markdown-preview-view .callout-title *,
+.kb-workbench .markdown-preview-view .callout-title-icon,
+.kb-workbench .markdown-preview-view .callout-title-icon svg {
+  color: var(--wb-title) !important;
+  stroke: var(--wb-title) !important;
+  -webkit-text-fill-color: var(--wb-title) !important;
+}
+
+.markdown-preview-view.kb-workbench .callout-content,
+.kb-workbench .markdown-preview-view .callout-content {
+  background: var(--wb-surface) !important;
+  color: var(--wb-text) !important;
+  -webkit-text-fill-color: var(--wb-text) !important;
+}
+
+.markdown-preview-view.kb-workbench .callout-content *,
+.kb-workbench .markdown-preview-view .callout-content * {
+  color: var(--wb-text) !important;
+  -webkit-text-fill-color: var(--wb-text) !important;
+}
+
+.markdown-preview-view.kb-workbench strong,
+.kb-workbench .markdown-preview-view strong {
+  color: #7f3a31 !important;
+  -webkit-text-fill-color: #7f3a31 !important;
+}
+
+.markdown-preview-view.kb-workbench em,
+.kb-workbench .markdown-preview-view em {
+  color: var(--wb-muted) !important;
+  -webkit-text-fill-color: var(--wb-muted) !important;
+}
+
+.markdown-preview-view.kb-workbench a,
+.markdown-preview-view.kb-workbench .internal-link,
+.markdown-preview-view.kb-workbench .external-link,
+.kb-workbench .markdown-preview-view a,
+.kb-workbench .markdown-preview-view .internal-link,
+.kb-workbench .markdown-preview-view .external-link {
+  color: var(--wb-link) !important;
+  -webkit-text-fill-color: var(--wb-link) !important;
+  background: rgba(123, 63, 152, 0.08) !important;
+  border-bottom: 1px solid rgba(123, 63, 152, 0.28) !important;
+  border-radius: 4px !important;
+}
+
+.markdown-preview-view.kb-workbench table,
+.markdown-preview-view.kb-workbench .dataview.table-view-table,
+.kb-workbench .markdown-preview-view table,
+.kb-workbench .markdown-preview-view .dataview.table-view-table {
+  background: #fffdf8 !important;
+  color: var(--wb-text) !important;
+  border: 1px solid var(--wb-border) !important;
+  box-shadow: none !important;
+}
+
+.markdown-preview-view.kb-workbench th,
+.markdown-preview-view.kb-workbench .dataview.table-view-table th,
+.kb-workbench .markdown-preview-view th,
+.kb-workbench .markdown-preview-view .dataview.table-view-table th {
+  background: #ead0bc !important;
+  color: #3d2b24 !important;
+  -webkit-text-fill-color: #3d2b24 !important;
+  border-color: var(--wb-border) !important;
+}
+
+.markdown-preview-view.kb-workbench td,
+.markdown-preview-view.kb-workbench .dataview.table-view-table td,
+.kb-workbench .markdown-preview-view td,
+.kb-workbench .markdown-preview-view .dataview.table-view-table td {
+  background: var(--wb-surface) !important;
+  color: var(--wb-text) !important;
+  -webkit-text-fill-color: var(--wb-text) !important;
+  border-color: #e0c5b2 !important;
+}
+
+.markdown-preview-view.kb-workbench tr:nth-child(even) td,
+.kb-workbench .markdown-preview-view tr:nth-child(even) td {
+  background: #f6e7da !important;
+}
+
+.markdown-preview-view.kb-workbench tr:hover td,
+.kb-workbench .markdown-preview-view tr:hover td {
+  background: #efd3c0 !important;
+}
+
+.markdown-preview-view.kb-workbench .dataview,
+.markdown-preview-view.kb-workbench .dataview-container,
+.markdown-preview-view.kb-workbench .dataview-result-list-root-ul,
+.markdown-preview-view.kb-workbench .task-list-item,
+.kb-workbench .markdown-preview-view .dataview,
+.kb-workbench .markdown-preview-view .dataview-container,
+.kb-workbench .markdown-preview-view .dataview-result-list-root-ul,
+.kb-workbench .markdown-preview-view .task-list-item {
+  color: var(--wb-text) !important;
+  -webkit-text-fill-color: var(--wb-text) !important;
+}
+
+.markdown-preview-view.kb-workbench code:not(pre code),
+.kb-workbench .markdown-preview-view code:not(pre code) {
+  background: #efd3c0 !important;
+  color: #8a3449 !important;
+  -webkit-text-fill-color: #8a3449 !important;
+  border: 1px solid var(--wb-border) !important;
+}
+
+.markdown-preview-view.kb-workbench .callout[data-callout="dashboard-title"] .callout-title,
+.kb-workbench .markdown-preview-view .callout[data-callout="dashboard-title"] .callout-title {
+  display: none !important;
+}
+
+.markdown-preview-view.kb-workbench .callout[data-callout="dashboard-title"] h1,
+.kb-workbench .markdown-preview-view .callout[data-callout="dashboard-title"] h1 {
+  color: #68362f !important;
+  -webkit-text-fill-color: #68362f !important;
+  border: none !important;
+}
+
+.markdown-preview-view.kb-workbench .callout[data-callout="info"],
+.markdown-preview-view.kb-workbench .callout[data-callout="dashboard-status"],
+.kb-workbench .markdown-preview-view .callout[data-callout="info"],
+.kb-workbench .markdown-preview-view .callout[data-callout="dashboard-status"] {
+  border-left-color: #9b6541 !important;
+}
+
+.markdown-preview-view.kb-workbench .callout[data-callout="example"],
+.kb-workbench .markdown-preview-view .callout[data-callout="example"] {
+  border-left-color: #8a5bb5 !important;
+}
+
+.markdown-preview-view.kb-workbench .callout[data-callout="success"],
+.markdown-preview-view.kb-workbench .callout[data-callout="tip"],
+.kb-workbench .markdown-preview-view .callout[data-callout="success"],
+.kb-workbench .markdown-preview-view .callout[data-callout="tip"] {
+  border-left-color: #438662 !important;
+}
+
+.markdown-preview-view.kb-workbench .callout[data-callout="warning"],
+.markdown-preview-view.kb-workbench .callout[data-callout="important"],
+.kb-workbench .markdown-preview-view .callout[data-callout="warning"],
+.kb-workbench .markdown-preview-view .callout[data-callout="important"] {
+  border-left-color: #b57a2e !important;
+}
+
+.markdown-preview-view.kb-workbench .callout[data-callout="bug"],
+.kb-workbench .markdown-preview-view .callout[data-callout="bug"] {
+  border-left-color: #b94c4c !important;
+}
+
+.markdown-preview-view.kb-workbench .callout[data-callout="abstract"],
+.markdown-preview-view.kb-workbench .callout[data-callout="note"],
+.kb-workbench .markdown-preview-view .callout[data-callout="abstract"],
+.kb-workbench .markdown-preview-view .callout[data-callout="note"] {
+  border-left-color: #7d6d64 !important;
+}
+
+/* Final readability clamp for workbench cards. */
+.markdown-preview-view.kb-workbench .callout :is(p, li, span, div, td, th, a, strong, em, code),
+.markdown-preview-view.kb-workbench table :is(td, th, span, div, a, strong, em, code),
+.kb-workbench .markdown-preview-view .callout :is(p, li, span, div, td, th, a, strong, em, code),
+.kb-workbench .markdown-preview-view table :is(td, th, span, div, a, strong, em, code) {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.markdown-preview-view.kb-workbench .callout :is(p, li, span, div, td),
+.markdown-preview-view.kb-workbench table :is(td, span, div),
+.kb-workbench .markdown-preview-view .callout :is(p, li, span, div, td),
+.kb-workbench .markdown-preview-view table :is(td, span, div) {
+  color: #332923 !important;
+  -webkit-text-fill-color: #332923 !important;
+}
+
+.markdown-preview-view.kb-workbench .callout th,
+.markdown-preview-view.kb-workbench table th,
+.kb-workbench .markdown-preview-view .callout th,
+.kb-workbench .markdown-preview-view table th {
+  color: #3d2b24 !important;
+  -webkit-text-fill-color: #3d2b24 !important;
+}
+
+.markdown-preview-view.kb-workbench .callout a,
+.markdown-preview-view.kb-workbench table a,
+.kb-workbench .markdown-preview-view .callout a,
+.kb-workbench .markdown-preview-view table a {
+  color: #7b3f98 !important;
+  -webkit-text-fill-color: #7b3f98 !important;
+}
+
+/* Reading-mode fallback for workbench callout cards. */
+.markdown-reading-view.kb-workbench .callout,
+.kb-workbench .markdown-reading-view .callout,
+.markdown-reading-view .callout {
+  background: var(--wb-surface, #fff9ef) !important;
+  color: var(--wb-text, #332923) !important;
+  -webkit-text-fill-color: var(--wb-text, #332923) !important;
+  border: 1px solid var(--wb-border, #c9a58e) !important;
+  border-left-width: 5px !important;
+  border-radius: 9px !important;
+  box-shadow: 0 8px 22px rgba(82, 50, 32, 0.13) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+.markdown-reading-view.kb-workbench .callout-title,
+.kb-workbench .markdown-reading-view .callout-title,
+.markdown-reading-view .callout-title {
+  background: transparent !important;
+  color: var(--wb-title, #44342d) !important;
+  -webkit-text-fill-color: var(--wb-title, #44342d) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+.markdown-reading-view.kb-workbench .callout-title *,
+.markdown-reading-view.kb-workbench .callout-title-icon,
+.markdown-reading-view.kb-workbench .callout-title-icon svg,
+.kb-workbench .markdown-reading-view .callout-title *,
+.kb-workbench .markdown-reading-view .callout-title-icon,
+.kb-workbench .markdown-reading-view .callout-title-icon svg,
+.markdown-reading-view .callout-title *,
+.markdown-reading-view .callout-title-icon,
+.markdown-reading-view .callout-title-icon svg {
+  color: var(--wb-title, #44342d) !important;
+  stroke: var(--wb-title, #44342d) !important;
+  -webkit-text-fill-color: var(--wb-title, #44342d) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.markdown-reading-view.kb-workbench .callout-content,
+.kb-workbench .markdown-reading-view .callout-content,
+.markdown-reading-view .callout-content {
+  background: transparent !important;
+  color: var(--wb-text, #332923) !important;
+  -webkit-text-fill-color: var(--wb-text, #332923) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+.markdown-reading-view.kb-workbench .callout-content :is(p, li, div, span, td, th, a, strong, em),
+.markdown-reading-view.kb-workbench table :is(td, th, span, div, a, strong, em),
+.kb-workbench .markdown-reading-view .callout-content :is(p, li, div, span, td, th, a, strong, em),
+.kb-workbench .markdown-reading-view table :is(td, th, span, div, a, strong, em),
+.markdown-reading-view .callout-content :is(p, li, div, span, td, th, a, strong, em),
+.markdown-reading-view .callout-content table :is(td, th, span, div, a, strong, em) {
+  color: var(--wb-text, #332923) !important;
+  -webkit-text-fill-color: var(--wb-text, #332923) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+.markdown-reading-view.kb-workbench .callout-content table,
+.kb-workbench .markdown-reading-view .callout-content table,
+.markdown-reading-view .callout-content table {
+  background: #fffdf8 !important;
+  color: var(--wb-text, #332923) !important;
+  -webkit-text-fill-color: var(--wb-text, #332923) !important;
+  border: 1px solid var(--wb-border, #c9a58e) !important;
+}
+
+.markdown-reading-view.kb-workbench .callout-content th,
+.kb-workbench .markdown-reading-view .callout-content th,
+.markdown-reading-view .callout-content th {
+  background: #ead0bc !important;
+  color: #3d2b24 !important;
+  -webkit-text-fill-color: #3d2b24 !important;
+}
+
+.markdown-reading-view.kb-workbench .callout-content td,
+.kb-workbench .markdown-reading-view .callout-content td,
+.markdown-reading-view .callout-content td {
+  background: #fffaf3 !important;
+  color: var(--wb-text, #332923) !important;
+  -webkit-text-fill-color: var(--wb-text, #332923) !important;
+}

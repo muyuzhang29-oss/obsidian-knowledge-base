@@ -89,7 +89,7 @@ CDV 是 UVM 的核心方法论，通过覆盖率指标量化验证进度：
 
 断言嵌入设计内部，提供白盒实时检查：
 
-```systemverilog
+```verilog
 // 属性断言: AXI 握手协议
 property axi_handshake;
     @(posedge clk) $rose(valid) |-> ##[0:$] $rose(ready);
@@ -251,7 +251,7 @@ IP 交付物清单（用于 SoC 集成）：
 
 **AXI 总线验证要点：**
 
-```systemverilog
+```verilog
 // AXI 关键验证场景
 class axi_subsystem_test extends uvm_test;
     // 1. Outstanding 事务深度
@@ -451,7 +451,7 @@ VIP 复用层次
     └── 子场景可独立回归
 ```
 
-```systemverilog
+```verilog
 // 测试复用示例: Factory Override
 class subsystem_test extends base_test;
     `uvm_component_utils(subsystem_test)
@@ -674,13 +674,13 @@ SoC 验证方法论全景
 
 - [[05-Verification/00-验证计划|00-验证计划]] - 验证计划编写指南
 - [[05-Verification/01-覆盖率|01-覆盖率]] - 覆盖率收集与分析方法
-- [[08-Projects/01-SPI验证|01-SPI验证]] - SPI IP 验证项目实例
-- [[08-Projects/02-AXI验证|02-AXI验证]] - AXI 总线验证项目实例
-- [[03-Protocol/AXI|AXI 协议]] - AXI 总线协议详解
-- [[03-Protocol/APB|APB 协议]] - APB 总线协议详解
-- [[03-Protocol/SPI|SPI 协议]] - SPI 接口协议详解
-- [[03-Protocol/I2C|I2C 协议]] - I2C 接口协议详解
-- [[03-Protocol/UART|UART 协议]] - UART 接口协议详解
+- [[08-Projects/01-SPI验证/00-项目概述|01-SPI验证]] - SPI IP 验证项目实例
+- [[08-Projects/02-AXI验证/00-项目概述|02-AXI验证]] - AXI 总线验证项目实例
+- [[03-Protocol/AXI/00-AXI|AXI 协议]] - AXI 总线协议详解
+- [[03-Protocol/APB/00-APB|APB 协议]] - APB 总线协议详解
+- [[03-Protocol/SPI/00-SPI|SPI 协议]] - SPI 接口协议详解
+- [[03-Protocol/I2C/00-I2C|I2C 协议]] - I2C 接口协议详解
+- [[03-Protocol/UART/00-UART|UART 协议]] - UART 接口协议详解
 - [[03-Protocol/00-协议索引|协议索引]] - 全部协议笔记索引
 
 ---

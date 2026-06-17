@@ -262,7 +262,7 @@ sequenceDiagram
 
 ### UVM Transaction 定义
 
-```systemverilog
+```verilog
 class axi_transaction extends uvm_sequence_item;
     typedef enum {READ, WRITE} rw_e;
     typedef enum {OKAY, EXOKAY, SLVERR, DECERR} resp_e;
@@ -307,7 +307,7 @@ endclass
 
 ### Driver 驱动模板
 
-```systemverilog
+```verilog
 class axi_driver extends uvm_driver#(axi_transaction);
     `uvm_component_utils(axi_driver)
 
@@ -366,7 +366,7 @@ endclass
 
 ### Monitor 监测模板
 
-```systemverilog
+```verilog
 class axi_monitor extends uvm_monitor;
     `uvm_component_utils(axi_monitor)
 
@@ -420,7 +420,7 @@ endclass
 
 ### 1. 死锁问题
 
-```systemverilog
+```verilog
 // ❌ 错误：同时依赖多个通道就绪
 always @(posedge clk) begin
     if (awvalid && awready && wvalid && wready)
@@ -438,7 +438,7 @@ end
 
 ### 2. 带宽利用率优化
 
-```systemverilog
+```verilog
 // 提高带宽的方法
 constraint burst_len {
     len inside {[8:16]};  // 较大的突发长度
@@ -452,7 +452,7 @@ endclass
 
 ### 3. 4KB 边界检查
 
-```systemverilog
+```verilog
 function bit check_4kb_boundary(bit [31:0] addr, bit [7:0] len, bit [2:0] size);
     int bytes_per_beat = 1 << size;
     int total_bytes = (len + 1) * bytes_per_beat;

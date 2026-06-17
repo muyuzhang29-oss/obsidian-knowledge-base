@@ -8,7 +8,7 @@ updated: 2026-06-02
 
 > 比对 monitor 的实际输出和 ref_model 的期望输出
 
-```systemverilog
+```verilog
 `ifndef SPI_SCB_SV
 `define SPI_SCB_SV
 

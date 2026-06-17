@@ -22,7 +22,7 @@ transaction   →  只定义 rand 变量 + 通用约束（不依赖 cfg）
 
 ## 为什么不能写在 transaction 内部
 
-```systemverilog
+```verilog
 // ❌ 错误写法：trans 内部依赖 cfg
 class my_trans extends uvm_sequence_item;
     my_cfg cfg;                    // trans 依赖外部配置
@@ -43,7 +43,7 @@ endclass
 
 ## 最标准写法：sequence 里 randomize with
 
-```systemverilog
+```verilog
 class my_sequence extends uvm_sequence #(my_trans);
     `uvm_object_utils(my_sequence)
 
@@ -82,7 +82,7 @@ endclass
 
 > 适合所有 sequence 都必须遵守的全局规则
 
-```systemverilog
+```verilog
 class my_trans extends uvm_sequence_item;
     my_cfg cfg;
     rand bit [7:0] data;
@@ -107,7 +107,7 @@ endclass
 
 test 只负责配置 cfg，不碰 trans 随机：
 
-```systemverilog
+```verilog
 class my_test extends uvm_test;
     my_env env;
     my_cfg cfg;
@@ -142,7 +142,7 @@ endclass
 
 cfg 里定义约束模式，sequence 里根据模式切换约束：
 
-```systemverilog
+```verilog
 // cfg 定义模式
 class my_cfg extends uvm_object;
     typedef enum {NORMAL, STRESS, CORNER} test_mode_e;
@@ -187,7 +187,7 @@ endtask
 
 ### 1. 多 trans 批量发送
 
-```systemverilog
+```verilog
 task body();
     my_cfg cfg;
     uvm_config_db#(my_cfg)::get(null, get_full_name(), "cfg", cfg);
@@ -205,7 +205,7 @@ endtask
 
 ### 2. 子 sequence 继承 cfg 约束
 
-```systemverilog
+```verilog
 class base_sequence extends uvm_sequence #(my_trans);
     my_cfg cfg;
 
@@ -230,7 +230,7 @@ endclass
 
 ### 3. inline constraint 覆盖
 
-```systemverilog
+```verilog
 // sequence 可以额外加约束，覆盖 trans 的默认约束
 assert(tr.randomize() with {
     inject_crc_err == 1;          // 强制注入错误

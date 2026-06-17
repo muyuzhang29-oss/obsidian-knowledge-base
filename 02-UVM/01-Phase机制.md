@@ -50,7 +50,7 @@ updated: 2026-06-02
 
 ### 2. Run Phases
 
-```systemverilog
+```verilog
 // 推荐使用 main_phase
 task run_phase(uvm_phase phase);
     phase.raise_objection(this);
@@ -62,7 +62,7 @@ endtask
 
 ### 3. Cleanup Phases
 
-```systemverilog
+```verilog
 function void extract_phase(uvm_phase phase);
     int cov;
     super.extract_phase(phase);
@@ -80,7 +80,7 @@ endfunction
 
 ## Objection 机制
 
-```systemverilog
+```verilog
 task run_phase(uvm_phase phase);
     phase.raise_objection(this);
     `uvm_info("RUN", "Starting...", UVM_MEDIUM)
@@ -93,7 +93,7 @@ endtask
 
 ## 常见错误
 
-```systemverilog
+```verilog
 // 错误1：忘记raise objection
 task run_phase(uvm_phase phase);
     // 不会执行，phase立即结束

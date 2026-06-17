@@ -134,7 +134,7 @@ FIFO 是一种先进先出的数据缓冲器：最先写入的数据最先被读
 
 ### 2.2 完整实现代码
 
-```systemverilog
+```verilog
 module sync_fifo #(
     parameter int DATA_WIDTH = 32,
     parameter int DEPTH      = 16,
@@ -234,7 +234,7 @@ endmodule
 
 ### 2.3 同步 FIFO 验证代码
 
-```systemverilog
+```verilog
 module tb_sync_fifo;
 
     //==========================================================
@@ -682,7 +682,7 @@ endmodule
 
 ### 3.3 完整实现代码
 
-```systemverilog
+```verilog
 module async_fifo #(
     parameter int DATA_WIDTH = 32,
     parameter int DEPTH      = 16,
@@ -842,7 +842,7 @@ endmodule
 
 ### 3.4 异步 FIFO 验证代码
 
-```systemverilog
+```verilog
 module tb_async_fifo;
 
     //==========================================================
@@ -1281,7 +1281,7 @@ CLK_WR ___|‾|___|‾|___|‾|___         CLK_RD ___|‾|___|‾|___|‾|___
 
 ### 4.6 时隙验证
 
-```systemverilog
+```verilog
 // 时隙验证属性：写使能后，考虑同步延迟，读端口应响应
 property time_slot_check;
   @(posedge wr_clk) disable iff (!wr_rst_n)
@@ -1364,7 +1364,7 @@ endproperty
 | **性能分析** | 测量时隙利用率和有效吞吐量 | 性能计数器 + 统计分析 |
 | **CDC 验证** | 检查跨时钟域时隙安全性 | Spyglass CDC |
 
-```systemverilog
+```verilog
 // 时隙覆盖率模型
 covergroup time_slot_cg @(posedge wr_clk);
   // 覆盖各种时隙利用率
@@ -1436,7 +1436,7 @@ endgroup
 
 ### 5.4 SVA 断言模块
 
-```systemverilog
+```verilog
 module fifo_sva_checker #(
     parameter int DATA_WIDTH = 32,
     parameter int DEPTH      = 16
@@ -1587,7 +1587,7 @@ endmodule
 | **保守读策略** | 读操作检查 `!empty`，空时不读 |
 | **增加 FIFO 深度** | 给同步延迟留余量 |
 
-```systemverilog
+```verilog
 // 推荐：读端口带 valid 信号
 assign rd_valid = !empty;
 // 下游根据 rd_valid 采样 rd_data
@@ -1609,7 +1609,7 @@ assign rd_valid = !empty;
 
 **关键约束：** FIFO 深度必须是 2 的幂。如果不是，格雷码在回绕时会有多个位同时变化，破坏格雷码的单比特变化特性。
 
-```systemverilog
+```verilog
 // 编译时检查深度是否为 2 的幂
 initial begin
     assert (DEPTH > 0 && (DEPTH & (DEPTH - 1)) == 0)

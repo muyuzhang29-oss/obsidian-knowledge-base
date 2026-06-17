@@ -8,7 +8,7 @@ updated: 2026-06-02
 
 > 仿真器入口，例化 DUT + interface，启动 UVM
 
-```systemverilog
+```verilog
 `ifndef TB_TOP_SV
 `define TB_TOP_SV
 

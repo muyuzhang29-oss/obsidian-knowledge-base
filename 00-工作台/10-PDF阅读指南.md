@@ -1,3 +1,10 @@
+---
+aliases: [PDF阅读指南, PDF阅读, Obsidian PDF]
+tags: [Environment, Obsidian, PDF, Guide]
+created: 2026-06-02
+updated: 2026-06-10
+---
+
 # PDF阅读指南
 
 ## 知识库PDF文件概览

@@ -8,7 +8,7 @@ updated: 2026-06-02
 
 > 根据 driver 的输入激励（通过 driver.ap 广播），计算期望输出，填入输出字段
 
-```systemverilog
+```verilog
 `ifndef SPI_REF_MODEL_SV
 `define SPI_REF_MODEL_SV
 

@@ -1,3 +1,10 @@
+---
+aliases: [Git同步配置指南, Obsidian Git同步, Git同步]
+tags: [Environment, Git, Obsidian, Sync]
+created: 2026-06-04
+updated: 2026-06-10
+---
+
 # Git同步配置指南
 
 ## 概述

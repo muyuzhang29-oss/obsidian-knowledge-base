@@ -26,7 +26,7 @@ updated: 2026-06-02
 
 ### 2.1 错误：`@(posedge clk iff rdy)`
 
-```systemverilog
+```verilog
 // ❌ 错误写法
 @(posedge vif.clk_lf iff vif.cmd_data_rdy_o == 1'b1);
 vif.drv_cb.cmd_data_vld_i <= 1'b1;
@@ -39,7 +39,7 @@ vif.drv_cb.cmd_data_vld_i <= 1'b1;
 
 ### 2.2 错误：先等 rdy 再拉 vld
 
-```systemverilog
+```verilog
 // ❌ 错误写法：先等 rdy，再拉 vld
 wait (vif.cmd_data_rdy_o == 1'b1);
 @(posedge vif.clk);
@@ -53,7 +53,7 @@ vif.drv_cb.cmd_data_vld_i <= 1'b1;
 
 ### 2.3 错误：混用 `drv_cb` 和直接信号
 
-```systemverilog
+```verilog
 // ❌ 错误写法
 @(posedge vif.clk);                    // 等实际时钟沿
 vif.drv_cb.cmd_data_vld_i <= 1'b1;    // 用 drv_cb 驱动
@@ -66,7 +66,7 @@ vif.drv_cb.cmd_data_vld_i <= 1'b1;    // 用 drv_cb 驱动
 
 ### 2.4 错误：拉低 vld 后多等一拍
 
-```systemverilog
+```verilog
 // ❌ 不必要的等待
 vif.drv_cb.cmd_data_vld_i <= 1'b0;
 @(vif.drv_cb);  // 多余的一拍
@@ -83,7 +83,7 @@ vif.drv_cb.cmd_data_vld_i <= 1'b0;
 
 ### 3.1 标准 do...while 握手
 
-```systemverilog
+```verilog
 // ✅ 正确写法
 virtual task drive_bytes(input bit[9:0] data_i, input bit[3:0] state);
     vif.drv_cb.cmd_data_vld_i <= 1'b1;      // 1. 先拉高 vld
@@ -101,7 +101,7 @@ endtask
 
 ### 3.2 连续 Burst 传输
 
-```systemverilog
+```verilog
 // ✅ 连续传输多个数据
 foreach (payload[i]) begin
     drive_bytes(payload[i], state);  // vld 保持高，连续握手
@@ -167,7 +167,7 @@ clk 上升沿 → DUT 内部判断缓冲区满 → 0.01ns 后 rdy_o 拉低
 
 **DUT 侧正确实现：**
 
-```systemverilog
+```verilog
 // ✅ rdy_o 用组合逻辑
 assign cmd_data_rdy_o = (buf_count < MAX_DEPTH);
 ```

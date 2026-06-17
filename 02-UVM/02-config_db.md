@@ -23,7 +23,7 @@ testbench
 
 ## set/get 配对
 
-```systemverilog
+```verilog
 // 在test或env中设置
 uvm_config_db#(int)::set(this, "env.agent", "is_active", UVM_ACTIVE);
 uvm_config_db#(virtual uvm_if)::set(this, "env.agent*", "vif", dut_if);
@@ -51,7 +51,7 @@ if (vif == null)
 
 ### 1. Virtual Interface
 
-```systemverilog
+```verilog
 // Top层设置
 module tb;
     interface dut_if();
@@ -74,14 +74,14 @@ endclass
 
 ### 2. 简单变量
 
-```systemverilog
+```verilog
 uvm_config_db#(int)::set(this, "env", "verbosity", UVM_MEDIUM);
 uvm_config_db#(string)::set(this, "env.agent", "mode", "MASTER");
 ```
 
 ### 3. 对象/句柄
 
-```systemverilog
+```verilog
 my_config cfg;
 cfg = my_config::type_id::create("cfg");
 uvm_config_db#(my_config)::set(this, "env", "cfg", cfg);
@@ -91,7 +91,7 @@ uvm_config_db#(my_config)::set(this, "env", "cfg", cfg);
 
 ## 常用预定义配置
 
-```systemverilog
+```verilog
 // is_active: 创建driver
 uvm_config_db#(uvm_active_passive_enum)::set(this, "env.agent", "is_active", UVM_PASSIVE);
 
@@ -106,7 +106,7 @@ uvm_config_db#(uvm_object_wrapper)::set(this,
 
 ## 常见错误
 
-```systemverilog
+```verilog
 // 错误1：路径不匹配
 uvm_config_db#(int)::set(this, "env.agent.drv", "value", 10);
 uvm_config_db#(int)::get(this, "env.agent.driver", "value", v);  // 不匹配！
