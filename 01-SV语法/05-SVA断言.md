@@ -7,6 +7,7 @@ tags:
   - 验证
   - 核心
 created: 2026-06-02
+updated: 2026-06-18
 ---
 
 # SVA 断言（SystemVerilog Assertions）
@@ -446,7 +447,35 @@ bind top.dut bus_assertions u_bus_chk (
 );
 ```
 
-### 8.3 UVM Agent 集成断言
+### 8.3 bind 的核心价值与使用场景
+
+`bind` 可以把一个断言模块挂到设计模块上，**不修改 RTL 代码**。
+
+```verilog
+bind spi_master spi_master_assertions u_bind_assert (
+    .clk  (clk),
+    .cs_n (cs_n),
+    .sck  (sck),
+    .mosi (mosi)
+);
+```
+
+**使用场景：**
+
+| 场景 | 说明 |
+|------|------|
+| 形式验证（Formal） | 形式验证团队写 SVA property，用 bind 挂到 RTL 跑形式证明，最常见的用途 |
+| SoC 集成验证 | 集成验证团队给关键接口 bind 协议检查器（AXI/SPI 等），不碰各模块 RTL |
+| IP 交付/重用 | IP 供应商附带 assertion 包，客户用 bind 一行接入即可 |
+
+**与 interface 内嵌断言的对比：**
+
+- **interface 内嵌**：断言写在 interface 里，随 interface 复用，适合自研模块
+- **bind 绑定**：断言独立于 RTL 和 interface，适合第三方 IP、不改 RTL 的场景
+
+**模块级验证中**一般用 UVM monitor + scoreboard 覆盖，bind 不是必须的。后续做形式验证或 SoC 集成时再加即可。
+
+### 8.4 UVM Agent 集成断言
 
 在 UVM agent 中通过 virtual interface 触发断言：
 
@@ -469,7 +498,7 @@ class bus_agent extends uvm_agent;
 endclass
 ```
 
-### 8.4 运行时控制断言
+### 8.5 运行时控制断言
 
 ```verilog
 // 通过 config_db 控制断言开关
