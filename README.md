@@ -22,3 +22,19 @@
 
 - **Obsidian** — 知识管理与笔记
 - **Git** — 版本控制
+
+## Git 同步操作
+
+每次开始工作前先拉取最新，结束后推送修改：
+
+```bash
+git pull           # 从 GitHub 同步到本地
+# ... 编辑笔记 ...
+git add .          # 暂存所有更改
+git commit -m "描述修改内容"   # 提交
+git push           # 推送到 GitHub
+```
+
+或在 Obsidian 中按 `Ctrl+P` 搜索：
+- `Obsidian Git: Pull from remote repository` — 拉取
+- `Obsidian Git: Create backup` — 推送
