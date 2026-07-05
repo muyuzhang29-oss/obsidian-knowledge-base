@@ -1,4 +1,4 @@
----
+﻿---
 tags: [UVM, Verification, 核心, 实践]
 created: 2026-04-17
 updated: 2026-06-02
@@ -248,5 +248,5 @@ assert(tr.randomize() with {
 
 - [[02-UVM/02-config_db|config_db]] - UVM 配置机制
 - [[02-UVM/03-Sequence机制|Sequence 机制]] - Sequence 激励生成
-- [[01-SV语法/06-随机化约束|随机化约束]] - SystemVerilog 随机化
+- [[01-SV语法/05-随机化约束|随机化约束]] - SystemVerilog 随机化
 - [[00-总索引]] - 返回总索引

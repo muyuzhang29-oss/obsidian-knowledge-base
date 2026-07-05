@@ -1,4 +1,4 @@
----
+﻿---
 tags:
   - Tools
   - QuestaSim
@@ -747,7 +747,7 @@ run -all
 
 ### 相关笔记
 
-- [[11-UVM源码学习/UVM源代码研究|UVM 源码研究]] - UVM 验证方法学
+- [[02-UVM/08-源代码研究|UVM 源码研究]] - UVM 验证方法学
 - [[04-Tools/05-VCS/00-VCS|VCS 仿真]] - VCS 仿真器使用
 - [[04-Tools/xrun/00-xrun|xrun 仿真]] - Cadence xrun 仿真器
 

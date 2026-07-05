@@ -1,4 +1,4 @@
----
+﻿---
 tags:
   - Tools
   - VCS
@@ -667,13 +667,13 @@ ls $VCS_HOME/doc/
 ### 相关笔记
 
 - [[04-Tools/06-Verdi/00-Verdi|Verdi 调试工具]] - Verdi 波形调试
-- [[11-UVM源码学习/UVM源代码研究|UVM 源码研究]] - UVM 验证方法学
+- [[02-UVM/08-源代码研究|UVM 源码研究]] - UVM 验证方法学
 - [[03-Protocol/AXI/00-AXI|AXI 协议]] - AXI 协议（验证常用）
 
 ### 常用文件模板
 
-- [[07-Scripts/00-Makefile|Makefile]] - Makefile 模板
-- [[07-Scripts/00-Python脚本|Python脚本]] - 运行脚本模板
+- [[07-Scripts/01-Makefile|Makefile]] - Makefile 模板
+- [[07-Scripts/02-Python脚本|Python脚本]] - 运行脚本模板
 
 ---
 

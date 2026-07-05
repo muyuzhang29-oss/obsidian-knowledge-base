@@ -1,4 +1,4 @@
----
+﻿---
 cssclass: dashboard
 banner_y: 0.3
 banner_lock: true
@@ -72,7 +72,7 @@ aliases:
 > 00-Makefile · 00-Python · 01-Log解析
 
 > [!note] 📚 **UVM源码** (4篇)
-> UVM源代码研究 · Factory机制 · Component与Root · TestBench启动
+> 08-源代码研究 · Factory机制 · Component与Root · TestBench启动
 
 ---
 

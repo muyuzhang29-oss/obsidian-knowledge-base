@@ -1,4 +1,4 @@
----
+﻿---
 aliases: [PDF阅读指南, PDF阅读, Obsidian PDF]
 tags: [Environment, Obsidian, PDF, Guide]
 created: 2026-06-02
@@ -14,7 +14,7 @@ updated: 2026-06-10
 | 文件路径 | 大小 | 位置 |
 |---------|------|------|
 | `QC-T 1217-2024车载有线高速媒体传输 万兆全双工系统 技术要求及试验方法.pdf` | 57.78 MB | 03-Protocol/HSMT/ |
-| `UVM1.1应用指南及源代码分析---张强(1).pdf` | 3.20 MB | 11-UVM源码学习/ |
+| `UVM1.1应用指南及源代码分析---张强(1).pdf` | 3.20 MB | 02-UVM/ |
 
 ### 重点文件：HSMT协议文档
 
