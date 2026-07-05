@@ -35,6 +35,4 @@ git commit -m "描述修改内容"   # 提交
 git push           # 推送到 GitHub
 ```
 
-或在 Obsidian 中按 `Ctrl+P` 搜索：
-- `Obsidian Git: Pull from remote repository` — 拉取
-- `Obsidian Git: Create backup` — 推送
+或在 Obsidian 中按 `Ctrl+P` 搜索 `Git` 查看所有命令（已配置开机自动拉取、定时自动备份）。
