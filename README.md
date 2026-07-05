@@ -23,16 +23,35 @@
 - **Obsidian** — 知识管理与笔记
 - **Git** — 版本控制
 
-## Git 同步操作
+## 同步方式
 
-每次开始工作前先拉取最新，结束后推送修改：
+### 方式一：自动同步（推荐）
 
-```bash
-git pull           # 从 GitHub 同步到本地
-# ... 编辑笔记 ...
-git add .          # 暂存所有更改
-git commit -m "描述修改内容"   # 提交
-git push           # 推送到 GitHub
+已安装 **Obsidian Git** 插件，配置如下：
+
+- 打开 Obsidian 时自动从 GitHub 拉取最新内容
+- 每 3 分钟（300 秒）自动备份并推送到 GitHub
+- 你只需专注于写笔记，同步全自动完成
+
+### 方式二：手动同步（终端）
+
+如果习惯手动控制，打开终端（`Win+R` → 输入 `powershell` → 回车），依次执行：
+
+**开始工作前拉取最新：**
+```powershell
+cd D:\obsdian\knowledge-base
+git pull
 ```
 
-或在 Obsidian 中按 `Ctrl+P` 搜索 `Git` 查看所有命令（已配置开机自动拉取、定时自动备份）。
+**编辑笔记后推送到 GitHub：**
+```powershell
+git add .
+git commit -m "描述本次修改的内容"
+git push
+```
+
+验证是否推送成功：终端输出最后一行应为 `main -> main`。
+
+### 方式三：Obsidian 命令面板
+
+在 Obsidian 中按 `Ctrl+P`，输入 `Git` 查看所有可用命令，选择执行即可。
