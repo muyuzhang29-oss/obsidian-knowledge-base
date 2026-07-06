@@ -1,154 +1,183 @@
-﻿---
-tags: [Verification, CDC, 璺ㄦ椂閽熷煙, 鏃跺簭, 鏍稿績]
+---
+tags: [Verification, CDC, 跨时钟域, 时序, 核心]
 created: 2026-06-02
 updated: 2026-06-02
 ---
 
-## 馃搼 鐩綍
+## 📑 目录
 
-- [CDC姒傝堪涓庨噸瑕佹€(#cdc姒傝堪涓庨噸瑕佹€?
-  - [涓轰粈涔圕DC楠岃瘉鑷冲叧閲嶈](#涓轰粈涔坈dc楠岃瘉鑷冲叧閲嶈)
-- [浜氱ǔ鎬侀棶棰樹笌MTBF](#浜氱ǔ鎬侀棶棰樹笌mtbf)
-  - [浜氱ǔ鎬佺殑鐗╃悊鏈川](#浜氱ǔ鎬佺殑鐗╃悊鏈川)
-  - [MTBF璁＄畻](#mtbf璁＄畻)
-  - [鍏抽敭璁捐鍚ず](#鍏抽敭璁捐鍚ず)
-- [鍚屾鍣ㄨ璁(#鍚屾鍣ㄨ璁?
-  - [鍙岃Е鍙戝櫒鍚屾鍣紙鏈€甯哥敤锛塢(#鍙岃Е鍙戝櫒鍚屾鍣ㄦ渶甯哥敤)
-  - [涓夌骇瑙﹀彂鍣ㄥ悓姝ュ櫒](#涓夌骇瑙﹀彂鍣ㄥ悓姝ュ櫒)
-  - [鍚屾鍣ㄨ璁¤鐐筣(#鍚屾鍣ㄨ璁¤鐐?
-- [鏍奸浄鐮佺紪鐮乚(#鏍奸浄鐮佺紪鐮?
-  - [鍘熺悊](#鍘熺悊)
-  - [浜岃繘鍒朵笌鏍奸浄鐮佽浆鎹(#浜岃繘鍒朵笌鏍奸浄鐮佽浆鎹?
-  - [搴旂敤鍦烘櫙](#搴旂敤鍦烘櫙)
-- [寮傛FIFO璁捐](#寮傛fifo璁捐)
-  - [鏋舵瀯姒傝](#鏋舵瀯姒傝)
-  - [鏍稿績瀹炵幇](#鏍稿績瀹炵幇)
-  - [寮傛FIFO璁捐瑕佺偣](#寮傛fifo璁捐瑕佺偣)
-- [鑴夊啿鍚屾鍣╙(#鑴夊啿鍚屾鍣?
-  - [闂鍦烘櫙](#闂鍦烘櫙)
-  - [鏂规涓€锛歍oggle鍚屾鍣紙鏈€甯哥敤锛塢(#鏂规涓€togglesync鍚屾鍣ㄦ渶甯哥敤)
-  - [鏂规浜岋細鍙嶉纭鍚屾鍣╙(#鏂规浜屽弽棣堢‘璁ゅ悓姝ュ櫒)
-- [鎻℃墜鍗忚鍚屾](#鎻℃墜鍗忚鍚屾)
-  - [閫傜敤鍦烘櫙](#閫傜敤鍦烘櫙)
-  - [req-ack 鎻℃墜鍗忚](#req-ack-鎻℃墜鍗忚)
-  - [鎻℃墜鏃跺簭鍥綸(#鎻℃墜鏃跺簭鍥?
-- [CDC楠岃瘉鏂规硶](#cdc楠岃瘉鏂规硶)
-  - [闈欐€佹鏌ワ紙CDC宸ュ叿鍒嗘瀽锛塢(#闈欐€佹鏌dc宸ュ叿鍒嗘瀽)
-  - [鍔ㄦ€侀獙璇侊紙绾︽潫闅忔満娴嬭瘯锛塢(#鍔ㄦ€侀獙璇佺害鏉熼殢鏈烘祴璇?
-  - [褰㈠紡楠岃瘉](#褰㈠紡楠岃瘉)
-- [甯歌CDC閿欒涓庢渚媇(#甯歌cdc閿欒涓庢渚?
-  - [閿欒1锛氬浣嶆€荤嚎閫愪綅鍚屾](#閿欒1澶氫綅鎬荤嚎閫愪綅鍚屾)
-  - [閿欒2锛氱粍鍚堥€昏緫鍚庢帴鍚屾鍣╙(#閿欒2缁勫悎閫昏緫鍚庢帴鍚屾鍣?
-  - [閿欒3锛氬紓姝ュ浣嶉噴鏀炬湭鍚屾](#閿欒3寮傛澶嶄綅閲婃斁鏈悓姝?
-- [CDC楠岃瘉宸ュ叿](#cdc楠岃瘉宸ュ叿)
+- [CDC概述与重要性](#cdc概述与重要性)
+  - [为什么CDC验证至关重要](#为什么cdc验证至关重要)
+- [亚稳态问题与MTBF](#亚稳态问题与mtbf)
+  - [亚稳态的物理本质](#亚稳态的物理本质)
+  - [MTBF计算](#mtbf计算)
+  - [关键设计启示](#关键设计启示)
+- [同步器设计](#同步器设计)
+  - [双触发器同步器（最常用）](#双触发器同步器最常用)
+  - [三级触发器同步器](#三级触发器同步器)
+  - [同步器设计要点](#同步器设计要点)
+- [格雷码编码](#格雷码编码)
+  - [原理](#原理)
+  - [二进制与格雷码转换](#二进制与格雷码转换)
+  - [应用场景](#应用场景)
+- [异步FIFO设计](#异步fifo设计)
+  - [架构概览](#架构概览)
+  - [核心实现](#核心实现)
+  - [异步FIFO设计要点](#异步fifo设计要点)
+- [脉冲同步器](#脉冲同步器)
+  - [问题场景](#问题场景)
+  - [方案一：Toggle同步器（最常用）](#方案一togglesync同步器最常用)
+  - [方案二：反馈确认同步器](#方案二反馈确认同步器)
+- [握手协议同步](#握手协议同步)
+  - [适用场景](#适用场景)
+  - [req-ack 握手协议](#req-ack-握手协议)
+  - [握手时序图](#握手时序图)
+- [CDC验证方法](#cdc验证方法)
+  - [静态检查（CDC工具分析）](#静态检查cdc工具分析)
+  - [动态验证（约束随机测试）](#动态验证约束随机测试)
+  - [形式验证](#形式验证)
+- [常见CDC错误与案例](#常见cdc错误与案例)
+  - [错误1：多位总线逐位同步](#错误1多位总线逐位同步)
+  - [错误2：组合逻辑后接同步器](#错误2组合逻辑后接同步器)
+  - [错误3：异步复位释放未同步](#错误3异步复位释放未同步)
+- [CDC验证工具](#cdc验证工具)
   - [SpyGlass CDC](#spyglass-cdc)
   - [Questa CDC](#questa-cdc)
-  - [宸ュ叿瀵规瘮](#宸ュ叿瀵规瘮)
+  - [工具对比](#工具对比)
 
 ---
 
-# 03-CDC楠岃瘉
+# 03-CDC验证
 
-## CDC姒傝堪涓庨噸瑕佹€?
-CDC锛圕lock Domain Crossing锛岃法鏃堕挓鍩燂級鏄寚淇″彿浠庝竴涓椂閽熷煙浼犺緭鍒板彟涓€涓椂閽熷煙鐨勮繃绋嬨€傚湪鐜颁唬SoC璁捐涓紝澶氭椂閽熷煙鏋舵瀯鏃犲涓嶅湪鈥斺€斿鐞嗗櫒鏍稿績銆佸璁炬帴鍙ｃ€丏DR鎺у埗鍣ㄣ€侀珮閫烻erDes绛夋ā鍧楀線寰€杩愯鍦ㄤ笉鍚岀殑鏃堕挓棰戠巼涓嬨€侰DC澶勭悊涓嶅綋浼氬鑷?*浜氱ǔ鎬侊紙Metastability锛?*锛屽紩鍙戝姛鑳介敊璇€佹暟鎹涪澶辩敋鑷崇郴缁熷穿婧冿紝涓旇繖绫籅ug鏋佸叾闅句互澶嶇幇鍜岃皟璇曘€?
-### 涓轰粈涔圕DC楠岃瘉鑷冲叧閲嶈
+## CDC概述与重要性
 
-| 椋庨櫓缁村害 | 璇存槑 |
+CDC（Clock Domain Crossing，跨时钟域）是指信号从一个时钟域传输到另一个时钟域的过程。在现代SoC设计中，多时钟域架构无处不在——处理器核心、外设接口、DDR控制器、高速SerDes等模块往往运行在不同的时钟频率下。CDC处理不当会导致**亚稳态（Metastability）**，引发功能错误、数据丢失甚至系统崩溃，且这类Bug极其难以复现和调试。
+
+### 为什么CDC验证至关重要
+
+| 风险维度 | 说明 |
 |---------|------|
-| 鍔熻兘姝ｇ‘鎬?| 浜氱ǔ鎬佸鑷存暟鎹噰鏍烽敊璇紝浜х敓闅忔満鍔熻兘鏁呴殰 |
-| 鍙潬鎬?| CDC Bug鍙兘鍦ㄨ姱鐗囧伐浣滄暟灏忔椂鐢氳嚦鏁板ぉ鍚庢墠鍋跺彂鍑虹幇 |
-| 璋冭瘯闅惧害 | 鏃犳硶鍦ㄤ豢鐪熶腑绋冲畾澶嶇幇锛屼紶缁熸尝褰㈣皟璇曟墜娈靛熀鏈け鏁?|
-| 娴佺墖椋庨櫓 | 涓€鏃︽祦鐗囧悗鍙戠幇CDC闂锛屼慨澶嶆垚鏈瀬楂橈紝鍙兘闇€瑕侀噸鏂拌璁?|
+| 功能正确性 | 亚稳态导致数据采样错误，产生随机功能故障 |
+| 可靠性 | CDC Bug可能在芯片工作数小时甚至数天后才偶发出现 |
+| 调试难度 | 无法在仿真中稳定复现，传统波形调试手段基本失效 |
+| 流片风险 | 一旦流片后发现CDC问题，修复成本极高，可能需要重新设计 |
 
 ```
-鏃堕挓鍩烝 (clk_a)          鏃堕挓鍩烞 (clk_b)
-    鈹屸攢鈹€鈹? 鈹屸攢鈹€鈹? 鈹屸攢鈹€鈹?        鈹屸攢鈹€鈹€鈹? 鈹屸攢鈹€鈹€鈹? 鈹屸攢鈹€鈹€鈹?    鈹? 鈹? 鈹? 鈹? 鈹? 鈹?        鈹?  鈹? 鈹?  鈹? 鈹?  鈹?鈹€鈹€鈹€鈹€鈹? 鈹斺攢鈹€鈹? 鈹斺攢鈹€鈹? 鈹斺攢鈹€       鈹?  鈹斺攢鈹€鈹?  鈹斺攢鈹€鈹?  鈹斺攢鈹€
+时钟域A (clk_a)          时钟域B (clk_b)
+    ┌──┐  ┌──┐  ┌──┐         ┌───┐  ┌───┐  ┌───┐
+    │  │  │  │  │  │         │   │  │   │  │   │
+────┘  └──┘  └──┘  └──       ┘   └──┘   └──┘   └──
 
-    sig_a 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈻? sig_b (?)
-                               鈫?                          浜氱ǔ鎬侀闄╃偣
+    sig_a ──────────────────►  sig_b (?)
+                               ↑
+                          亚稳态风险点
 ```
 
 ---
 
-## 浜氱ǔ鎬侀棶棰樹笌MTBF
+## 亚稳态问题与MTBF
 
-### 浜氱ǔ鎬佺殑鐗╃悊鏈川
+### 亚稳态的物理本质
 
-褰撹Е鍙戝櫒鐨勮緭鍏ヤ俊鍙峰湪**寤虹珛鏃堕棿锛圫etup Time锛?*鍜?*淇濇寔鏃堕棿锛圚old Time锛?*绐楀彛鍐呭彂鐢熷彉鍖栨椂锛岃Е鍙戝櫒鏃犳硶纭畾杈撳嚭鏄?杩樻槸1锛岃繘鍏ヤ竴涓?*浜氱ǔ鎬?*鈥斺€旇緭鍑虹數鍘嬪浜庨€昏緫0鍜岄€昏緫1涔嬮棿鐨勪笉纭畾鐢靛钩锛屽苟鍦ㄤ竴娈垫椂闂村唴闇囪崱鍚庢墠鏈€缁堢ǔ瀹氥€?
+当触发器的输入信号在**建立时间（Setup Time）**和**保持时间（Hold Time）**窗口内发生变化时，触发器无法确定输出是0还是1，进入一个**亚稳态**——输出电压处于逻辑0和逻辑1之间的不确定电平，并在一段时间内震荡后才最终稳定。
+
 ```
          tsu  th
-          鈹傗梽鈹€鈻衡攤
-          鈹屸攢鈹€鈹€鈹?clk  鈹€鈹€鈹€鈹€鈹€鈹?  鈹斺攢鈹€鈹€鈹€鈹€
-               鈻撯枔鈻撯枔鈻撯枔鈻撯枔鈻撯枔鈻撯枔鈻撯枔鈻撯枔鈻撯枔
-data 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€X鈻撯枔鈻撯枔鈻撯枔鈻撯枔鈻撯枔鈻撯枔鈻撯枔鈻撯枔鈻撯枔鈻撯枔鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
-               鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?Q    鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹? 浜氱ǔ鎬?(闇囪崱)    鈹溾攢鈹€鈹€鈹€鈹€?鈹€鈹€
-               鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?               鈹傗啇鈹€ 鎭㈠鏃堕棿 Tmet 鈹€鈫掆攤
+          │◄─►│
+          ┌───┐
+clk  ─────┘   └─────
+               ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+data ────────X▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓────────
+               ┌──────────────────┐
+Q    ──────────┤  亚稳态 (震荡)    ├─────?──
+               └──────────────────┘
+               │←─ 恢复时间 Tmet ─→│
 ```
 
-### MTBF璁＄畻
+### MTBF计算
 
-MTBF锛圡ean Time Between Failures锛屽钩鍧囨晠闅滈棿闅旀椂闂达級鏄　閲廋DC鍙潬鎬х殑鏍稿績鎸囨爣锛?
+MTBF（Mean Time Between Failures，平均故障间隔时间）是衡量CDC可靠性的核心指标：
+
 $$MTBF = \frac{1}{f_{clk} \cdot f_{data} \cdot T_0 \cdot e^{T_{met}/\tau}}$$
 
-鍏朵腑锛?- `f_clk`锛氶噰鏍锋椂閽熼鐜?- `f_data`锛氭暟鎹炕杞鐜?- `T_0`锛氫笌宸ヨ壓鐩稿叧鐨勫父鏁帮紙鍏稿瀷鍊肩害 0.1~1 ns锛?- `T_met`锛氬厑璁哥殑浜氱ǔ鎬佹仮澶嶆椂闂达紙鍗虫椂閽熷懆鏈熷噺鍘荤粍鍚堥€昏緫寤惰繜鍜屽缓绔嬫椂闂达級
-- `蟿`锛氳Е鍙戝櫒鐨勪簹绋虫€佹椂闂村父鏁帮紙鍏稿瀷鍊肩害 10~50 ps锛屽彇鍐充簬宸ヨ壓锛?
-### 鍏抽敭璁捐鍚ず
+其中：
+- `f_clk`：采样时钟频率
+- `f_data`：数据翻转频率
+- `T_0`：与工艺相关的常数（典型值约 0.1~1 ns）
+- `T_met`：允许的亚稳态恢复时间（即时钟周期减去组合逻辑延迟和建立时间）
+- `τ`：触发器的亚稳态时间常数（典型值约 10~50 ps，取决于工艺）
 
-| 鎺柦 | 瀵筂TBF鐨勫奖鍝?|
+### 关键设计启示
+
+| 措施 | 对MTBF的影响 |
 |------|-------------|
-| 澧炲姞涓€绾у悓姝ヨЕ鍙戝櫒 | MTBF鎸囨暟绾ф彁鍗囷紙e^(T/蟿)椤瑰澶э級 |
-| 闄嶄綆鏃堕挓棰戠巼 | MTBF绾挎€ф彁鍗?|
-| 浣跨敤鏇村揩鐨勫伐鑹?| 蟿鏇村皬锛孧TBF鎸囨暟绾ф彁鍗?|
-| 鍑忓皯璺ㄦ椂閽熷煙淇″彿缈昏浆鐜?| MTBF绾挎€ф彁鍗?|
+| 增加一级同步触发器 | MTBF指数级提升（e^(T/τ)项增大） |
+| 降低时钟频率 | MTBF线性提升 |
+| 使用更快的工艺 | τ更小，MTBF指数级提升 |
+| 减少跨时钟域信号翻转率 | MTBF线性提升 |
 
-鍏稿瀷鏁板€硷細鍙岃Е鍙戝櫒鍚屾鍣ㄥ湪鐜颁唬宸ヨ壓涓嬶紝MTBF鍙揪鏁板崄骞寸敋鑷虫暟鐧惧勾锛涗絾楂橀璁捐锛?500MHz锛夊彲鑳介渶瑕佷笁绾у悓姝ュ櫒鎵嶈兘婊¤冻瑕佹眰銆?
+典型数值：双触发器同步器在现代工艺下，MTBF可达数十年甚至数百年；但高频设计（>500MHz）可能需要三级同步器才能满足要求。
+
 ---
 
-## 鍚屾鍣ㄨ璁?
-### 鍙岃Е鍙戝櫒鍚屾鍣紙鏈€甯哥敤锛?
-鏈€鍩烘湰鐨凜DC鍚屾鏂规锛屽皢浜氱ǔ鎬佹仮澶嶆椂闂存墿灞曞埌涓€涓畬鏁存椂閽熷懆鏈燂細
+## 同步器设计
+
+### 双触发器同步器（最常用）
+
+最基本的CDC同步方案，将亚稳态恢复时间扩展到一个完整时钟周期：
 
 ```verilog
-// 鍙岃Е鍙戝櫒鍚屾鍣?module sync_2ff #(
+// 双触发器同步器
+module sync_2ff #(
     parameter INIT = 1'b0
 )(
-    input  logic clk_dst,   // 鐩爣鏃堕挓鍩?    input  logic rst_n,     // 寮傛澶嶄綅
-    input  logic sig_src,   // 婧愭椂閽熷煙淇″彿
-    output logic sig_dst    // 鍚屾鍚庣殑淇″彿
+    input  logic clk_dst,   // 目标时钟域
+    input  logic rst_n,     // 异步复位
+    input  logic sig_src,   // 源时钟域信号
+    output logic sig_dst    // 同步后的信号
 );
 
-    logic sig_meta;  // 绗竴绾э細鍙兘杩涘叆浜氱ǔ鎬?
+    logic sig_meta;  // 第一级：可能进入亚稳态
+
     always_ff @(posedge clk_dst or negedge rst_n) begin
         if (!rst_n) begin
             sig_meta <= INIT;
             sig_dst  <= INIT;
         end else begin
-            sig_meta <= sig_src;   // 绗竴绾ч噰鏍?            sig_dst  <= sig_meta;  // 绗簩绾хǔ瀹氳緭鍑?        end
+            sig_meta <= sig_src;   // 第一级采样
+            sig_dst  <= sig_meta;  // 第二级稳定输出
+        end
     end
 
 endmodule
 ```
 
-鏃跺簭娉㈠舰锛?
+时序波形：
+
 ```
-clk_dst  鈹屸攼  鈹屸攼  鈹屸攼  鈹屸攼  鈹屸攼  鈹屸攼
-         鈹樷敂鈹€鈹€鈹樷敂鈹€鈹€鈹樷敂鈹€鈹€鈹樷敂鈹€鈹€鈹樷敂鈹€鈹€鈹樷敂鈹€鈹€
+clk_dst  ┌┐  ┌┐  ┌┐  ┌┐  ┌┐  ┌┐
+         ┘└──┘└──┘└──┘└──┘└──┘└──
 
-sig_src  鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?                       鈹?                       鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+sig_src  ──────────────┐
+                       │
+                       └──────────────
 
-sig_meta 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ 鈹?鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
-                        鈻撯枔鈻撯枔  (浜氱ǔ鎬?
-                         鈹斺攢鈹€鈹?
-sig_dst  鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?                               鈹?                               鈹斺攢鈹€鈹€鈹€鈹€鈹€
-                        鈫?鍚屾寤惰繜 = 2涓猚lk_dst鍛ㄦ湡
+sig_meta ────────────── ┐ ┌──────────
+                        ▓▓▓▓  (亚稳态)
+                         └──┘
+
+sig_dst  ──────────────────────┐
+                               │
+                               └──────
+                        ↑ 同步延迟 = 2个clk_dst周期
 ```
 
-### 涓夌骇瑙﹀彂鍣ㄥ悓姝ュ櫒
+### 三级触发器同步器
 
-鐢ㄤ簬鏋侀珮棰戠巼鎴栧MTBF瑕佹眰鏋佷弗鐨勫満鏅紙濡傛苯杞︾骇ASIL-D鍔熻兘瀹夊叏锛夛細
+用于极高频率或对MTBF要求极严的场景（如汽车级ASIL-D功能安全）：
 
 ```verilog
-// 涓夌骇瑙﹀彂鍣ㄥ悓姝ュ櫒
+// 三级触发器同步器
 module sync_3ff #(
     parameter INIT = 1'b0
 )(
@@ -175,28 +204,32 @@ module sync_3ff #(
 endmodule
 ```
 
-### 鍚屾鍣ㄨ璁¤鐐?
-| 瑕佺偣 | 璇存槑 |
+### 同步器设计要点
+
+| 要点 | 说明 |
 |------|------|
-| 鍚屾鍣ㄥ繀椤绘斁鍦ㄧ洰鏍囨椂閽熷煙 | 閲囨牱绔繀椤荤敤鐩爣鏃堕挓椹卞姩 |
-| 绂佹瀵瑰悓姝ュ櫒杈撳嚭鍋氱粍鍚堥€昏緫 | 浼氬紩鍏ユ柊鐨勪簹绋虫€佺獥鍙?|
-| 澶嶄綅鍊煎簲涓庢簮淇″彿鍒濆鐘舵€佷竴鑷?| 閬垮厤涓婄數鍚庡悓姝ュ櫒杈撳嚭閿欒鐢靛钩 |
-| 缁煎悎灞炴€т繚鎶?| 娣诲姞 `(* ASYNC_REG = "TRUE" *)` 闃叉缁煎悎宸ュ叿浼樺寲 |
+| 同步器必须放在目标时钟域 | 采样端必须用目标时钟驱动 |
+| 禁止对同步器输出做组合逻辑 | 会引入新的亚稳态窗口 |
+| 复位值应与源信号初始状态一致 | 避免上电后同步器输出错误电平 |
+| 综合属性保护 | 添加 `(* ASYNC_REG = "TRUE" *)` 防止综合工具优化 |
 
 ```verilog
-// Xilinx 椋庢牸鐨勫紓姝ュ瘎瀛樺櫒澹版槑
+// Xilinx 风格的异步寄存器声明
 (* ASYNC_REG = "TRUE" *)
 logic sig_meta, sig_dst;
 ```
 
 ---
 
-## 鏍奸浄鐮佺紪鐮?
-### 鍘熺悊
+## 格雷码编码
 
-鏍奸浄鐮侊紙Gray Code锛夌殑缂栫爜鐗圭偣鏄細**鐩搁偦涓や釜缂栫爜涔嬮棿浠呮湁1浣嶅彂鐢熺炕杞?*銆傝繖浣垮緱鍦ㄨ法鏃堕挓鍩熶紶杈撳浣嶈鏁板櫒/鍦板潃鏃讹紝鍗充娇閲囨牱鏃跺埢涓嶇簿纭紝鏈€澶氬彧鏈?浣嶅嚭閿欙紝閿欒骞呭害浠呬负1銆?
+### 原理
+
+格雷码（Gray Code）的编码特点是：**相邻两个编码之间仅有1位发生翻转**。这使得在跨时钟域传输多位计数器/地址时，即使采样时刻不精确，最多只有1位出错，错误幅度仅为1。
+
 ```
-鍗佽繘鍒? 浜岃繘鍒? 鏍奸浄鐮?  0      000     000
+十进制  二进制  格雷码
+  0      000     000
   1      001     001
   2      010     011
   3      011     010
@@ -206,13 +239,16 @@ logic sig_meta, sig_dst;
   7      111     100
 ```
 
-### 浜岃繘鍒朵笌鏍奸浄鐮佽浆鎹?
+### 二进制与格雷码转换
+
 ```verilog
-// 浜岃繘鍒?鈫?鏍奸浄鐮?function automatic logic [N-1:0] bin2gray(input logic [N-1:0] bin);
+// 二进制 → 格雷码
+function automatic logic [N-1:0] bin2gray(input logic [N-1:0] bin);
     return bin ^ (bin >> 1);
 endfunction
 
-// 鏍奸浄鐮?鈫?浜岃繘鍒讹紙閫愪綅寮傛垨杩樺師锛?function automatic logic [N-1:0] gray2bin(input logic [N-1:0] gray);
+// 格雷码 → 二进制（逐位异或还原）
+function automatic logic [N-1:0] gray2bin(input logic [N-1:0] gray);
     logic [N-1:0] bin;
     bin[N-1] = gray[N-1];
     for (int i = N-2; i >= 0; i--)
@@ -221,48 +257,75 @@ endfunction
 endfunction
 ```
 
-### 搴旂敤鍦烘櫙
+### 应用场景
 
-鏍奸浄鐮佹渶鍏稿瀷鐨勫簲鐢ㄦ槸**寮傛FIFO鐨勮鍐欐寚閽堝悓姝?*銆傚皢浜岃繘鍒舵寚閽堣浆鎹负鏍奸浄鐮佸悗璺ㄦ椂閽熷煙浼犺緭锛岀洰鏍囨椂閽熷煙鍚屾鍚庡啀杞崲鍥炰簩杩涘埗銆?
+格雷码最典型的应用是**异步FIFO的读写指针同步**。将二进制指针转换为格雷码后跨时钟域传输，目标时钟域同步后再转换回二进制。
+
 ---
 
-## 寮傛FIFO璁捐
+## 异步FIFO设计
 
-### 鏋舵瀯姒傝
+### 架构概览
 
-寮傛FIFO鏄法鏃堕挓鍩熶紶杈撴壒閲忔暟鎹殑鏍囧噯鏂规锛屾牳蹇冩€濇兂鏄敤**鍙岀鍙AM**浣滀负鍏变韩瀛樺偍锛岄厤鍚?*鏍奸浄鐮佹寚閽?*鍜?*鍚屾鍣?*瀹炵幇瀹夊叏鐨勮法鏃堕挓鍩熼€氫俊銆?
+异步FIFO是跨时钟域传输批量数据的标准方案，核心思想是用**双端口RAM**作为共享存储，配合**格雷码指针**和**同步器**实现安全的跨时钟域通信。
+
 ```
-鍐欐椂閽熷煙 (wr_clk)                          璇绘椂閽熷煙 (rd_clk)
-鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?                         鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?鈹? wr_ptr_gray 鈹傗攢鈹€鈹€鈹€鈹€鈹€鈹?           鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹? rd_ptr_gray 鈹?鈹? (浜岃繘鍒垛啋鏍奸浄)鈹?     鈹?           鈹?     鈹? (浜岃繘鍒垛啋鏍奸浄)鈹?鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?     鈹?           鈹?     鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?                      鈻?           鈻?                 鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?                 鈹?  鍙岀鍙?RAM        鈹?                 鈹?  (娣卞害 N)          鈹?                 鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?                      鈹?           鈹?                      鈻?           鈻?               鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹? 鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?               鈹?鍚屾鍣?   鈹? 鈹?鍚屾鍣?   鈹?               鈹?wr鈫抮d鍩?  鈹? 鈹?rd鈫抴r鍩?  鈹?               鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹? 鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?                      鈹?           鈹?                      鈻?           鈻?               鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹? 鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?               鈹?婊℃爣蹇?   鈹? 鈹?绌烘爣蹇?   鈹?               鈹?(full)   鈹? 鈹?(empty)  鈹?               鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹? 鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?```
+写时钟域 (wr_clk)                          读时钟域 (rd_clk)
+┌──────────────┐                          ┌──────────────┐
+│  wr_ptr_gray │──────┐            ┌──────│  rd_ptr_gray │
+│  (二进制→格雷)│      │            │      │  (二进制→格雷)│
+└──────────────┘      │            │      └──────────────┘
+                      ▼            ▼
+                 ┌─────────────────────┐
+                 │   双端口 RAM        │
+                 │   (深度 N)          │
+                 └─────────────────────┘
+                      │            │
+                      ▼            ▼
+               ┌──────────┐  ┌──────────┐
+               │ 同步器    │  │ 同步器    │
+               │ wr→rd域   │  │ rd→wr域   │
+               └──────────┘  └──────────┘
+                      │            │
+                      ▼            ▼
+               ┌──────────┐  ┌──────────┐
+               │ 满标志    │  │ 空标志    │
+               │ (full)   │  │ (empty)  │
+               └──────────┘  └──────────┘
+```
 
-### 鏍稿績瀹炵幇
+### 核心实现
 
 ```verilog
 module async_fifo #(
     parameter DATA_WIDTH = 8,
-    parameter ADDR_WIDTH = 4,       // FIFO娣卞害 = 2^ADDR_WIDTH
+    parameter ADDR_WIDTH = 4,       // FIFO深度 = 2^ADDR_WIDTH
     parameter FIFO_DEPTH = 1 << ADDR_WIDTH
 )(
-    // 鍐欑鍙?    input  logic                    wr_clk,
+    // 写端口
+    input  logic                    wr_clk,
     input  logic                    wr_rst_n,
     input  logic                    wr_en,
     input  logic [DATA_WIDTH-1:0]   wr_data,
     output logic                    full,
-    // 璇荤鍙?    input  logic                    rd_clk,
+    // 读端口
+    input  logic                    rd_clk,
     input  logic                    rd_rst_n,
     input  logic                    rd_en,
     output logic [DATA_WIDTH-1:0]   rd_data,
     output logic                    empty
 );
 
-    // ---------- 瀛樺偍浣?----------
+    // ---------- 存储体 ----------
     logic [DATA_WIDTH-1:0] mem [0:FIFO_DEPTH-1];
 
-    // ---------- 鍐欐寚閽?----------
-    logic [ADDR_WIDTH:0] wr_ptr_bin;      // 澶?浣嶇敤浜庡垽婊?    logic [ADDR_WIDTH:0] wr_ptr_gray;
-    logic [ADDR_WIDTH:0] wr_ptr_gray_sync; // 鍚屾鍒拌鏃堕挓鍩?    logic [ADDR_WIDTH:0] rd_ptr_gray_in_wr; // 璇绘寚閽堝悓姝ュ埌鍐欏煙
+    // ---------- 写指针 ----------
+    logic [ADDR_WIDTH:0] wr_ptr_bin;      // 多1位用于判满
+    logic [ADDR_WIDTH:0] wr_ptr_gray;
+    logic [ADDR_WIDTH:0] wr_ptr_gray_sync; // 同步到读时钟域
+    logic [ADDR_WIDTH:0] rd_ptr_gray_in_wr; // 读指针同步到写域
 
-    // 鍐欐寚閽堥€掑涓庢牸闆风爜杞崲
+    // 写指针递增与格雷码转换
     always_ff @(posedge wr_clk or negedge wr_rst_n) begin
         if (!wr_rst_n)
             wr_ptr_bin <= '0;
@@ -272,12 +335,13 @@ module async_fifo #(
 
     assign wr_ptr_gray = bin2gray(wr_ptr_bin);
 
-    // 鍐欐暟鎹?    always_ff @(posedge wr_clk) begin
+    // 写数据
+    always_ff @(posedge wr_clk) begin
         if (wr_en && !full)
             mem[wr_ptr_bin[ADDR_WIDTH-1:0]] <= wr_data;
     end
 
-    // ---------- 璇绘寚閽?----------
+    // ---------- 读指针 ----------
     logic [ADDR_WIDTH:0] rd_ptr_bin;
     logic [ADDR_WIDTH:0] rd_ptr_gray;
 
@@ -290,69 +354,79 @@ module async_fifo #(
 
     assign rd_ptr_gray = bin2gray(rd_ptr_bin);
 
-    // 璇绘暟鎹?    assign rd_data = mem[rd_ptr_bin[ADDR_WIDTH-1:0]];
+    // 读数据
+    assign rd_data = mem[rd_ptr_bin[ADDR_WIDTH-1:0]];
 
-    // ---------- 鍚屾鍣?----------
-    // 鍐欐寚閽堟牸闆风爜 鈫?璇绘椂閽熷煙
+    // ---------- 同步器 ----------
+    // 写指针格雷码 → 读时钟域
     sync_2ff #(.INIT('0)) u_sync_wr2rd (
         .clk_dst(rd_clk), .rst_n(rd_rst_n),
         .sig_src(wr_ptr_gray[ADDR_WIDTH]),
         .sig_dst(wr_ptr_gray_sync[ADDR_WIDTH])
     );
-    // (瀹為檯瀹炵幇闇€瀵规瘡涓€浣嶅崟鐙悓姝ワ紝姝ゅ绠€鍖栫ず鎰?
+    // (实际实现需对每一位单独同步，此处简化示意)
 
-    // 璇绘寚閽堟牸闆风爜 鈫?鍐欐椂閽熷煙
+    // 读指针格雷码 → 写时钟域
     sync_2ff #(.INIT('0)) u_sync_rd2wr (
         .clk_dst(wr_clk), .rst_n(wr_rst_n),
         .sig_src(rd_ptr_gray[ADDR_WIDTH]),
         .sig_dst(rd_ptr_gray_in_wr[ADDR_WIDTH])
     );
 
-    // ---------- 婊?绌哄垽鏂?----------
-    // 婊★細鍐欐寚閽堟牸闆风爜楂樹綅鐩稿弽锛屽叾浣欎綅鐩稿悓
+    // ---------- 满/空判断 ----------
+    // 满：写指针格雷码高位相反，其余位相同
     assign full  = (wr_ptr_gray == {~rd_ptr_gray_in_wr[ADDR_WIDTH:ADDR_WIDTH-1],
                                      rd_ptr_gray_in_wr[ADDR_WIDTH-2:0]});
-    // 绌猴細璇诲啓鎸囬拡鏍奸浄鐮佸畬鍏ㄧ浉鍚?    assign empty = (rd_ptr_gray == wr_ptr_gray_sync);
+    // 空：读写指针格雷码完全相同
+    assign empty = (rd_ptr_gray == wr_ptr_gray_sync);
 
 endmodule
 ```
 
-### 寮傛FIFO璁捐瑕佺偣
+### 异步FIFO设计要点
 
-| 瑕佺偣 | 璇存槑 |
+| 要点 | 说明 |
 |------|------|
-| 鎸囬拡瀹藉害 = 鍦板潃瀹藉害 + 1 | 澶氬嚭鐨?浣嶇敤浜庡尯鍒嗘弧鍜岀┖ |
-| 鏍奸浄鐮佸悓姝ュ欢杩?| 婊?绌烘爣蹇楀彲鑳?淇濆畧"锛堝鎶ュ憡1~2涓級锛屼絾涓嶄細婕忔姤 |
-| 澶嶄綅澶勭悊 | 璇诲啓鎸囬拡闇€鍚屾澶嶄綅锛屾垨浣跨敤寮傛澶嶄綅鍚屾閲婃斁 |
-| 娣卞害蹇呴』鏄?鐨勫箓 | 鏍奸浄鐮佺殑鍗曟瘮鐗圭炕杞壒鎬ц姹傛繁搴︿负2^n |
+| 指针宽度 = 地址宽度 + 1 | 多出的1位用于区分满和空 |
+| 格雷码同步延迟 | 满/空标志可能"保守"（多报告1~2个），但不会漏报 |
+| 复位处理 | 读写指针需同步复位，或使用异步复位同步释放 |
+| 深度必须是2的幂 | 格雷码的单比特翻转特性要求深度为2^n |
 
 ---
 
-## 鑴夊啿鍚屾鍣?
-### 闂鍦烘櫙
+## 脉冲同步器
 
-褰撴簮鏃堕挓鍩熺殑涓€涓?*鍗曞懆鏈熻剦鍐?*闇€瑕佷紶閫掑埌鐩爣鏃堕挓鍩熸椂锛屽鏋滅洿鎺ョ敤鍙岃Е鍙戝櫒鍚屾锛岃剦鍐插搴﹀彲鑳戒笉瓒充竴涓洰鏍囨椂閽熷懆鏈燂紝瀵艰嚧鐩爣鍩?*瀹屽叏閲囨牱涓嶅埌**銆?
+### 问题场景
+
+当源时钟域的一个**单周期脉冲**需要传递到目标时钟域时，如果直接用双触发器同步，脉冲宽度可能不足一个目标时钟周期，导致目标域**完全采样不到**。
+
 ```
-clk_src  鈹屸攼鈹屸攼鈹屸攼鈹屸攼鈹屸攼鈹屸攼鈹屸攼鈹屸攼
-         鈹樷敂鈹樷敂鈹樷敂鈹樷敂鈹樷敇鈹斺敇鈹斺敇鈹斺敇鈹?
-pulse_src 鈹€鈹?           鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€  (浠?涓猚lk_src鍛ㄦ湡瀹?
+clk_src  ┌┐┌┐┌┐┌┐┌┐┌┐┌┐┌┐
+         ┘└┘└┘└┘└┘┘└┘└┘└┘└
 
-clk_dst     鈹屸攢鈹€鈹? 鈹屸攢鈹€鈹? 鈹屸攢鈹€鈹?            鈹斺攢鈹€鈹? 鈹斺攢鈹€鈹? 鈹斺攢鈹€鈹?
-pulse_dst 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€  (鏈閲囨牱鍒?)
+pulse_src ─┐
+           └────────────────  (仅1个clk_src周期宽)
+
+clk_dst     ┌──┐  ┌──┐  ┌──┐
+            └──┘  └──┘  └──┘
+
+pulse_dst ────────────────────  (未被采样到!)
 ```
 
-### 鏂规涓€锛歍oggle鍚屾鍣紙鏈€甯哥敤锛?
-婧愬煙灏嗚剦鍐茶浆鎹负鐢靛钩缈昏浆锛岀洰鏍囧煙妫€娴嬬炕杞竟娌匡細
+### 方案一：Toggle同步器（最常用）
+
+源域将脉冲转换为电平翻转，目标域检测翻转边沿：
 
 ```verilog
 module pulse_sync_toggle (
     input  logic clk_src,
     input  logic rst_n,
-    input  logic pulse_src,    // 婧愬煙鑴夊啿
+    input  logic pulse_src,    // 源域脉冲
     input  logic clk_dst,
-    output logic pulse_dst     // 鐩爣鍩熻剦鍐?);
+    output logic pulse_dst     // 目标域脉冲
+);
 
-    // ---------- 婧愭椂閽熷煙锛氳剦鍐?鈫?缈昏浆鐢靛钩 ----------
+    // ---------- 源时钟域：脉冲 → 翻转电平 ----------
     logic toggle_src;
     always_ff @(posedge clk_src or negedge rst_n) begin
         if (!rst_n)
@@ -361,7 +435,7 @@ module pulse_sync_toggle (
             toggle_src <= ~toggle_src;
     end
 
-    // ---------- 鐩爣鏃堕挓鍩燂細鍚屾 + 杈规部妫€娴?----------
+    // ---------- 目标时钟域：同步 + 边沿检测 ----------
     logic toggle_sync, toggle_sync_d;
 
     sync_2ff #(.INIT(1'b0)) u_sync (
@@ -378,30 +452,37 @@ module pulse_sync_toggle (
             toggle_sync_d <= toggle_sync;
     end
 
-    // 杈规部妫€娴嬶細褰撳墠鍊间笌涓婁竴鍛ㄦ湡涓嶅悓 鈫?杈撳嚭鑴夊啿
+    // 边沿检测：当前值与上一周期不同 → 输出脉冲
     assign pulse_dst = toggle_sync ^ toggle_sync_d;
 
 endmodule
 ```
 
-鏃跺簭娉㈠舰锛?
+时序波形：
+
 ```
-clk_src     鈹屸攼鈹屸攼鈹屸攼鈹屸攼鈹屸攼鈹屸攼
-            鈹樷敂鈹樷敂鈹樷敂鈹樷敇鈹斺敇鈹斺敇鈹?
-pulse_src   鈹€鈹?             鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+clk_src     ┌┐┌┐┌┐┌┐┌┐┌┐
+            ┘└┘└┘└┘┘└┘└┘└
 
-toggle_src  鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?                      鈹斺攢鈹€鈹€鈹€  (鐢靛钩缈昏浆)
+pulse_src   ─┐
+             └──────────────
 
-clk_dst         鈹屸攢鈹€鈹? 鈹屸攢鈹€鈹? 鈹屸攢鈹€鈹? 鈹屸攢鈹€鈹?                鈹斺攢鈹€鈹? 鈹斺攢鈹€鈹? 鈹斺攢鈹€鈹? 鈹斺攢鈹€鈹?
-toggle_sync 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹? (缁忚繃2绾у悓姝?
-                           鈹斺攢鈹€鈹€鈹€鈹€鈹€
+toggle_src  ──────────┐
+                      └────  (电平翻转)
 
-pulse_dst   鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹? (杈规部妫€娴嬭緭鍑?
-                               鈹斺攢鈹€
+clk_dst         ┌──┐  ┌──┐  ┌──┐  ┌──┐
+                └──┘  └──┘  └──┘  └──┘
+
+toggle_sync ───────────────┐  (经过2级同步)
+                           └──────
+
+pulse_dst   ───────────────────┐  (边沿检测输出)
+                               └──
 ```
 
-### 鏂规浜岋細鍙嶉纭鍚屾鍣?
-閫傜敤浜庢簮鍩熼渶瑕佺‘璁よ剦鍐插凡琚洰鏍囧煙鎺ユ敹鐨勫満鏅紙閫熺巼鏇翠綆浣嗘洿鍙潬锛夛細
+### 方案二：反馈确认同步器
+
+适用于源域需要确认脉冲已被目标域接收的场景（速率更低但更可靠）：
 
 ```verilog
 module pulse_sync_ack (
@@ -413,7 +494,7 @@ module pulse_sync_ack (
 
     logic req_src, ack_src, req_dst;
 
-    // 婧愬煙锛氳姹傚彂鍑?& 绛夊緟纭
+    // 源域：请求发出 & 等待确认
     always_ff @(posedge clk_src or negedge rst_n) begin
         if (!rst_n)
             req_src <= 1'b0;
@@ -423,7 +504,8 @@ module pulse_sync_ack (
             req_src <= 1'b0;
     end
 
-    // 鐩爣鍩燂細鍚屾璇锋眰骞剁敓鎴愯剦鍐?    logic req_sync;
+    // 目标域：同步请求并生成脉冲
+    logic req_sync;
     sync_2ff u_sync_req (.clk_dst(clk_dst), .rst_n(rst_n),
                          .sig_src(req_src), .sig_dst(req_sync));
 
@@ -434,7 +516,7 @@ module pulse_sync_ack (
     end
     assign pulse_dst = req_sync & ~req_sync_d;
 
-    // 鍥炰紶纭
+    // 回传确认
     sync_2ff u_sync_ack (.clk_dst(clk_src), .rst_n(rst_n),
                          .sig_src(req_sync), .sig_dst(ack_src));
 
@@ -443,37 +525,48 @@ endmodule
 
 ---
 
-## 鎻℃墜鍗忚鍚屾
+## 握手协议同步
 
-### 閫傜敤鍦烘櫙
+### 适用场景
 
-褰撻渶瑕佽法鏃堕挓鍩熶紶杈?*澶氫綅鏁版嵁鎬荤嚎**涓斿鍚炲悙閲忚姹備笉楂樻椂锛屾彙鎵嬪崗璁槸姣斿紓姝IFO鏇寸畝鍗曠殑鏂规銆?
-### req-ack 鎻℃墜鍗忚
+当需要跨时钟域传输**多位数据总线**且对吞吐量要求不高时，握手协议是比异步FIFO更简单的方案。
+
+### req-ack 握手协议
 
 ```
-婧愭椂閽熷煙                          鐩爣鏃堕挓鍩?鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?                   鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?鈹?鏁版嵁瀵勫瓨 鈹傗攢鈹€鈹€鈹€ data_bus 鈹€鈹€鈹€鈹€鈻衡攤 鏁版嵁瀵勫瓨 鈹?鈹?        鈹?                   鈹?        鈹?鈹?req鍙戣捣  鈹傗攢鈹€鈹€鈹€ req 鈹€鈹€[鍚屾]鈹€鈹€鈻衡攤 req妫€娴? 鈹?鈹?        鈹?                   鈹?        鈹?鈹?ack鎺ユ敹  鈹傗梽鈹€鈹€[鍚屾]鈹€鈹€ ack 鈹€鈹€鈹€鈹?ack搴旂瓟  鈹?鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?                   鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?```
+源时钟域                          目标时钟域
+┌─────────┐                    ┌─────────┐
+│ 数据寄存 │──── data_bus ────►│ 数据寄存 │
+│         │                    │         │
+│ req发起  │──── req ──[同步]──►│ req检测  │
+│         │                    │         │
+│ ack接收  │◄──[同步]── ack ───│ ack应答  │
+└─────────┘                    └─────────┘
+```
 
 ```verilog
 module handshake_sync #(
     parameter DATA_WIDTH = 8
 )(
-    // 婧愮鍙?    input  logic                    clk_src,
+    // 源端口
+    input  logic                    clk_src,
     input  logic                    rst_n,
     input  logic                    valid_src,
     input  logic [DATA_WIDTH-1:0]   data_src,
     output logic                    ready_src,
-    // 鐩爣绔彛
+    // 目标端口
     input  logic                    clk_dst,
     output logic                    valid_dst,
     output logic [DATA_WIDTH-1:0]   data_dst,
     input  logic                    ready_dst
 );
 
-    // ---------- 婧愭椂閽熷煙 ----------
+    // ---------- 源时钟域 ----------
     logic req_src, ack_src_sync, ack_src_sync_d;
     logic [DATA_WIDTH-1:0] data_reg;
 
-    // 鏁版嵁閿佸瓨锛氬湪req鍙戣捣鏃堕攣瀛樻暟鎹?    always_ff @(posedge clk_src or negedge rst_n) begin
+    // 数据锁存：在req发起时锁存数据
+    always_ff @(posedge clk_src or negedge rst_n) begin
         if (!rst_n) begin
             req_src <= 1'b0;
             data_reg <= '0;
@@ -481,12 +574,13 @@ module handshake_sync #(
             req_src <= 1'b1;
             data_reg <= data_src;
         end else if (ack_src_sync && !ack_src_sync_d) begin
-            // 妫€娴嬪埌ack涓婂崌娌匡紝瀹屾垚鎻℃墜
+            // 检测到ack上升沿，完成握手
             req_src <= 1'b0;
         end
     end
 
-    // ack鍚屾鍒版簮鍩?    logic ack_raw;
+    // ack同步到源域
+    logic ack_raw;
     sync_2ff u_sync_ack (.clk_dst(clk_src), .rst_n(rst_n),
                          .sig_src(ack_raw), .sig_dst(ack_src_sync));
 
@@ -497,10 +591,10 @@ module handshake_sync #(
 
     assign ready_src = !req_src;
 
-    // ---------- 鐩爣鏃堕挓鍩?----------
+    // ---------- 目标时钟域 ----------
     logic req_sync, req_sync_d;
 
-    // req鍚屾鍒扮洰鏍囧煙
+    // req同步到目标域
     sync_2ff u_sync_req (.clk_dst(clk_dst), .rst_n(rst_n),
                          .sig_src(req_src), .sig_dst(req_sync));
 
@@ -509,7 +603,7 @@ module handshake_sync #(
         else        req_sync_d <= req_sync;
     end
 
-    // req涓婂崌娌?鈫?杈撳嚭valid
+    // req上升沿 → 输出valid
     logic valid_dst_r;
     always_ff @(posedge clk_dst or negedge rst_n) begin
         if (!rst_n)
@@ -521,95 +615,110 @@ module handshake_sync #(
     end
 
     assign valid_dst = valid_dst_r;
-    assign data_dst  = data_reg;  // 鏁版嵁鍦╮eq鏈夋晥鏈熼棿绋冲畾
+    assign data_dst  = data_reg;  // 数据在req有效期间稳定
 
-    // ack搴旂瓟
+    // ack应答
     always_ff @(posedge clk_dst or negedge rst_n) begin
         if (!rst_n) ack_raw <= 1'b0;
-        else        ack_raw <= req_sync;  // 璺熼殢req
+        else        ack_raw <= req_sync;  // 跟随req
     end
 
 endmodule
 ```
 
-### 鎻℃墜鏃跺簭鍥?
+### 握手时序图
+
 ```
-clk_src   鈹屸攼鈹屸攼鈹屸攼鈹屸攼鈹屸攼鈹屸攼鈹屸攼鈹屸攼鈹屸攼鈹屸攼
-          鈹樷敂鈹樷敂鈹樷敂鈹樷敂鈹樷敂鈹樷敂鈹樷敂鈹樷敂鈹樷敂鈹樷敂鈹?
-valid_src 鈹€鈹?           鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+clk_src   ┌┐┌┐┌┐┌┐┌┐┌┐┌┐┌┐┌┐┌┐
+          ┘└┘└┘└┘└┘└┘└┘└┘└┘└┘└┘
 
-req_src   鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?                                   鈹斺攢鈹€
+valid_src ─┐
+           └──────────────────────
 
-clk_dst      鈹屸攢鈹€鈹? 鈹屸攢鈹€鈹? 鈹屸攢鈹€鈹? 鈹屸攢鈹€鈹? 鈹屸攢鈹€鈹?             鈹斺攢鈹€鈹? 鈹斺攢鈹€鈹? 鈹斺攢鈹€鈹? 鈹斺攢鈹€鈹? 鈹斺攢鈹€鈹?
-req_sync  鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?                                        鈹斺攢鈹€
+req_src   ─────────────────────────┐
+                                   └──
 
-valid_dst 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?                                           鈹斺攢鈹€
+clk_dst      ┌──┐  ┌──┐  ┌──┐  ┌──┐  ┌──┐
+             └──┘  └──┘  └──┘  └──┘  └──┘
 
-ack_raw   鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?                                            鈹斺攢鈹€
+req_sync  ──────────────────────────────┐
+                                        └──
 
-ack_sync  鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?                                                鈹斺攢鈹€
-          鈹傗啇鈹€鈹€ 鎻℃墜寤惰繜 鈮?2脳T_src + 2脳T_dst 鈹€鈹€鈫掆攤
+valid_dst ─────────────────────────────────┐
+                                           └──
+
+ack_raw   ──────────────────────────────────┐
+                                            └──
+
+ack_sync  ──────────────────────────────────────┐
+                                                └──
+          │←── 握手延迟 ≈ 2×T_src + 2×T_dst ──→│
 ```
 
 ---
 
-## CDC楠岃瘉鏂规硶
+## CDC验证方法
 
-### 闈欐€佹鏌ワ紙CDC宸ュ叿鍒嗘瀽锛?
-闈欐€丆DC鍒嗘瀽鏄?*鏈€鏍稿績銆佹渶楂樻晥**鐨凜DC楠岃瘉鎵嬫锛屾棤闇€浠跨湡鍗冲彲绌蜂妇鎵€鏈塁DC璺緞銆?
-**妫€鏌ュ唴瀹癸細**
+### 静态检查（CDC工具分析）
 
-| 妫€鏌ラ」 | 璇存槑 |
+静态CDC分析是**最核心、最高效**的CDC验证手段，无需仿真即可穷举所有CDC路径。
+
+**检查内容：**
+
+| 检查项 | 说明 |
 |--------|------|
-| 缂哄皯鍚屾鍣?| 淇″彿璺ㄨ秺鏃堕挓鍩熶絾鏈粡杩囧悓姝ュ櫒 |
-| 澶氫綅淇″彿鐙珛鍚屾 | 澶氫綅鎬荤嚎姣忎綅鍒嗗埆鍚屾锛屽鑷存暟鎹笉涓€鑷?|
-| 缁勫悎閫昏緫鍚庡悓姝?| 鍚屾鍣ㄥ墠鏈夌粍鍚堥€昏緫锛屽彲鑳戒骇鐢熸瘺鍒?|
-| 澶嶄綅鍚屾闂 | 寮傛澶嶄綅閲婃斁鏃跺簭涓嶆弧瓒虫仮澶?绉婚櫎鏃堕棿 |
-| 鏃堕挓鍒嗛鍣ㄦ湭鍚屾 | 鍒嗛鍣ㄨ緭鍑鸿法鍩熸湭澶勭悊 |
-| 闂ㄦ帶鏃堕挓闂 | 闂ㄦ帶鏃堕挓瀵艰嚧浣胯兘淇″彿鐨凜DC闂 |
+| 缺少同步器 | 信号跨越时钟域但未经过同步器 |
+| 多位信号独立同步 | 多位总线每位分别同步，导致数据不一致 |
+| 组合逻辑后同步 | 同步器前有组合逻辑，可能产生毛刺 |
+| 复位同步问题 | 异步复位释放时序不满足恢复/移除时间 |
+| 时钟分频器未同步 | 分频器输出跨域未处理 |
+| 门控时钟问题 | 门控时钟导致使能信号的CDC问题 |
 
-**鍏稿瀷CDC宸ュ叿浣跨敤娴佺▼锛?*
+**典型CDC工具使用流程：**
 
 ```tcl
-# SpyGlass CDC 娴佺▼绀轰緥
+# SpyGlass CDC 流程示例
 read_file -type verilog {./rtl/*.sv}
 current_design top_module
 
-# 璁剧疆鏃堕挓
+# 设置时钟
 set_option stop {module_name}
 clock -name clk_a -period 10
 clock -name clk_b -period 15
 
-# 杩愯CDC鍒嗘瀽
+# 运行CDC分析
 run_goal cdc/cdc_verify
 
-# 鏌ョ湅鎶ュ憡
+# 查看报告
 report_goal cdc/cdc_verify -output cdc_report.rpt
 ```
 
-### 鍔ㄦ€侀獙璇侊紙绾︽潫闅忔満娴嬭瘯锛?
-鍔ㄦ€丆DC楠岃瘉閫氳繃**娉ㄥ叆浜氱ǔ鎬佸欢杩?*鏉ユā鎷熺湡瀹炵‖浠惰涓猴細
+### 动态验证（约束随机测试）
+
+动态CDC验证通过**注入亚稳态延迟**来模拟真实硬件行为：
 
 ```verilog
-// CDC楠岃瘉涓撶敤鎺ュ彛锛氭敞鍏ラ殢鏈哄欢杩?interface cdc_if (input logic clk_a, input logic clk_b);
+// CDC验证专用接口：注入随机延迟
+interface cdc_if (input logic clk_a, input logic clk_b);
     logic sig_a;
     logic sig_b;
 
-    // 鍦ㄤ俊鍙疯法鍩熸椂娉ㄥ叆0~1涓懆鏈熺殑闅忔満寤惰繜
+    // 在信号跨域时注入0~1个周期的随机延迟
     clocking cb_src @(posedge clk_a);
         output sig_a;
     endclocking
 
-    // 妯℃嫙浜氱ǔ鎬侊細闅忔満閫夋嫨閲囨牱鏃跺埢
+    // 模拟亚稳态：随机选择采样时刻
     task automatic inject_metastability(ref logic signal);
         randcase
-            1: #0;                    // 姝ｅ父閲囨牱
-            1: #(0.1ns);              // 杞诲井寤惰繜
-            1: #(0.5ns);              // 鎺ヨ繎浜氱ǔ鎬?        endcase
+            1: #0;                    // 正常采样
+            1: #(0.1ns);              // 轻微延迟
+            1: #(0.5ns);              // 接近亚稳态
+        endcase
     endtask
 endinterface
 
-// CDC楠岃瘉娴嬭瘯鐢ㄤ緥
+// CDC验证测试用例
 class cdc_random_test extends uvm_test;
     `uvm_component_utils(cdc_random_test)
 
@@ -617,15 +726,17 @@ class cdc_random_test extends uvm_test;
         phase.raise_objection(this);
 
         repeat (10000) begin
-            // 闅忔満鍖栨椂閽熼鐜囨瘮
+            // 随机化时钟频率比
             cfg.randomize() with {
                 clk_a_period inside {[5:20]};
                 clk_b_period inside {[8:30]};
             };
 
-            // 闅忔満鍖栨暟鎹ā寮?            send_random_transaction();
+            // 随机化数据模式
+            send_random_transaction();
 
-            // 妫€鏌DC鏁版嵁涓€鑷存€?            check_cdc_consistency();
+            // 检查CDC数据一致性
+            check_cdc_consistency();
         end
 
         phase.drop_objection(this);
@@ -633,12 +744,13 @@ class cdc_random_test extends uvm_test;
 endclass
 ```
 
-### 褰㈠紡楠岃瘉
+### 形式验证
 
-鍒╃敤褰㈠紡鍖栨柟娉曡瘉鏄嶤DC鐢佃矾鐨勬纭€э細
+利用形式化方法证明CDC电路的正确性：
 
 ```verilog
-// 浣跨敤SVA楠岃瘉FIFO绌烘爣蹇楃殑姝ｇ‘鎬?property p_fifo_empty_correct;
+// 使用SVA验证FIFO空标志的正确性
+property p_fifo_empty_correct;
     @(posedge rd_clk) disable iff (!rd_rst_n)
     (rd_ptr_gray == wr_ptr_gray_sync) |-> empty;
 endproperty
@@ -646,50 +758,60 @@ endproperty
 assert property (p_fifo_empty_correct)
     else `uvm_error("CDC", "FIFO empty flag incorrect!");
 
-// 楠岃瘉鑴夊啿鍚屾鍣ㄤ笉浼氫涪澶辫剦鍐?property p_pulse_no_loss;
+// 验证脉冲同步器不会丢失脉冲
+property p_pulse_no_loss;
     @(posedge clk_src) disable iff (!rst_n)
     $rose(pulse_src) |-> ##[3:6] $rose(pulse_dst);
-    // 鑴夊啿鍙戝嚭鍚庯紝3~6涓洰鏍囨椂閽熷懆鏈熷唴蹇呴』鍑虹幇杈撳嚭鑴夊啿
+    // 脉冲发出后，3~6个目标时钟周期内必须出现输出脉冲
 endproperty
 ```
 
 ---
 
-## 甯歌CDC閿欒涓庢渚?
-### 閿欒1锛氬浣嶆€荤嚎閫愪綅鍚屾
+## 常见CDC错误与案例
 
-**閿欒鍐欐硶锛?*
+### 错误1：多位总线逐位同步
+
+**错误写法：**
 
 ```verilog
-// 鉂?閿欒锛氬浣嶆暟鎹瘡浣嶇嫭绔嬪悓姝ワ紝鍙兘閲囨牱鍒颁笉鍚屽懆鏈熺殑鍊?logic [3:0] data_src, data_sync1, data_dst;
+// ❌ 错误：多位数据每位独立同步，可能采样到不同周期的值
+logic [3:0] data_src, data_sync1, data_dst;
 
 always_ff @(posedge clk_dst or negedge rst_n) begin
     if (!rst_n) begin
         data_sync1 <= '0;
         data_dst   <= '0;
     end else begin
-        data_sync1 <= data_src;  // 4浣嶅垎鍒悓姝?        data_dst   <= data_sync1;
+        data_sync1 <= data_src;  // 4位分别同步
+        data_dst   <= data_sync1;
     end
 end
 ```
 
-**闂锛?* 濡傛灉 `data_src` 浠?`4'b0111` 鍙樹负 `4'b1000`锛屽悓姝ュ櫒鍙兘閲囨牱鍒?`4'b0100`銆乣4'b1110` 绛変腑闂存€併€?
-**姝ｇ‘鏂规锛?*
+**问题：** 如果 `data_src` 从 `4'b0111` 变为 `4'b1000`，同步器可能采样到 `4'b0100`、`4'b1110` 等中间态。
+
+**正确方案：**
 
 ```verilog
-// 鉁?姝ｇ‘锛氫娇鐢ㄥ紓姝IFO銆佹牸闆风爜鎴栨彙鎵嬪崗璁?// 鏂规1锛氭牸闆风爜锛堥€傜敤浜庤鏁板櫒/鍦板潃锛?// 鏂规2锛氬紓姝IFO锛堥€傜敤浜庢暟鎹祦锛?// 鏂规3锛氭彙鎵嬪崗璁紙閫傜敤浜庝綆閫熸帶鍒朵俊鍙凤級
+// ✓ 正确：使用异步FIFO、格雷码或握手协议
+// 方案1：格雷码（适用于计数器/地址）
+// 方案2：异步FIFO（适用于数据流）
+// 方案3：握手协议（适用于低速控制信号）
 ```
 
-### 閿欒2锛氱粍鍚堥€昏緫鍚庢帴鍚屾鍣?
+### 错误2：组合逻辑后接同步器
+
 ```verilog
-// 鉂?閿欒锛氱粍鍚堥€昏緫鍙兘浜х敓姣涘埡
+// ❌ 错误：组合逻辑可能产生毛刺
 logic a, b, cdc_in;
-assign cdc_in = a & b;  // 缁勫悎閫昏緫杈撳嚭
+assign cdc_in = a & b;  // 组合逻辑输出
 
 sync_2ff u_sync (.clk_dst(clk_dst), .rst_n(rst_n),
                  .sig_src(cdc_in), .sig_dst(cdc_out));
 
-// 鉁?姝ｇ‘锛氬厛鍦ㄦ簮鍩熷瘎瀛樹竴鎷?logic cdc_in_reg;
+// ✓ 正确：先在源域寄存一拍
+logic cdc_in_reg;
 always_ff @(posedge clk_src or negedge rst_n) begin
     if (!rst_n) cdc_in_reg <= 1'b0;
     else        cdc_in_reg <= a & b;
@@ -699,19 +821,20 @@ sync_2ff u_sync (.clk_dst(clk_dst), .rst_n(rst_n),
                  .sig_src(cdc_in_reg), .sig_dst(cdc_out));
 ```
 
-### 閿欒3锛氬紓姝ュ浣嶉噴鏀炬湭鍚屾
+### 错误3：异步复位释放未同步
 
 ```verilog
-// 鉂?閿欒锛氬紓姝ュ浣嶉噴鏀惧彲鑳借繚鍙嶆仮澶?绉婚櫎鏃堕棿
+// ❌ 错误：异步复位释放可能违反恢复/移除时间
 always_ff @(posedge clk or negedge rst_n) begin
     if (!rst_n) q <= 1'b0;
     else        q <= d;
 end
 
-// 鉁?姝ｇ‘锛氬紓姝ュ浣嶅悓姝ラ噴鏀?logic rst_n_sync;
+// ✓ 正确：异步复位同步释放
+logic rst_n_sync;
 always_ff @(posedge clk or negedge rst_n) begin
-    if (!rst_n) rst_n_sync <= 1'b0;   // 寮傛澶嶄綅
-    else        rst_n_sync <= 1'b1;   // 鍚屾閲婃斁
+    if (!rst_n) rst_n_sync <= 1'b0;   // 异步复位
+    else        rst_n_sync <= 1'b1;   // 同步释放
 end
 
 always_ff @(posedge clk or negedge rst_n_sync) begin
@@ -720,100 +843,113 @@ always_ff @(posedge clk or negedge rst_n_sync) begin
 end
 ```
 
-### 瀹為檯妗堜緥锛歋PI鎺ュ彛CDC闂
+### 实际案例：SPI接口CDC问题
 
 ```
-妗堜緥鑳屾櫙锛氭煇SoC鐨凷PI Master杩愯鍦?00MHz锛屽鎺lash杩愯鍦?0MHz銆?         閰嶇疆瀵勫瓨鍣ㄥ湪APB鍩?25MHz)锛岀洿鎺ラ€佸埌SPI鍩熷鑷村伓鍙戦厤缃敊璇€?
-鏍瑰洜锛?浣嶉厤缃瘎瀛樺櫒[7:0]鐩存帴璺ㄥ煙锛屾湭鍋欳DC澶勭悊銆?      閰嶇疆浠?x55鍙樹负0xAA鏃讹紝閲囨牱鍒?x75绛変腑闂村€笺€?
-淇锛氬皢閰嶇疆瀵勫瓨鍣ㄦ敼涓?鍐欏叆-鎻℃墜-鏇存柊"鏈哄埗锛?      1. APB鍩熷啓鍏ラ厤缃埌褰卞瓙瀵勫瓨鍣?      2. 閫氳繃鑴夊啿鍚屾鍣ㄥ彂閫佹洿鏂拌姹?      3. SPI鍩熸敹鍒拌姹傚悗锛屼粠褰卞瓙瀵勫瓨鍣ㄥ姞杞介厤缃?      4. 閫氳繃鎻℃墜鍗忚鍥炰紶纭
+案例背景：某SoC的SPI Master运行在100MHz，外接Flash运行在50MHz。
+         配置寄存器在APB域(25MHz)，直接送到SPI域导致偶发配置错误。
+
+根因：8位配置寄存器[7:0]直接跨域，未做CDC处理。
+      配置从0x55变为0xAA时，采样到0x75等中间值。
+
+修复：将配置寄存器改为"写入-握手-更新"机制：
+      1. APB域写入配置到影子寄存器
+      2. 通过脉冲同步器发送更新请求
+      3. SPI域收到请求后，从影子寄存器加载配置
+      4. 通过握手协议回传确认
 ```
 
 ---
 
-## CDC楠岃瘉宸ュ叿
+## CDC验证工具
 
 ### SpyGlass CDC
 
-Synopsys鐨凷pyGlass CDC鏄笟鐣屾渶骞挎硾浣跨敤鐨勯潤鎬丆DC鍒嗘瀽宸ュ叿锛?
-**鏍稿績妫€鏌ヨ鍒欙細**
+Synopsys的SpyGlass CDC是业界最广泛使用的静态CDC分析工具：
 
-| 瑙勫垯ID | 妫€鏌ュ唴瀹?| 涓ラ噸绾у埆 |
+**核心检查规则：**
+
+| 规则ID | 检查内容 | 严重级别 |
 |--------|---------|---------|
-| CDCR01 | 璺ㄦ椂閽熷煙淇″彿缂哄皯鍚屾鍣?| Error |
-| CDCR02 | 澶氫綅淇″彿鐙珛鍚屾 | Error |
-| CDCR03 | 鍚屾鍣ㄥ墠瀛樺湪缁勫悎閫昏緫 | Warning |
-| CDCR04 | 澶嶄綅淇″彿璺ㄥ煙鏈悓姝?| Error |
-| CDCR05 | 闂ㄦ帶鏃堕挓浣胯兘淇″彿璺ㄥ煙 | Warning |
-| WYSIWYGS | 鍚屾鍣ㄧ粨鏋勮瘑鍒?| Info |
+| CDCR01 | 跨时钟域信号缺少同步器 | Error |
+| CDCR02 | 多位信号独立同步 | Error |
+| CDCR03 | 同步器前存在组合逻辑 | Warning |
+| CDCR04 | 复位信号跨域未同步 | Error |
+| CDCR05 | 门控时钟使能信号跨域 | Warning |
+| WYSIWYGS | 同步器结构识别 | Info |
 
-**鍏稿瀷浣跨敤娴佺▼锛?*
+**典型使用流程：**
 
 ```tcl
-# 1. 璇诲叆璁捐
+# 1. 读入设计
 read_file -type sverilog ./rtl/top.sv
 current_design top
 
-# 2. 绾︽潫璁剧疆
+# 2. 约束设置
 set_option enableSV yes
 set_option enableV05 yes
 
-# 3. 瀹氫箟鏃堕挓鍩?clock -name sys_clk -period 10 -domain D1
+# 3. 定义时钟域
+clock -name sys_clk -period 10 -domain D1
 clock -name usb_clk -period 16.67 -domain D2
 clock -name eth_clk  -period 8 -domain D3
 
-# 4. 鎸囧畾鍚屾鍣ㄥ簱
+# 4. 指定同步器库
 set_option lib sync_cells.lib
 
-# 5. 杩愯鍒嗘瀽
+# 5. 运行分析
 run_goal cdc/cdc_abstract -dmsw cdc
 
-# 6. 瀹￠槄鍜寃aive
-# 瀵圭‘璁ゅ畨鍏ㄧ殑CDC璺緞娣诲姞waiver
+# 6. 审阅和waive
+# 对确认安全的CDC路径添加waiver
 waiver -goal cdc -rule CDCR01 -comment "Confirmed safe toggle sync"
 ```
 
 ### Questa CDC
 
-Siemens EDA鐨凲uesta CDC锛堝師0in CDC锛夐泦鎴愬湪Questa楠岃瘉骞冲彴涓細
+Siemens EDA的Questa CDC（原0in CDC）集成在Questa验证平台中：
 
-**鐗圭偣锛?*
-- 涓嶲uesta浠跨湡鐜娣卞害闆嗘垚
-- 鏀寔褰㈠紡鍖朇DC楠岃瘉
-- 鍙笌UVM楠岃瘉骞冲彴鑱斿姩
-- 鑷姩璇嗗埆鍚屾鍣ㄧ粨鏋勶紙FF銆丮UX銆丷AM绛夛級
+**特点：**
+- 与Questa仿真环境深度集成
+- 支持形式化CDC验证
+- 可与UVM验证平台联动
+- 自动识别同步器结构（FF、MUX、RAM等）
 
 ```tcl
-# Questa CDC 娴佺▼
+# Questa CDC 流程
 vlog -sv rtl/*.sv
 vsim -c -do "cdc_setup.do" work.top
 
-# 杩愯CDC妫€鏌?cdc check -all
+# 运行CDC检查
+cdc check -all
 cdc report -summary
 cdc report -details -output cdc_detail.rpt
 ```
 
-### 宸ュ叿瀵规瘮
+### 工具对比
 
-| 鐗规€?| SpyGlass CDC | Questa CDC |
+| 特性 | SpyGlass CDC | Questa CDC |
 |------|-------------|------------|
-| 鍘傚晢 | Synopsys | Siemens EDA |
-| 鏂规硶 | 闈欐€佸垎鏋愪负涓?| 闈欐€?+ 褰㈠紡 |
-| 闆嗘垚搴?| 鐙珛宸ュ叿 | 闆嗘垚鍦≦uesta骞冲彴 |
-| 鍚屾鍣ㄨ瘑鍒?| 搴撳尮閰?+ 鑷畾涔?| 鑷姩鎺ㄦ柇 + 搴撳尮閰?|
-| 鎶ュ憡璐ㄩ噺 | 璇︾粏鐨勮矾寰勮拷韪?| 浜や簰寮忔尝褰㈠洖婧?|
-| 涓氱晫閲囩敤 | 鏈€骞挎硾 | 蹇€熷闀?|
+| 厂商 | Synopsys | Siemens EDA |
+| 方法 | 静态分析为主 | 静态 + 形式 |
+| 集成度 | 独立工具 | 集成在Questa平台 |
+| 同步器识别 | 库匹配 + 自定义 | 自动推断 + 库匹配 |
+| 报告质量 | 详细的路径追踪 | 交互式波形回溯 |
+| 业界采用 | 最广泛 | 快速增长 |
 
 ---
 
-## 鐩稿叧绗旇
+## 相关笔记
 
-- [[04-鏃堕挓鍧桟locking-Block]] - SystemVerilog鏃堕挓鍧椾笌淇″彿閲囨牱/椹卞姩鏃跺簭鎺у埗
-- [[04-鏃跺簭闂鎺掓煡]] - 鏃跺簭杩濅緥涓庝慨澶嶆柟娉?- [[00-楠岃瘉璁″垝]] - 濡備綍鍦ㄩ獙璇佽鍒掍腑绾冲叆CDC娴嬭瘯椤?- [[01-瑕嗙洊鐜嘳] - CDC鐩稿叧鍔熻兘瑕嗙洊鐜囩殑瀹氫箟鏂规硶
+- [[04-时钟块Clocking-Block]] - SystemVerilog时钟块与信号采样/驱动时序控制
+- [[04-时序问题排查]] - 时序违例与修复方法
+- [[00-验证计划]] - 如何在验证计划中纳入CDC测试项
+- [[01-覆盖率]] - CDC相关功能覆盖率的定义方法
 
 ---
 
-## 鍙傝€冭祫婧?
+## 参考资源
+
 - Clifford E. Cummings, "Clock Domain Crossing (CDC) Design & Verification Techniques Using SystemVerilog"
 - SNUG 2008: "Synthesis and Scripting Techniques for Designing Multi-Asynchronous Clock Designs"
 - Cadence: "Clock Domain Crossing (CDC) Verification White Paper"
-

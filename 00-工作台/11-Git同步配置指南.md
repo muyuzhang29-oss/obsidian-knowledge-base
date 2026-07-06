@@ -1,168 +1,188 @@
-﻿---
-aliases: [Git鍚屾閰嶇疆鎸囧崡, Obsidian Git鍚屾, Git鍚屾]
+---
+aliases: [Git同步配置指南, Obsidian Git同步, Git同步]
 tags: [Environment, Git, Obsidian, Sync]
 created: 2026-06-04
 updated: 2026-06-10
 ---
 
-# Git鍚屾閰嶇疆鎸囧崡
+# Git同步配置指南
 
-## 姒傝堪
+## 概述
 
-鏈枃妗ｄ粙缁嶅浣曞湪Windows鍜宨Pad涓婇厤缃甇bsidian Git鍚屾鍔熻兘銆?
+本文档介绍如何在Windows和iPad上配置Obsidian Git同步功能。
+
 ---
 
-## 涓€銆乄indows閰嶇疆姝ラ
+## 一、Windows配置步骤
 
-### 1. 瀹夎Git
+### 1. 安装Git
 
-1. 璁块棶 https://git-scm.com/download/win
-2. 涓嬭浇Windows鐗堟湰鐨凣it瀹夎绋嬪簭
-3. 杩愯瀹夎绋嬪簭锛屼娇鐢ㄩ粯璁ら€夐」鍗冲彲
-4. 瀹夎瀹屾垚鍚庯紝鎵撳紑PowerShell鎴栧懡浠ゆ彁绀虹锛岃緭鍏?`git --version` 楠岃瘉瀹夎
+1. 访问 https://git-scm.com/download/win
+2. 下载Windows版本的Git安装程序
+3. 运行安装程序，使用默认选项即可
+4. 安装完成后，打开PowerShell或命令提示符，输入 `git --version` 验证安装
 
-### 2. 閰嶇疆Git鐢ㄦ埛淇℃伅
+### 2. 配置Git用户信息
 
 ```powershell
-git config --global user.name "浣犵殑鐢ㄦ埛鍚?
-git config --global user.email "浣犵殑閭@example.com"
+git config --global user.name "你的用户名"
+git config --global user.email "你的邮箱@example.com"
 ```
 
-### 3. 鍏嬮殕浠撳簱
+### 3. 克隆仓库
 
 ```powershell
 cd D:\obsidian
 git clone https://github.com/muyuzhang29-oss/obsidian-knowledge-base.git knowledge-base
 ```
 
-### 4. 瀹夎Obsidian Git鎻掍欢
+### 4. 安装Obsidian Git插件
 
-1. 鎵撳紑Obsidian
-2. 杩涘叆 璁剧疆 鈫?绗笁鏂规彃浠?鈫?娴忚
-3. 鎼滅储 "Git" 骞跺畨瑁?"Obsidian Git" 鎻掍欢
-4. 鍚敤鎻掍欢
+1. 打开Obsidian
+2. 进入 设置 → 第三方插件 → 浏览
+3. 搜索 "Git" 并安装 "Obsidian Git" 插件
+4. 启用插件
 
-### 5. 閰嶇疆鎻掍欢
+### 5. 配置插件
 
-鎻掍欢閰嶇疆鏂囦欢浣嶄簬 `.obsidian/plugins/obsidian-git/data.json`锛屼富瑕侀厤缃」锛?
-- **鑷姩鍚屾闂撮殧**: 5鍒嗛挓锛?00绉掞級
-- **鑷姩pull**: 鍚敤
-- **鑷姩push**: 鍚敤
-- **鎻愪氦淇℃伅妯℃澘**: `vault backup: {{date}}`
+插件配置文件位于 `.obsidian/plugins/obsidian-git/data.json`，主要配置项：
 
----
-
-## 浜屻€乮Pad閰嶇疆姝ラ
-
-### 1. 瀹夎Working Copy
-
-1. 鍦ˋpp Store鎼滅储 "Working Copy"
-2. 涓嬭浇骞跺畨瑁咃紙闇€瑕佷粯璐硅В閿佹帹閫佸姛鑳斤級
-
-### 2. 鍏嬮殕浠撳簱
-
-1. 鎵撳紑Working Copy
-2. 鐐瑰嚮鍙充笂瑙?"+" 鎸夐挳
-3. 閫夋嫨 "Clone Repository"
-4. 杈撳叆浠撳簱鍦板潃锛歚https://github.com/muyuzhang29-oss/obsidian-knowledge-base.git`
-5. 閫夋嫨鍏嬮殕浣嶇疆
-
-### 3. 閰嶇疆Obsidian
-
-1. 鎵撳紑Obsidian
-2. 鎵撳紑浠撳簱鎵€鍦ㄧ殑鏂囦欢澶?3. 瀹夎骞跺惎鐢∣bsidian Git鎻掍欢
-4. 閰嶇疆鑷姩鍚屾
-
-### 4. 鍚屾娴佺▼
-
-鍦╥Pad涓婏紝闇€瑕佹墜鍔ㄨЕ鍙戝悓姝ワ細
-
-1. 鍦∣bsidian涓娇鐢ㄥ懡浠ら潰鏉匡紙Ctrl/Cmd + P锛?2. 杈撳叆 "Git: Pull" 鎷夊彇鏈€鏂版洿鏀?3. 缂栬緫瀹屾垚鍚庯紝杈撳叆 "Git: Commit all" 鎻愪氦鏇存敼
-4. 杈撳叆 "Git: Push" 鎺ㄩ€佸埌GitHub
+- **自动同步间隔**: 5分钟（300秒）
+- **自动pull**: 启用
+- **自动push**: 启用
+- **提交信息模板**: `vault backup: {{date}}`
 
 ---
 
-## 涓夈€佸父瑙侀棶棰樿В绛?
-### Q1: 鎻愮ず "Permission denied" 鎬庝箞鍔烇紵
+## 二、iPad配置步骤
 
-**A**: 闇€瑕侀厤缃甋SH瀵嗛挜鎴栦娇鐢ㄤ釜浜鸿闂护鐗岋紙PAT锛夈€?
-浣跨敤HTTPS + PAT鏂瑰紡锛?1. 璁块棶 GitHub 鈫?Settings 鈫?Developer settings 鈫?Personal access tokens
-2. 鐢熸垚鏂颁护鐗岋紝鍕鹃€?`repo` 鏉冮檺
-3. 鍦ㄦ帹閫佹椂浣跨敤浠ょ墝浣滀负瀵嗙爜
+### 1. 安装Working Copy
 
-### Q2: 濡備綍瑙ｅ喅鍚堝苟鍐茬獊锛?
+1. 在App Store搜索 "Working Copy"
+2. 下载并安装（需要付费解锁推送功能）
+
+### 2. 克隆仓库
+
+1. 打开Working Copy
+2. 点击右上角 "+" 按钮
+3. 选择 "Clone Repository"
+4. 输入仓库地址：`https://github.com/muyuzhang29-oss/obsidian-knowledge-base.git`
+5. 选择克隆位置
+
+### 3. 配置Obsidian
+
+1. 打开Obsidian
+2. 打开仓库所在的文件夹
+3. 安装并启用Obsidian Git插件
+4. 配置自动同步
+
+### 4. 同步流程
+
+在iPad上，需要手动触发同步：
+
+1. 在Obsidian中使用命令面板（Ctrl/Cmd + P）
+2. 输入 "Git: Pull" 拉取最新更改
+3. 编辑完成后，输入 "Git: Commit all" 提交更改
+4. 输入 "Git: Push" 推送到GitHub
+
+---
+
+## 三、常见问题解答
+
+### Q1: 提示 "Permission denied" 怎么办？
+
+**A**: 需要配置SSH密钥或使用个人访问令牌（PAT）。
+
+使用HTTPS + PAT方式：
+1. 访问 GitHub → Settings → Developer settings → Personal access tokens
+2. 生成新令牌，勾选 `repo` 权限
+3. 在推送时使用令牌作为密码
+
+### Q2: 如何解决合并冲突？
+
 **A**: 
-1. 鎵撳紑鏈夊啿绐佺殑鏂囦欢
-2. 鎵惧埌 `<<<<<<<` 鍜?`>>>>>>>` 鏍囪
-3. 鎵嬪姩閫夋嫨瑕佷繚鐣欑殑鍐呭
-4. 鍒犻櫎鍐茬獊鏍囪
-5. 鎻愪氦鏇存敼
+1. 打开有冲突的文件
+2. 找到 `<<<<<<<` 和 `>>>>>>>` 标记
+3. 手动选择要保留的内容
+4. 删除冲突标记
+5. 提交更改
 
-### Q3: 鍚屾閫熷害寰堟參鎬庝箞鍔烇紵
+### Q3: 同步速度很慢怎么办？
 
 **A**:
-- 妫€鏌ョ綉缁滆繛鎺?- 鍑忓皯澶у瀷浜岃繘鍒舵枃浠讹紙鍥剧墖銆丳DF绛夛級
-- 浣跨敤 `.gitignore` 鎺掗櫎涓嶉渶瑕佸悓姝ョ殑鏂囦欢
+- 检查网络连接
+- 减少大型二进制文件（图片、PDF等）
+- 使用 `.gitignore` 排除不需要同步的文件
 
-### Q4: 濡備綍鏌ョ湅鍚屾鍘嗗彶锛?
+### Q4: 如何查看同步历史？
+
 **A**: 
-- 鍦∣bsidian涓娇鐢ㄥ懡浠?"Git: View history"
-- 鎴栧湪鍛戒护琛屾墽琛?`git log --oneline`
+- 在Obsidian中使用命令 "Git: View history"
+- 或在命令行执行 `git log --oneline`
 
-### Q5: 璇垹浜嗘枃浠舵€庝箞鍔烇紵
+### Q5: 误删了文件怎么办？
 
 **A**:
 ```powershell
-git checkout -- 鏂囦欢鍚? # 鎭㈠鍗曚釜鏂囦欢
-git checkout .  # 鎭㈠鎵€鏈夋枃浠?```
+git checkout -- 文件名  # 恢复单个文件
+git checkout .  # 恢复所有文件
+```
 
 ---
 
-## 鍥涖€佹棩甯镐娇鐢ㄨ鏄?
-### 鎺ㄨ崘宸ヤ綔娴佺▼
+## 四、日常使用说明
 
-1. **寮€濮嬪伐浣滃墠**: 鍏堟媺鍙栨渶鏂版洿鏀?   - Obsidian鍛戒护: `Git: Pull`
-   - 鍛戒护琛? `git pull`
+### 推荐工作流程
 
-2. **宸ヤ綔杩囩▼涓?*: 瀹氭湡鎻愪氦锛堝缓璁瘡瀹屾垚涓€涓富棰樺氨鎻愪氦锛?   - Obsidian鍛戒护: `Git: Commit all`
-   - 鍛戒护琛? `git add . && git commit -m "鎻忚堪"`
+1. **开始工作前**: 先拉取最新更改
+   - Obsidian命令: `Git: Pull`
+   - 命令行: `git pull`
 
-3. **宸ヤ綔缁撴潫鍚?*: 鎺ㄩ€佸埌杩滅▼浠撳簱
-   - Obsidian鍛戒护: `Git: Push`
-   - 鍛戒护琛? `git push`
+2. **工作过程中**: 定期提交（建议每完成一个主题就提交）
+   - Obsidian命令: `Git: Commit all`
+   - 命令行: `git add . && git commit -m "描述"`
 
-### 蹇嵎閿缃?
-寤鸿鍦∣bsidian涓负甯哥敤Git鎿嶄綔璁剧疆蹇嵎閿細
+3. **工作结束后**: 推送到远程仓库
+   - Obsidian命令: `Git: Push`
+   - 命令行: `git push`
 
-1. 杩涘叆 璁剧疆 鈫?蹇嵎閿?2. 鎼滅储 "Git"
-3. 涓轰互涓嬪懡浠よ缃揩鎹烽敭锛?   - Git: Pull 鈫?`Ctrl+Shift+P`
-   - Git: Commit all 鈫?`Ctrl+Shift+C`
-   - Git: Push 鈫?`Ctrl+Shift+U`
+### 快捷键设置
+
+建议在Obsidian中为常用Git操作设置快捷键：
+
+1. 进入 设置 → 快捷键
+2. 搜索 "Git"
+3. 为以下命令设置快捷键：
+   - Git: Pull → `Ctrl+Shift+P`
+   - Git: Commit all → `Ctrl+Shift+C`
+   - Git: Push → `Ctrl+Shift+U`
 
 ---
 
-## 浜斻€侀厤缃枃浠跺弬鑰?
-### .gitignore 鏂囦欢鍐呭
+## 五、配置文件参考
+
+### .gitignore 文件内容
 
 ```
-# Obsidian宸ヤ綔鍖烘枃浠?.obsidian/workspace.json
+# Obsidian工作区文件
+.obsidian/workspace.json
 .obsidian/workspace-mobile.json
 .obsidian/workspace
 
-# 绯荤粺鏂囦欢
+# 系统文件
 desktop.ini
 Thumbs.db
 .DS_Store
 
-# 涓存椂鏂囦欢
+# 临时文件
 *.tmp
 *.bak
 *.swp
 ```
 
-### Obsidian Git 鎻掍欢閰嶇疆
+### Obsidian Git 插件配置
 
-鏂囦欢浣嶇疆锛歚.obsidian/plugins/obsidian-git/data.json`
+文件位置：`.obsidian/plugins/obsidian-git/data.json`
 
 ```json
 {
@@ -177,5 +197,4 @@ Thumbs.db
 
 ---
 
-*鏈€鍚庢洿鏂? 2026-06-02*
-
+*最后更新: 2026-06-02*

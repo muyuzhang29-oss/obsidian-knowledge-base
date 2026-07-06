@@ -1,31 +1,32 @@
-﻿---
-tags: [UVM, Verification, 妯℃澘, Sequence]
+---
+tags: [UVM, Verification, 模板, Sequence]
 created: 2026-04-17
 updated: 2026-06-02
 ---
 
-# 03 - Sequence 浜嬪姟搴忓垪
+# 03 - Sequence 事务序列
 
-> 璐熻矗鐢熸垚婵€鍔憋紝瀹氫箟"瑕佸彂鍝簺 transaction锛屼互浠€涔堥『搴忓彂"
+> 负责生成激励，定义"要发哪些 transaction，以什么顺序发"
 
 ```verilog
 `ifndef SPI_SEQ_SV
 `define SPI_SEQ_SV
 
 // =============================================================================
-// 鍩虹 sequence锛氬彂閫佸崟涓?transaction
+// 基础 sequence：发送单个 transaction
 // =============================================================================
 class spi_base_sequence extends uvm_sequence #(spi_trans);
 
     `uvm_object_utils(spi_base_sequence)
 
-    int num_items = 10;  // 鍙戦€?transaction 鏁伴噺
+    int num_items = 10;  // 发送 transaction 数量
 
     function new(string name = "spi_base_sequence");
         super.new(name);
     endfunction
 
-    // body() 鏄?sequence 鐨勪富鍑芥暟锛岃皟鐢?start() 鏃舵墽琛?    virtual task body();
+    // body() 是 sequence 的主函数，调用 start() 时执行
+    virtual task body();
         `uvm_info(get_type_name(), $sformatf("Starting sequence, num_items=%0d", num_items), UVM_LOW)
 
         repeat (num_items) begin
@@ -36,8 +37,8 @@ class spi_base_sequence extends uvm_sequence #(spi_trans);
                 continue;
             end
 
-            // start_item: 绛夊緟 sequencer 鎺堟潈
-            // finish_item: 鍙戦€佺粰 driver锛岀瓑寰?driver 瀹屾垚
+            // start_item: 等待 sequencer 授权
+            // finish_item: 发送给 driver，等待 driver 完成
             start_item(tr);
             finish_item(tr);
         end
@@ -48,7 +49,7 @@ class spi_base_sequence extends uvm_sequence #(spi_trans);
 endclass
 
 // =============================================================================
-// 鍐欎笓鐢?sequence锛氬彧鍙戝啓鍛戒护
+// 写专用 sequence：只发写命令
 // =============================================================================
 class spi_write_sequence extends uvm_sequence #(spi_trans);
 
@@ -64,7 +65,7 @@ class spi_write_sequence extends uvm_sequence #(spi_trans);
         repeat (num_items) begin
             spi_trans tr = spi_trans::type_id::create("tr");
 
-            // 绾︽潫鍙敓鎴愬啓鍛戒护
+            // 约束只生成写命令
             if (!tr.randomize() with { cmd == spi_trans::WR_CMD; }) begin
                 `uvm_error(get_type_name(), "Randomization failed")
                 continue;
@@ -78,7 +79,7 @@ class spi_write_sequence extends uvm_sequence #(spi_trans);
 endclass
 
 // =============================================================================
-// 閿欒娉ㄥ叆 sequence锛氬彂閫佸甫閿欒娉ㄥ叆鐨?transaction
+// 错误注入 sequence：发送带错误注入的 transaction
 // =============================================================================
 class spi_error_sequence extends uvm_sequence #(spi_trans);
 
@@ -113,12 +114,13 @@ endclass
 `endif
 ```
 
-**鍏抽敭鐐癸細**
-- sequence 鏄?`uvm_object`锛屼笉鏄?`uvm_component`锛岀敓鍛藉懆鏈熺敱 test 鎺у埗
-- 閫氳繃 `start_item`/`finish_item` 涓?driver 浜や簰
-- 鐢?`with {}` 鍐呰仈绾︽潫鎺у埗闅忔満鍖栬寖鍥?
-## 鐩稿叧閾炬帴
+**关键点：**
+- sequence 是 `uvm_object`，不是 `uvm_component`，生命周期由 test 控制
+- 通过 `start_item`/`finish_item` 与 driver 交互
+- 用 `with {}` 内联约束控制随机化范围
 
-- [[05-Verification/UVM-Template/00-鎬昏|UVM 妯℃澘鎬昏]] - UVM 楠岃瘉鐜妯℃澘
-- [[02-UVM/03-Sequence鏈哄埗|Sequence 鏈哄埗]] - Sequence 璇﹁В
-- [[00-鎬荤储寮昡] - 杩斿洖鎬荤储寮?
+## 相关链接
+
+- [[05-Verification/UVM-Template/00-总览|UVM 模板总览]] - UVM 验证环境模板
+- [[02-UVM/03-Sequence机制|Sequence 机制]] - Sequence 详解
+- [[00-总索引]] - 返回总索引

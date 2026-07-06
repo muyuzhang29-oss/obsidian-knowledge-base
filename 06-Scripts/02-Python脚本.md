@@ -1,57 +1,57 @@
-﻿---
-tags: [Script, Python, 鑷姩鍖? 宸ュ叿]
+---
+tags: [Script, Python, 自动化, 工具]
 created: 2026-04-17
 updated: 2026-06-02
 ---
 
 # 00-Python
 
-tags: #Python #鑴氭湰 #鑷姩鍖?
+tags: #Python #脚本 #自动化
 
-## Python 鍦ㄩ獙璇佷腑鐨勫簲鐢?
+## Python 在验证中的应用
 
-Python 骞挎硾搴旂敤浜?IC 楠岃瘉鐨勫悇涓樁娈碉細
-- 楠岃瘉璁″垝绠＄悊
-- 鍥炲綊娴嬭瘯鑷姩鍖?
-- 鏃ュ織瑙ｆ瀽鍜屽垎鏋?
-- 瑕嗙洊鐜囧鐞?
-- 鏂囨。鐢熸垚
+Python 广泛应用于 IC 验证的各个阶段：
+- 验证计划管理
+- 回归测试自动化
+- 日志解析和分析
+- 覆盖率处理
+- 文档生成
 
-## 鍩虹璇硶閫熸煡
+## 基础语法速查
 
-### 鍙橀噺鍜屾暟鎹被鍨?
+### 变量和数据类型
 
 ```python
-# 鏁存暟
+# 整数
 a = 10
 b = 0xFF
 
-# 娴偣鏁?
+# 浮点数
 pi = 3.14159
 
-# 瀛楃涓?
+# 字符串
 name = "IC_Verification"
 path = r"C:\project"  # raw string
 
-# 鍒楄〃
+# 列表
 data = [1, 2, 3, 4]
 data.append(5)
 
-# 瀛楀吀
+# 字典
 config = {
     "frequency": 100,
     "voltage": 1.2,
     "mode": "async"
 }
 
-# 鍏冪粍 (涓嶅彲鍙?
+# 元组 (不可变)
 coord = (10, 20)
 
-# 闆嗗悎
+# 集合
 regs = {"AXI", "APB", "I2C"}
 ```
 
-### 鏉′欢鍒ゆ柇
+### 条件判断
 
 ```python
 if condition:
@@ -61,39 +61,39 @@ elif other:
 else:
     print("False")
 
-# 涓夊厓琛ㄨ揪寮?
+# 三元表达式
 value = "yes" if x > 0 else "no"
 ```
 
-### 寰幆
+### 循环
 
 ```python
-# for 寰幆
+# for 循环
 for i in range(10):
     print(i)
 
-# 閬嶅巻鍒楄〃
+# 遍历列表
 for item in data:
     print(item)
 
-# 甯︾储寮?
+# 带索引
 for i, item in enumerate(data):
     print(f"{i}: {item}")
 
-# while 寰幆
+# while 循环
 while count < 100:
     count += 1
 
-# 鍒楄〃鎺ㄥ寮?
+# 列表推导式
 squares = [x**2 for x in range(10)]
 evens = [x for x in range(20) if x % 2 == 0]
 ```
 
-### 鍑芥暟
+### 函数
 
 ```python
 def parse_log(filename, pattern=None):
-    """瑙ｆ瀽鏃ュ織鏂囦欢"""
+    """解析日志文件"""
     results = []
     with open(filename, 'r') as f:
         for line in f:
@@ -101,16 +101,16 @@ def parse_log(filename, pattern=None):
                 results.append(line.strip())
     return results
 
-# 榛樿鍙傛暟
+# 默认参数
 def config_reg(addr, value=0, enable=True):
     pass
 
-# 鍙彉鍙傛暟
+# 可变参数
 def printf(*args, **kwargs):
     print(*args, **kwargs)
 ```
 
-### 寮傚父澶勭悊
+### 异常处理
 
 ```python
 try:
@@ -124,101 +124,101 @@ finally:
     print("Cleanup")
 ```
 
-## 鏂囦欢鎿嶄綔
+## 文件操作
 
-### 璇诲啓鏂囦欢
+### 读写文件
 
 ```python
-# 璇诲彇鏁翠釜鏂囦欢
+# 读取整个文件
 with open("design.sv", "r") as f:
     content = f.read()
 
-# 閫愯璇诲彇
+# 逐行读取
 with open("log.txt", "r") as f:
     for line in f:
         print(line.strip())
 
-# 鍐欏叆鏂囦欢
+# 写入文件
 with open("output.txt", "w") as f:
     f.write("Hello\n")
     f.writelines(["line1\n", "line2\n"])
 
-# 杩藉姞妯″紡
+# 追加模式
 with open("log.txt", "a") as f:
     f.write("New entry\n")
 ```
 
-### 璺緞鎿嶄綔
+### 路径操作
 
 ```python
 import os
 from pathlib import Path
 
-# 璺緞鎷兼帴
+# 路径拼接
 project_root = Path("D:/project")
 log_dir = project_root / "logs"
 
-# 妫€鏌ヨ矾寰?
+# 检查路径
 if log_dir.exists():
     print("Directory exists")
 
-# 鍒楀嚭鏂囦欢
+# 列出文件
 for f in log_dir.glob("*.log"):
     print(f.name)
 
-# 鍒涘缓鐩綍
+# 创建目录
 log_dir.mkdir(parents=True, exist_ok=True)
 ```
 
-## 姝ｅ垯琛ㄨ揪寮?
+## 正则表达式
 
 ```python
 import re
 
-# 鍖归厤鍦板潃
+# 匹配地址
 addr_match = re.search(r'@([0-9a-fA-F]+)', line)
 if addr_match:
     addr = int(addr_match.group(1), 16)
 
-# 鍖归厤鏃堕棿鎴?
+# 匹配时间戳
 time_match = re.search(r'(\d+):(\d+):(\d+)', line)
 
-# 鏌ユ壘鎵€鏈夊尮閰?
+# 查找所有匹配
 errors = re.findall(r'ERROR: (.+)', log_content)
 
-# 鏇挎崲
+# 替换
 new_content = re.sub(r'\bERROR\b', 'WARN', content)
 
-# 缂栬瘧姝ｅ垯
+# 编译正则
 addr_pattern = re.compile(r'@([0-9a-fA-F]+)')
 ```
 
-## 绯荤粺鍛戒护
+## 系统命令
 
 ```python
 import subprocess
 import os
 
-# 鎵ц鍛戒护
+# 执行命令
 result = subprocess.run(["ls", "-la"], capture_output=True, text=True)
 print(result.stdout)
 
-# 鎵ц鍛戒护骞惰幏鍙栬繑鍥炵爜
+# 执行命令并获取返回码
 ret = subprocess.call("make sim", shell=True)
 
-# 鍚庡彴鎵ц
+# 后台执行
 proc = subprocess.Popen(["vsim", "-c"], stdin=subprocess.PIPE)
 proc.stdin.write(b"run -all\n")
 proc.stdin.close()
 
-# 妫€鏌ヨ繘绋?
+# 检查进程
 if proc.poll() is None:
     print("Still running")
 ```
 
-## 鏃ュ織瑙ｆ瀽绀轰緥
+## 日志解析示例
 
-### 瑙ｆ瀽 UVM 鏃ュ織
+### 解析 UVM 日志
 
 ```python
 import re
@@ -268,14 +268,14 @@ if __name__ == "__main__":
     parser.print_summary()
 ```
 
-### 瑙ｆ瀽瑕嗙洊鐜囨姤鍛?
+### 解析覆盖率报告
 
 ```python
 import re
 import json
 
 def parse_coverage_report(filename):
-    """瑙ｆ瀽瑕嗙洊鐜囨姤鍛?""
+    """解析覆盖率报告"""
     coverage = {}
     current_section = None
 
@@ -283,7 +283,7 @@ def parse_coverage_report(filename):
         for line in f:
             line = line.strip()
 
-            # 妫€娴嬬珷鑺?
+            # 检测章节
             if 'Line Coverage' in line:
                 current_section = 'line'
             elif 'Branch Coverage' in line:
@@ -291,7 +291,7 @@ def parse_coverage_report(filename):
             elif 'Functional Coverage' in line:
                 current_section = 'functional'
 
-            # 鎻愬彇瑕嗙洊鐜囨暟鍊?
+            # 提取覆盖率数值
             match = re.search(r'(\d+\.?\d*)%', line)
             if match and current_section:
                 coverage[current_section] = float(match.group(1))
@@ -299,7 +299,7 @@ def parse_coverage_report(filename):
     return coverage
 
 def generate_html_report(coverage_data, output="coverage.html"):
-    """鐢熸垚 HTML 鎶ュ憡"""
+    """生成 HTML 报告"""
     html = f"""
     <html>
     <head><title>Coverage Report</title></head>
@@ -320,13 +320,13 @@ def generate_html_report(coverage_data, output="coverage.html"):
         f.write(html)
 ```
 
-## 閰嶇疆绠＄悊
+## 配置管理
 
 ```python
 import json
 import yaml
 
-# JSON 閰嶇疆
+# JSON 配置
 def load_config_json(filename):
     with open(filename, 'r') as f:
         return json.load(f)
@@ -335,12 +335,12 @@ def save_config_json(config, filename):
     with open(filename, 'w') as f:
         json.dump(config, f, indent=2)
 
-# YAML 閰嶇疆
+# YAML 配置
 def load_config_yaml(filename):
     with open(filename, 'r') as f:
         return yaml.safe_load(f)
 
-# 閰嶇疆绀轰緥
+# 配置示例
 config = {
     "project": {
         "name": "chip_verification",
@@ -357,14 +357,14 @@ config = {
 }
 ```
 
-## 骞惰澶勭悊
+## 并行处理
 
 ```python
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 import subprocess
 
 def run_simulation(test_name):
-    """杩愯鍗曚釜娴嬭瘯"""
+    """运行单个测试"""
     result = subprocess.run(
         ["vsim", "-c", "-do", f"run {test_name}"],
         capture_output=True,
@@ -373,22 +373,22 @@ def run_simulation(test_name):
     return (test_name, result.returncode)
 
 def run_parallel_tests(test_list, workers=4):
-    """骞惰杩愯娴嬭瘯"""
+    """并行运行测试"""
     with ProcessPoolExecutor(max_workers=workers) as executor:
         results = list(executor.map(run_simulation, test_list))
     return results
 
-# 浣跨敤
+# 使用
 tests = [f"test_{i}" for i in range(10)]
 results = run_parallel_tests(tests, workers=4)
 ```
 
-## Excel/CSV 澶勭悊
+## Excel/CSV 处理
 
 ```python
 import csv
 
-# CSV 鎿嶄綔
+# CSV 操作
 def save_to_csv(data, filename):
     with open(filename, 'w', newline='') as f:
         writer = csv.DictWriter(f, fieldnames=data[0].keys())
@@ -400,7 +400,7 @@ def read_from_csv(filename):
         reader = csv.DictReader(f)
         return list(reader)
 
-# Excel 鎿嶄綔 (闇€瑕?openpyxl)
+# Excel 操作 (需要 openpyxl)
 from openpyxl import Workbook, load_workbook
 
 def save_to_excel(data, filename):
@@ -412,29 +412,28 @@ def save_to_excel(data, filename):
     wb.save(filename)
 ```
 
-## 甯哥敤搴撻€熸煡
+## 常用库速查
 
-| 搴?| 鐢ㄩ€?| 瀹夎 |
+| 库 | 用途 | 安装 |
 |---|------|------|
-| `re` | 姝ｅ垯琛ㄨ揪寮?| 鍐呯疆 |
-| `json` | JSON 澶勭悊 | 鍐呯疆 |
-| `csv` | CSV 澶勭悊 | 鍐呯疆 |
-| `pathlib` | 璺緞鎿嶄綔 | 鍐呯疆 |
-| `subprocess` | 鎵ц鍛戒护 | 鍐呯疆 |
-| `yaml` | YAML 澶勭悊 | `pip install pyyaml` |
-| `openpyxl` | Excel 鎿嶄綔 | `pip install openpyxl` |
-| `matplotlib` | 缁樺浘 | `pip install matplotlib` |
-| `numpy` | 鏁板€艰绠?| `pip install numpy` |
-| `pandas` | 鏁版嵁鍒嗘瀽 | `pip install pandas` |
+| `re` | 正则表达式 | 内置 |
+| `json` | JSON 处理 | 内置 |
+| `csv` | CSV 处理 | 内置 |
+| `pathlib` | 路径操作 | 内置 |
+| `subprocess` | 执行命令 | 内置 |
+| `yaml` | YAML 处理 | `pip install pyyaml` |
+| `openpyxl` | Excel 操作 | `pip install openpyxl` |
+| `matplotlib` | 绘图 | `pip install matplotlib` |
+| `numpy` | 数值计算 | `pip install numpy` |
+| `pandas` | 数据分析 | `pip install pandas` |
 
-## 鐩稿叧閾炬帴
+## 相关链接
 
-- [[01-Log瑙ｆ瀽]] - 鏃ュ織瑙ｆ瀽
-- [[00-Makefile]] - 鏋勫缓宸ュ叿
-- [[00-鎬荤储寮昡] - 杩斿洖鎬荤储寮?
+- [[01-Log解析]] - 日志解析
+- [[00-Makefile]] - 构建工具
+- [[00-总索引]] - 返回总索引
 
 ---
 
-*鍒涘缓鏃堕棿: 2026-04-17*
-*鏇存柊鏃堕棿: 2026-04-17*
-
+*创建时间: 2026-04-17*
+*更新时间: 2026-04-17*

@@ -122,7 +122,7 @@
   margin-right: 4px;
 }
 
-/* 07-Projects - 靛蓝色系 */
+/* 08-Projects - 靛蓝色系 */
 .nav-folder-title-content[data-path="07-Projects"] {
   background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
   color: #3730a3 !important;
@@ -137,7 +137,7 @@
   margin-right: 4px;
 }
 
-/* 08-Issues - 红色系 */
+/* 09-Issues - 红色系 */
 .nav-folder-title-content[data-path="08-Issues"] {
   background: linear-gradient(135deg, #fee2e2, #fca5a5);
   color: #991b1b !important;
@@ -152,7 +152,7 @@
   margin-right: 4px;
 }
 
-/* 09-Notes - 天蓝色系 */
+/* 10-Notes - 天蓝色系 */
 .nav-folder-title-content[data-path="09-Notes"] {
   background: linear-gradient(135deg, #e0f2fe, #bae6fd);
   color: #0c4a6e !important;

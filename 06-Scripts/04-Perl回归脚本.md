@@ -1,50 +1,50 @@
-﻿---
-tags: [Script, Perl, 鍥炲綊, 娴嬭瘯, 宸ュ叿]
+---
+tags: [Script, Perl, 回归, 测试, 工具]
 created: 2026-05-13
 updated: 2026-06-02
 ---
 
-# Perl 鍥炲綊绠＄悊鑴氭湰
+# Perl 回归管理脚本
 
-> 鑷姩鍖?UVM 鍥炲綊娴嬭瘯鐨勬牳蹇冭剼鏈細瑙ｆ瀽閰嶇疆 鈫?缂栬瘧 鈫?骞惰浠跨湡 鈫?鐩戞帶缁撴灉 鈫?瑕嗙洊鐜囧悎骞?
+> 自动化 UVM 回归测试的核心脚本：解析配置 → 编译 → 并行仿真 → 监控结果 → 覆盖率合并
 
 tags: #Perl #Regression #UVM #Verification
 
 ---
 
-## 鏁翠綋鏋舵瀯
+## 整体架构
 
 ```
 regression.pl
-鈹溾攢鈹€ 瑙ｆ瀽鍛戒护琛屽弬鏁?(GetOptions)
-鈹溾攢鈹€ ana_regress_list()        鈫?瑙ｆ瀽 regression.cfg
-鈹溾攢鈹€ compile_rgs()             鈫?缂栬瘧 testbench
-鈹溾攢鈹€ chk_compile_log()         鈫?楠岃瘉缂栬瘧鎴愬姛
-鈹溾攢鈹€ run_simulation()          鈫?骞惰鍚姩浠跨湡
-鈹溾攢鈹€ check_simulation_process() 鈫?杞鐩戞帶 + pass/fail 鍒ゅ畾
-鈹溾攢鈹€ remove_failed_test_coverage() 鈫?娓呯悊澶辫触鐢ㄤ緥瑕嗙洊鐜?
-鈹斺攢鈹€ merge_coverage()          鈫?imc 鍚堝苟瑕嗙洊鐜?
+├── 解析命令行参数 (GetOptions)
+├── ana_regress_list()        ← 解析 regression.cfg
+├── compile_rgs()             ← 编译 testbench
+├── chk_compile_log()         ← 验证编译成功
+├── run_simulation()          ← 并行启动仿真
+├── check_simulation_process() ← 轮询监控 + pass/fail 判定
+├── remove_failed_test_coverage() ← 清理失败用例覆盖率
+└── merge_coverage()          ← imc 合并覆盖率
 ```
 
 ---
 
-## 鍛戒护琛屽弬鏁?
+## 命令行参数
 
 ```bash
 perl regression.pl -r regression.cfg --timeout 720 --local_sim on --cov on --seed_zero off
 ```
 
-| 鍙傛暟 | 鍚箟 | 榛樿鍊?|
+| 参数 | 含义 | 默认值 |
 |------|------|--------|
-| `-r / --rgs_list` | 鍥炲綊閰嶇疆鏂囦欢璺緞 | 纭紪鐮佽矾寰?|
-| `--timeout` | 鏈€澶х瓑寰呰疆璇㈡鏁?| 720 |
-| `--local_sim` | `on`=鏈湴鍚庡彴杩愯, `off`=bsub 鎻愪氦闆嗙兢 | off |
-| `--cov` | 鏄惁鏀堕泦瑕嗙洊鐜?| off |
-| `--seed_zero` | seed 鍥哄畾涓?0锛堣皟璇曠敤锛?| off |
+| `-r / --rgs_list` | 回归配置文件路径 | 硬编码路径 |
+| `--timeout` | 最大等待轮询次数 | 720 |
+| `--local_sim` | `on`=本地后台运行, `off`=bsub 提交集群 | off |
+| `--cov` | 是否收集覆盖率 | off |
+| `--seed_zero` | seed 固定为 0（调试用） | off |
 
 ---
 
-## 閰嶇疆鏂囦欢鏍煎紡 (regression.cfg)
+## 配置文件格式 (regression.cfg)
 
 ```
 [csr] CompileOption: TB_FILELIST=$ENV{DV_HOME}/tb/ss02_tb/filelist COMP_OPTS='-define SS02_CHIPTOP_DV'
@@ -53,140 +53,140 @@ tests: tc_video_trial1   test_mode: aphy_ana_csr_wrp0   rpt_time: 2
 tests: tc_video_trial2   test_mode: aphy_ana_csr_wrp0   rpt_time: 3
 ```
 
-| 瀛楁 | 鍚箟 |
+| 字段 | 含义 |
 |------|------|
-| `[csr]` | 缂栬瘧鍚嶇О锛岀敓鎴?`regress_<鏃堕棿鎴?_csr` 鐩綍 |
-| `CompileOption:` | 浼犵粰 `make compile` 鐨勭紪璇戦€夐」 |
-| `tests:` | 娴嬭瘯鐢ㄤ緥鍚嶏紙瀵瑰簲 Makefile 鐨?TEST 鍙傛暟锛?|
-| `test_mode:` | 娴嬭瘯妯″紡锛堜細鍔?`_0`, `_1` 鍚庣紑鍖哄垎閲嶅锛?|
-| `rpt_time:` | 閲嶅娆℃暟锛屾瘡閬嶇敤涓嶅悓 seed |
-| `sim_options:` | 浼犵粰浠跨湡鐨勯澶栧弬鏁帮紙`+` 寮€澶寸殑 plusarg锛?|
+| `[csr]` | 编译名称，生成 `regress_<时间戳>_csr` 目录 |
+| `CompileOption:` | 传给 `make compile` 的编译选项 |
+| `tests:` | 测试用例名（对应 Makefile 的 TEST 参数） |
+| `test_mode:` | 测试模式（会加 `_0`, `_1` 后缀区分重复） |
+| `rpt_time:` | 重复次数，每遍用不同 seed |
+| `sim_options:` | 传给仿真的额外参数（`+` 开头的 plusarg） |
 
-`rpt_time: 3` 浼氭妸鍚屼竴涓敤渚嬪睍寮€涓?3 涓嫭绔嬩豢鐪熷疄渚嬶紝姣忎釜鏈夌嫭绔?seed銆?
+`rpt_time: 3` 会把同一个用例展开为 3 个独立仿真实例，每个有独立 seed。
 
 ---
 
-## 鏍稿績瀛愮▼搴忚瑙?
+## 核心子程序详解
 
-### 1. `ana_regress_list()` 鈥?瑙ｆ瀽閰嶇疆
+### 1. `ana_regress_list()` — 解析配置
 
 ```perl
-# 閫愯瑙ｆ瀽锛岃烦杩囨敞閲?#寮€澶?鍜岀┖琛?
-# 鎻愬彇 [缂栬瘧鍚峕銆丆ompileOption銆乼ests銆乼est_mode銆乺pt_time銆乻im_options
-# 鎸?rpt_time 灞曞紑锛宲ush 鍒板叏灞€鏁扮粍
-@rgs_test_name    # 娴嬭瘯鍚?
-@rgs_test_mode    # 妯″紡_搴忓彿
-@rgs_test_options # 浠跨湡閫夐」
-$rgs_test_num     # 鎬荤敤渚嬫暟
+# 逐行解析，跳过注释(#开头)和空行
+# 提取 [编译名]、CompileOption、tests、test_mode、rpt_time、sim_options
+# 按 rpt_time 展开，push 到全局数组
+@rgs_test_name    # 测试名
+@rgs_test_mode    # 模式_序号
+@rgs_test_options # 仿真选项
+$rgs_test_num     # 总用例数
 ```
 
-### 2. `compile_rgs()` 鈥?缂栬瘧
+### 2. `compile_rgs()` — 编译
 
 ```perl
-$rgs_compile_mode = "regress_<鏃堕棿鎴?_<缂栬瘧鍚?";
+$rgs_compile_mode = "regress_<时间戳>_<编译名>";
 system("make compile $rgs_cmp_opt MODE=$rgs_compile_mode COV=$cov_flag");
 ```
 
-- `MODE` 鐢ㄦ椂闂存埑鍛藉悕锛屼繚璇佹瘡娆″洖褰掔殑缂栬瘧鐩綍鐙珛涓嶅啿绐?
-- `COV=1` 寮€鍚鐩栫巼锛宍COV=0` 鍏抽棴
+- `MODE` 用时间戳命名，保证每次回归的编译目录独立不冲突
+- `COV=1` 开启覆盖率，`COV=0` 关闭
 
-### 3. `chk_compile_log()` 鈥?缂栬瘧楠岃瘉
+### 3. `chk_compile_log()` — 编译验证
 
 ```perl
-# 妫€鏌?compile.log 鏈€鍚?5 琛?
+# 检查 compile.log 最后 5 行
 tail -5 .../compile.log
-# 鍖归厤 "Writing initial simulation snapshot: worklib.tb_top.v"
-# 涓嶅尮閰嶅垯 die 缁堟鏁翠釜鍥炲綊
+# 匹配 "Writing initial simulation snapshot: worklib.tb_top.v"
+# 不匹配则 die 终止整个回归
 ```
 
-### 4. `run_simulation()` 鈥?骞惰浠跨湡
+### 4. `run_simulation()` — 并行仿真
 
 ```perl
-# 鏈湴妯″紡锛堝悗鍙板苟琛岋級
+# 本地模式（后台并行）
 make simulate TEST=... SEED=... mode=... &
 
-# 闆嗙兢妯″紡锛坆sub 鎻愪氦锛?
+# 集群模式（bsub 提交）
 bsub -q normal make simulate TEST=... SEED=... MODE=...
 ```
 
-- seed 榛樿 `int(rand(3999999999))`锛宍seed_zero=on` 鏃跺浐瀹氫负 0
-- 鏈湴妯″紡杩藉姞 `:nostdout` 鎶戝埗缁堢杈撳嚭
+- seed 默认 `int(rand(3999999999))`，`seed_zero=on` 时固定为 0
+- 本地模式追加 `:nostdout` 抑制终端输出
 
-### 5. `check_simulation_process()` 鈥?鐩戞帶鏍稿績
+### 5. `check_simulation_process()` — 监控核心
 
-**杞鏈哄埗**锛氭瘡绉掓鏌ヤ竴娆★紝鏈€澶?`$timeout` 杞?
+**轮询机制**：每秒检查一次，最多 `$timeout` 轮
 
 ```perl
 while($timeout_cnt < $timeout) {
     sleep 1;
-    # 閬嶅巻鎵€鏈夋湭瀹屾垚娴嬭瘯
+    # 遍历所有未完成测试
     for each test:
-        # 妫€鏌?DONE 鏍囧織鏂囦欢鏄惁瀛樺湪
+        # 检查 DONE 标志文件是否存在
         if(-e "$DONE_PATH/$mode/$test_$seed/DONE") {
-            # 妫€鏌?sim log 鍒ゅ畾 pass/fail
-            # 浠庡緟妫€鏁扮粍涓?splice 绉婚櫎
+            # 检查 sim log 判定 pass/fail
+            # 从待检数组中 splice 移除
         }
-    # 鍏ㄩ儴瀹屾垚鍒欓€€鍑?
+    # 全部完成则退出
 }
 ```
 
-**DONE 鏂囦欢璺緞**锛?
+**DONE 文件路径**：
 ```
 $DONE_PATH/$rgs_compile_mode/$test_name_$seed/DONE
 ```
 
-浠跨湡鍣ㄨ繍琛岀粨鏉熷悗浼氬垱寤?`DONE` 鏂囦欢锛岃剼鏈€氳繃妫€娴嬭鏂囦欢鍒ゆ柇浠跨湡鏄惁缁撴潫銆?
+仿真器运行结束后会创建 `DONE` 文件，脚本通过检测该文件判断仿真是否结束。
 
-### 6. `check_simulation_log()` 鈥?Pass/Fail 鍒ゅ畾
+### 6. `check_simulation_log()` — Pass/Fail 判定
 
 ```perl
-# 浠?sim_<seed>.log 涓悳绱?UVM 鎶ュ憡
+# 从 sim_<seed>.log 中搜索 UVM 报告
 UVM_ERROR : <count>
 UVM_FATAL : <count>
 
-# 鍒ゅ畾瑙勫垯锛?
-#   error_count == 0 AND fatal_count == 0 鈫?PASS
-#   鍚﹀垯 鈫?FAIL
+# 判定规则：
+#   error_count == 0 AND fatal_count == 0 → PASS
+#   否则 → FAIL
 ```
 
-### 7. 瑕嗙洊鐜囧鐞?
+### 7. 覆盖率处理
 
 ```perl
-# 鍒犻櫎澶辫触鐢ㄤ緥鐨勮鐩栫巼鐩綍
+# 删除失败用例的覆盖率目录
 rm -rf $rgs_compile_mode/cov_work/scope/$test_$seed
 
-# imc 鍚堝苟閫氳繃鐢ㄤ緥鐨勮鐩栫巼
+# imc 合并通过用例的覆盖率
 imc -execcmd "merge * -overwrite -out merged_cov"
 ```
 
-鍏堝垹鎺夊け璐ョ敤渚嬬殑瑕嗙洊鐜囨暟鎹紝鍐嶇敤 Cadence IMC 鍚堝苟鍓╀綑鐨勶紝纭繚瑕嗙洊鐜囧彧鍙嶆槧閫氳繃鐨勭敤渚嬨€?
+先删掉失败用例的覆盖率数据，再用 Cadence IMC 合并剩余的，确保覆盖率只反映通过的用例。
 
 ---
 
-## 鎵ц娴佺▼
+## 执行流程
 
 ```
 main
- 鈹?
- 鈹溾攢 瑙ｆ瀽鍛戒护琛屽弬鏁?
- 鈹溾攢 ana_regress_list()          鈫?鏋勫缓娴嬭瘯鏁扮粍 (@rgs_test_name, ...)
- 鈹溾攢 compile_rgs()               鈫?make compile
- 鈹溾攢 chk_compile_log()           鈫?楠岃瘉缂栬瘧鎴愬姛
- 鈹溾攢 run_simulation()            鈫?骞惰鍚姩 N 涓豢鐪熻繘绋?
- 鈹溾攢 check_simulation_process()  鈫?杞 DONE 鏂囦欢
- 鈹?  鈹溾攢 check_simulation_log()  鈫?妫€鏌?UVM_ERROR / UVM_FATAL
- 鈹?  鈹溾攢 PASS 鈫?璁℃暟 +1
- 鈹?  鈹斺攢 FAIL 鈫?璁板綍鍛戒护銆佹棩蹇楄矾寰勩€佽鐩栫巼鐩綍
- 鈹溾攢 杈撳嚭 summary锛坱otal/pass/fail/running锛?
- 鈹溾攢 remove_failed_test_coverage()  (cov=on)
- 鈹斺攢 merge_coverage()              (cov=on)
+ │
+ ├─ 解析命令行参数
+ ├─ ana_regress_list()          → 构建测试数组 (@rgs_test_name, ...)
+ ├─ compile_rgs()               → make compile
+ ├─ chk_compile_log()           → 验证编译成功
+ ├─ run_simulation()            → 并行启动 N 个仿真进程
+ ├─ check_simulation_process()  → 轮询 DONE 文件
+ │   ├─ check_simulation_log()  → 检查 UVM_ERROR / UVM_FATAL
+ │   ├─ PASS → 计数 +1
+ │   └─ FAIL → 记录命令、日志路径、覆盖率目录
+ ├─ 输出 summary（total/pass/fail/running）
+ ├─ remove_failed_test_coverage()  (cov=on)
+ └─ merge_coverage()              (cov=on)
 ```
 
 ---
 
-## 杈撳嚭绀轰緥
+## 输出示例
 
-缁堢杈撳嚭锛?
+终端输出：
 ```
 id: 0, make simulate TEST=tc_spi_wr TEST_RGS_IDX=csr_0 SEED=12345 ...
 id: 1, bsub -q normal make simulate TEST=tc_spi_rd TEST_RGS_IDX=csr_1 SEED=67890 ...
@@ -199,33 +199,33 @@ FAIL, test: tc_spi_crc_err, seed: 99887
 ################################################################################failed test: make simulate TEST=tc_spi_crc_err SEED=99887 ...
 ```
 
-Summary 鏂囦欢 `regress_summary_<mode>` 浼氳褰曠浉鍚屽唴瀹瑰埌纾佺洏銆?
+Summary 文件 `regress_summary_<mode>` 会记录相同内容到磁盘。
 
 ---
 
-## 瀹炵敤鎶€宸?
+## 实用技巧
 
-### 璋冭瘯鍗曚釜鐢ㄤ緥
+### 调试单个用例
 ```bash
 perl regression.pl -r regression.cfg --seed_zero on --timeout 10 --local_sim on
 ```
-鍥哄畾 seed + 鐭秴鏃?+ 鏈湴杩愯锛屾柟渚垮揩閫熷鐜般€?
+固定 seed + 短超时 + 本地运行，方便快速复现。
 
-### 鍙窇瑕嗙洊鐜?
+### 只跑覆盖率
 ```bash
 perl regression.pl -r regression.cfg --cov on --local_sim off
 ```
-bsub 鎻愪氦闆嗙兢锛岃窇瀹岃嚜鍔ㄥ悎骞惰鐩栫巼銆?
+bsub 提交集群，跑完自动合并覆盖率。
 
-### 閰嶇疆鏂囦欢涓窇澶氳疆
+### 配置文件中跑多轮
 ```
 tests: tc_spi_stress   test_mode: stress   rpt_time: 10
 ```
-鍚屼竴鐢ㄤ緥璺?10 閬嶏紝姣忛亶涓嶅悓 seed锛岃鐩栭殢鏈烘€с€?
+同一用例跑 10 遍，每遍不同 seed，覆盖随机性。
 
 ---
 
-## 瀹屾暣鑴氭湰婧愮爜
+## 完整脚本源码
 
 ```perl
 #!/usr/bin/perl -w
@@ -527,13 +527,12 @@ if($cov eq "on") {&merge_coverage;}
 
 ---
 
-## 宸茬煡闂
+## 已知问题
 
-1. **鍙傛暟閫昏緫鍙嶈浆**锛歚if(defined $regress_list)` 鍧楀唴鐩存帴瑕嗙洊浜嗚矾寰勶紝搴旇鏄?`if(!defined)` 鎵嶄娇鐢ㄩ粯璁ゅ€?
-2. **`$passed_num` 鏈０鏄?*锛歚check_simulation_process` 涓娇鐢ㄤ簡 `$passed_num` 浣嗘病鏈?`my` 澹版槑
-3. **splice 绱㈠紩闂**锛歠or 寰幆涓?splice 鍚?`$cnt` 浠嶉€掑锛屼細璺宠繃绱ф帴鐨勪笅涓€涓厓绱?
+1. **参数逻辑反转**：`if(defined $regress_list)` 块内直接覆盖了路径，应该是 `if(!defined)` 才使用默认值
+2. **`$passed_num` 未声明**：`check_simulation_process` 中使用了 `$passed_num` 但没有 `my` 声明
+3. **splice 索引问题**：for 循环中 splice 后 `$cnt` 仍递增，会跳过紧接的下一个元素
 
 ---
 
-*鍒涘缓鏃堕棿: 2026-05-19*
-
+*创建时间: 2026-05-19*

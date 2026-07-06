@@ -1,11 +1,12 @@
-﻿---
-tags: [UVM, Verification, 妯℃澘, Monitor]
+---
+tags: [UVM, Verification, 模板, Monitor]
 created: 2026-04-17
 updated: 2026-06-02
 ---
 
-# 05 - Monitor 鐩戣鍣?
-> 浠?vif 閲囬泦 DUT 杈撳嚭锛屽～鍏?transaction 鐨勮緭鍑哄瓧娈碉紝鍙戦€佺粰 scoreboard
+# 05 - Monitor 监视器
+
+> 从 vif 采集 DUT 输出，填入 transaction 的输出字段，发送给 scoreboard
 
 ```verilog
 `ifndef SPI_MON_SV
@@ -16,7 +17,7 @@ class spi_monitor extends uvm_monitor;
     `uvm_component_utils(spi_monitor)
 
     virtual spi_if vif;
-    uvm_analysis_port #(spi_trans) ap;  // 鍙戦€佺粰 scoreboard
+    uvm_analysis_port #(spi_trans) ap;  // 发送给 scoreboard
 
     bit [7:0] collected_bytes[$];
 
@@ -33,38 +34,41 @@ class spi_monitor extends uvm_monitor;
     endfunction
 
     // =========================================================================
-    // run_phase: 涓诲惊鐜?    // =========================================================================
+    // run_phase: 主循环
+    // =========================================================================
     virtual task run_phase(uvm_phase phase);
         @(posedge vif.rst_n);
 
         forever begin
             spi_trans rx_trans;
 
-            wait (vif.mon_cb.cs_n == 1'b0);  // 绛夊緟 transaction 寮€濮?
+            wait (vif.mon_cb.cs_n == 1'b0);  // 等待 transaction 开始
+
             rx_trans = spi_trans::type_id::create("rx_trans");
-            collect_transaction(rx_trans);     // 閲囬泦 DUT 杈撳嚭
-            ap.write(rx_trans);                // 鍙戦€佺粰 scoreboard
+            collect_transaction(rx_trans);     // 采集 DUT 输出
+            ap.write(rx_trans);                // 发送给 scoreboard
         end
     endtask
 
     // =========================================================================
-    // collect_transaction: 閲囬泦 DUT 杈撳嚭锛屽～鍏ヨ緭鍑哄瓧娈?    // =========================================================================
+    // collect_transaction: 采集 DUT 输出，填入输出字段
+    // =========================================================================
     task collect_transaction(spi_trans tr);
         bit [7:0] addr_byte;
         collected_bytes.delete();
 
-        // 閲囬泦鍦板潃
+        // 采集地址
         collect_byte(addr_byte);
         tr.addr = addr_byte;
 
-        // 閲囬泦杩斿洖鏁版嵁
+        // 采集返回数据
         while (vif.mon_cb.cs_n == 1'b0) begin
             bit [7:0] data_byte;
             collect_byte(data_byte);
             collected_bytes.push_back(data_byte);
         end
 
-        // 濉叆杈撳嚭瀛楁
+        // 填入输出字段
         if (collected_bytes.size() > 0) begin
             tr.status_o = collected_bytes[0];
             tr.error_o  = collected_bytes[0][0];
@@ -89,10 +93,10 @@ endclass
 `endif
 ```
 
-**monitor 鐨勮亴璐ｏ細** 閲囬泦 DUT 瀹為檯杈撳嚭 鈫?濉叆 `status_o`, `data_o[]`, `error_o` 鈫?鍙戦€佺粰 scoreboard
+**monitor 的职责：** 采集 DUT 实际输出 → 填入 `status_o`, `data_o[]`, `error_o` → 发送给 scoreboard
 
-## 鐩稿叧閾炬帴
+## 相关链接
 
-- [[05-Verification/UVM-Template/00-鎬昏|UVM 妯℃澘鎬昏]] - UVM 楠岃瘉鐜妯℃澘
-- [[02-UVM/06-TLM閫氫俊|TLM 閫氫俊]] - TLM 閫氫俊鏈哄埗
-- [[00-鎬荤储寮昡] - 杩斿洖鎬荤储寮?
+- [[05-Verification/UVM-Template/00-总览|UVM 模板总览]] - UVM 验证环境模板
+- [[02-UVM/06-TLM通信|TLM 通信]] - TLM 通信机制
+- [[00-总索引]] - 返回总索引

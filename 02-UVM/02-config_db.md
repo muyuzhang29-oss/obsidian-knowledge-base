@@ -1,54 +1,59 @@
-﻿---
-tags: [UVM, config_db, 閰嶇疆, 鏍稿績]
+---
+tags: [UVM, config_db, 配置, 核心]
 created: 2026-05-13
 updated: 2026-06-02
 ---
 
-# UVM config_db 鏈哄埗
+# UVM config_db 机制
 
-> 閰嶇疆浼犻€掓満鍒讹紝鍏佽testbench灞傛鍖栭厤缃?
-## 鍩烘湰姒傚康
+> 配置传递机制，允许testbench层次化配置
+
+## 基本概念
 
 ```
 testbench
-    鈹斺攢鈹€ env (uvm_env)
-            鈹溾攢鈹€ agent (uvm_agent)
-            鈹?      鈹溾攢鈹€ driver (uvm_driver)
-            鈹?      鈹斺攢鈹€ monitor (uvm_monitor)
-            鈹斺攢鈹€ scoreboard
+    └── env (uvm_env)
+            ├── agent (uvm_agent)
+            │       ├── driver (uvm_driver)
+            │       └── monitor (uvm_monitor)
+            └── scoreboard
 ```
 
 ---
 
-## set/get 閰嶅
+## set/get 配对
 
 ```verilog
-// 鍦╰est鎴杄nv涓缃?uvm_config_db#(int)::set(this, "env.agent", "is_active", UVM_ACTIVE);
+// 在test或env中设置
+uvm_config_db#(int)::set(this, "env.agent", "is_active", UVM_ACTIVE);
 uvm_config_db#(virtual uvm_if)::set(this, "env.agent*", "vif", dut_if);
 
-// 鍦╠river/monitor涓幏鍙?uvm_config_db#(virtual uvm_if)::get(this, "", "vif", vif);
+// 在driver/monitor中获取
+uvm_config_db#(virtual uvm_if)::get(this, "", "vif", vif);
 if (vif == null)
     `uvm_fatal("NOVIF", "vif is null")
 ```
 
 ---
 
-## 閫氶厤绗﹁矾寰?
-| 璺緞 | 鍚箟 |
+## 通配符路径
+
+| 路径 | 含义 |
 |------|------|
-| `"env.agent"` | 绮剧‘鍖归厤 |
-| `"env.*"` | env涓嬫墍鏈?|
-| `"env.**"` | env鍙婂叾鎵€鏈夊瓙缁勪欢 |
-| `"*"` | 鍏ㄥ眬 |
+| `"env.agent"` | 精确匹配 |
+| `"env.*"` | env下所有 |
+| `"env.**"` | env及其所有子组件 |
+| `"*"` | 全局 |
 
 ---
 
-## 甯哥敤閰嶇疆绫诲瀷
+## 常用配置类型
 
 ### 1. Virtual Interface
 
 ```verilog
-// Top灞傝缃?module tb;
+// Top层设置
+module tb;
     interface dut_if();
     endinterface
     initial begin
@@ -56,7 +61,7 @@ if (vif == null)
     end
 endmodule
 
-// Driver鑾峰彇
+// Driver获取
 class my_driver extends uvm_driver;
     virtual dut_if vif;
     function void build_phase(uvm_phase phase);
@@ -67,13 +72,14 @@ class my_driver extends uvm_driver;
 endclass
 ```
 
-### 2. 绠€鍗曞彉閲?
+### 2. 简单变量
+
 ```verilog
 uvm_config_db#(int)::set(this, "env", "verbosity", UVM_MEDIUM);
 uvm_config_db#(string)::set(this, "env.agent", "mode", "MASTER");
 ```
 
-### 3. 瀵硅薄/鍙ユ焺
+### 3. 对象/句柄
 
 ```verilog
 my_config cfg;
@@ -83,12 +89,13 @@ uvm_config_db#(my_config)::set(this, "env", "cfg", cfg);
 
 ---
 
-## 甯哥敤棰勫畾涔夐厤缃?
+## 常用预定义配置
+
 ```verilog
-// is_active: 鍒涘缓driver
+// is_active: 创建driver
 uvm_config_db#(uvm_active_passive_enum)::set(this, "env.agent", "is_active", UVM_PASSIVE);
 
-// sequence鏉愭枡
+// sequence材料
 uvm_config_db#(uvm_object_wrapper)::set(this,
     "env.agent.sequencer.main_phase",
     "default_sequence",
@@ -97,25 +104,27 @@ uvm_config_db#(uvm_object_wrapper)::set(this,
 
 ---
 
-## 甯歌閿欒
+## 常见错误
 
 ```verilog
-// 閿欒1锛氳矾寰勪笉鍖归厤
+// 错误1：路径不匹配
 uvm_config_db#(int)::set(this, "env.agent.drv", "value", 10);
-uvm_config_db#(int)::get(this, "env.agent.driver", "value", v);  // 涓嶅尮閰嶏紒
+uvm_config_db#(int)::get(this, "env.agent.driver", "value", v);  // 不匹配！
 
-// 閿欒2锛氬湪top灞備娇鐢ㄧ浉瀵硅矾寰?uvm_config_db#(virtual dut_if)::set(uvm_root::get(), "env.drv", "vif", vif);
-// 搴旇鐢ㄩ€氶厤绗?uvm_config_db#(virtual dut_if)::set(uvm_root::get(), "*", "vif", vif);
+// 错误2：在top层使用相对路径
+uvm_config_db#(virtual dut_if)::set(uvm_root::get(), "env.drv", "vif", vif);
+// 应该用通配符
+uvm_config_db#(virtual dut_if)::set(uvm_root::get(), "*", "vif", vif);
 ```
 
 ---
 
-tags: #UVM #config_db #鏍稿績
+tags: #UVM #config_db #核心
 
-## 鐩稿叧绗旇
+## 相关笔记
 
-- [[02-UVM/00-鍏ラ棬|UVM 鍏ラ棬]] - UVM 鍩虹鍏ラ棬
-- [[01-Phase鏈哄埗]] - UVM Phase 鏈哄埗
-- [[03-Sequence鏈哄埗]] - Sequence 婵€鍔辩敓鎴?- [[04-缁勪欢]] - UVM 缁勪欢缁撴瀯
-- [[05-Transaction闅忔満涓巆fg鑱斿姩]] - cfg 涓?Transaction 闅忔満鑱斿姩
-
+- [[02-UVM/00-入门|UVM 入门]] - UVM 基础入门
+- [[01-Phase机制]] - UVM Phase 机制
+- [[03-Sequence机制]] - Sequence 激励生成
+- [[04-组件]] - UVM 组件结构
+- [[05-Transaction随机与cfg联动]] - cfg 与 Transaction 随机联动

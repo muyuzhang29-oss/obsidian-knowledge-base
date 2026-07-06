@@ -1,53 +1,62 @@
-﻿---
+---
 tags:
   - tool
   - eda
   - claude
 aliases:
-  - EDA浠跨湡鎶€鑳?  - Claude Code EDA
+  - EDA仿真技能
+  - Claude Code EDA
 ---
 
-# 馃洜锔?Claude Code EDA 浠跨湡鎶€鑳?
-> [!abstract] 姒傝堪
-> 鏈枃妗ｈ褰曚簡 Claude Code 涓厤缃殑 EDA 浠跨湡鎶€鑳斤紝鐢ㄤ簬鑷姩鍖栬繍琛?Cadence xrun 浠跨湡鍜屾煡鐪?SimVision 娉㈠舰銆?
+# 🛠️ Claude Code EDA 仿真技能
+
+> [!abstract] 概述
+> 本文档记录了 Claude Code 中配置的 EDA 仿真技能，用于自动化运行 Cadence xrun 仿真和查看 SimVision 波形。
+
 ---
 
-## 馃枼锔?鐜姒傝
+## 🖥️ 环境概览
 
-> [!info] 绯荤粺閰嶇疆
-> | 缁勪欢 | 璇存槑 |
+> [!info] 系统配置
+> | 组件 | 说明 |
 > |------|------|
-> | **WSL 鍙戣鐗?* | AlmaLinux-8 |
-> | **WSL 鐢ㄦ埛** | muyuEDA / 瀵嗙爜: 1220 |
-> | **EDA 宸ュ叿** | Cadence Xcelium 23.09 |
-> | **宸ュ叿璺緞** | `/opt/eda/cadence/XCELUMMAIN2309/tools/bin/` |
-> | **X11 鏄剧ず** | VcXsrv (Windows) + WSLg (澶囩敤) |
-> | **tmux 浼氳瘽** | muyu (鍦?AlmaLinux-8 鍐? |
+> | **WSL 发行版** | AlmaLinux-8 |
+> | **WSL 用户** | muyuEDA / 密码: 1220 |
+> | **EDA 工具** | Cadence Xcelium 23.09 |
+> | **工具路径** | `/opt/eda/cadence/XCELUMMAIN2309/tools/bin/` |
+> | **X11 显示** | VcXsrv (Windows) + WSLg (备用) |
+> | **tmux 会话** | muyu (在 AlmaLinux-8 内) |
 
 ---
 
-## 馃幆 Skill 1: alma-tmux
+## 🎯 Skill 1: alma-tmux
 
-> [!note] 鐢ㄩ€?> 鎺у埗 AlmaLinux-8 鍐呴儴鐨?tmux 浼氳瘽锛岀渷鍘?`powershell 鈫?wsl 鈫?tmux` 鐨勫眰灞傚祵濂椼€?
-### 瑙﹀彂鏂瑰紡
+> [!note] 用途
+> 控制 AlmaLinux-8 内部的 tmux 会话，省去 `powershell → wsl → tmux` 的层层嵌套。
 
-鎻愬埌浠ヤ笅鍏抽敭璇嶆椂鑷姩瑙﹀彂锛?- `alma`銆乣muyuEDA`銆乣muyu session`
-- 鎯冲湪 AlmaLinux 閲屾墽琛屽懡浠?
-### 鍛戒护妯℃澘
+### 触发方式
 
-> [!example]- 鍙戦€佸懡浠?> ```bash
-> powershell.exe -Command "wsl -d AlmaLinux-8 -u muyuEDA -- tmux send-keys -t muyu '<鍛戒护>' Enter"
+提到以下关键词时自动触发：
+- `alma`、`muyuEDA`、`muyu session`
+- 想在 AlmaLinux 里执行命令
+
+### 命令模板
+
+> [!example]- 发送命令
+> ```bash
+> powershell.exe -Command "wsl -d AlmaLinux-8 -u muyuEDA -- tmux send-keys -t muyu '<命令>' Enter"
 > ```
 
-> [!example]- 鎹曡幏杈撳嚭
+> [!example]- 捕获输出
 > ```bash
-> # 瀹屾暣杈撳嚭
+> # 完整输出
 > powershell.exe -Command "wsl -d AlmaLinux-8 -u muyuEDA -- bash -c 'tmux capture-pane -t muyu -p -S -'"
 >
-> # 鏈€鍚?N 琛?> powershell.exe -Command "wsl -d AlmaLinux-8 -u muyuEDA -- bash -c 'tmux capture-pane -t muyu -p -S - | tail -20'"
+> # 最后 N 行
+> powershell.exe -Command "wsl -d AlmaLinux-8 -u muyuEDA -- bash -c 'tmux capture-pane -t muyu -p -S - | tail -20'"
 > ```
 
-> [!example]- 鐗规畩鎸夐敭
+> [!example]- 特殊按键
 > ```bash
 > # Ctrl+C
 > powershell.exe -Command "wsl -d AlmaLinux-8 -u muyuEDA -- tmux send-keys -t muyu C-c"
@@ -56,50 +65,57 @@ aliases:
 > powershell.exe -Command "wsl -d AlmaLinux-8 -u muyuEDA -- tmux send-keys -t muyu Escape"
 > ```
 
-### 浣跨敤绀轰緥
+### 使用示例
 
 ```
-鎴戯細鍦?alma 閲岃繍琛?htop
-鎴戯細鐪嬬湅 muyu session 鐨勮緭鍑?鎴戯細鍦?AlmaLinux 閲岃涓寘
+我：在 alma 里运行 htop
+我：看看 muyu session 的输出
+我：在 AlmaLinux 里装个包
 ```
 
 ---
 
-## 馃幆 Skill 2: eda-sim
+## 🎯 Skill 2: eda-sim
 
-> [!note] 鐢ㄩ€?> 鑷姩鍖?EDA 浠跨湡娴佺▼锛屽寘鎷繍琛?xrun 浠跨湡鍜屾煡鐪?SimVision 娉㈠舰銆?
-### 瑙﹀彂鏂瑰紡
+> [!note] 用途
+> 自动化 EDA 仿真流程，包括运行 xrun 仿真和查看 SimVision 波形。
 
-鎻愬埌浠ヤ笅鍏抽敭璇嶆椂鑷姩瑙﹀彂锛?- `xrun`銆乣simvision`銆乣simulate`銆乣run test`
-- `waveform`銆乣UVM`銆乣DUT verification`
-- `浠跨湡`銆乣璺戞祴璇昤銆乣鐪嬫尝褰
+### 触发方式
 
-### 鍓嶇疆鏉′欢
+提到以下关键词时自动触发：
+- `xrun`、`simvision`、`simulate`、`run test`
+- `waveform`、`UVM`、`DUT verification`
+- `仿真`、`跑测试`、`看波形`
 
-> [!warning] 鍚姩鍓嶆鏌?> 1. VcXsrv 蹇呴』鍦?Windows 涓婅繍琛?> 2. AlmaLinux-8 鐨?tmux 浼氳瘽 muyu 蹇呴』瀛樺湪
-> 3. DISPLAY 鐜鍙橀噺蹇呴』璁剧疆涓?`localhost:0`
+### 前置条件
 
-### 鍚姩 VcXsrv
+> [!warning] 启动前检查
+> 1. VcXsrv 必须在 Windows 上运行
+> 2. AlmaLinux-8 的 tmux 会话 muyu 必须存在
+> 3. DISPLAY 环境变量必须设置为 `localhost:0`
+
+### 启动 VcXsrv
 
 ```powershell
-# 鍦?PowerShell 涓墽琛?Start-Process 'C:\Program Files (x86)\VcXsrv\vcxsrv.exe' -ArgumentList ':0 -multiwindow -ac -nowgl -listen tcp'
+# 在 PowerShell 中执行
+Start-Process 'C:\Program Files (x86)\VcXsrv\vcxsrv.exe' -ArgumentList ':0 -multiwindow -ac -nowgl -listen tcp'
 ```
 
-### 璁剧疆鏄剧ず
+### 设置显示
 
 ```bash
 export DISPLAY=localhost:0
 ```
 
-### 杩愯浠跨湡
+### 运行仿真
 
-> [!example]- 鍩烘湰 UVM 浠跨湡
+> [!example]- 基本 UVM 仿真
 > ```bash
-> cd /home/muyuEDA/<椤圭洰鐩綍>
+> cd /home/muyuEDA/<项目目录>
 > xrun <top.sv> -uvm -access +r -gui
 > ```
 
-> [!example]- 瀹屾暣绀轰緥
+> [!example]- 完整示例
 > ```bash
 > xrun \
 >   +incdir+./sv \
@@ -111,34 +127,35 @@ export DISPLAY=localhost:0
 >   tb_top.sv
 > ```
 
-### 甯哥敤 xrun 閫夐」
+### 常用 xrun 选项
 
-| 閫夐」 | 璇存槑 |
+| 选项 | 说明 |
 |------|------|
-| `-uvm` | 鍚敤 UVM |
-| `-access +r` | 璇绘潈闄愶紝鐢ㄤ簬娉㈠舰杞偍 |
-| `-gui` | 鎵撳紑 SimVision GUI |
-| `-sv_seed <value>` | 璁剧疆闅忔満绉嶅瓙 |
-| `-sv_lib <library>` | 鍔犺浇 DPI 搴?|
-| `-incdir <dir>` | 鍖呭惈鐩綍 |
-| `-define <macro>` | 瀹氫箟瀹?|
-| `-timescale <scale>` | 璁剧疆鏃堕棿鍗曚綅 |
-| `-exit` | 浠跨湡缁撴潫鍚庨€€鍑?|
-| `+UVM_TESTNAME=<name>` | 鎸囧畾 UVM test |
+| `-uvm` | 启用 UVM |
+| `-access +r` | 读权限，用于波形转储 |
+| `-gui` | 打开 SimVision GUI |
+| `-sv_seed <value>` | 设置随机种子 |
+| `-sv_lib <library>` | 加载 DPI 库 |
+| `-incdir <dir>` | 包含目录 |
+| `-define <macro>` | 定义宏 |
+| `-timescale <scale>` | 设置时间单位 |
+| `-exit` | 仿真结束后退出 |
+| `+UVM_TESTNAME=<name>` | 指定 UVM test |
 
-### 鏌ョ湅娉㈠舰
+### 查看波形
 
-> [!example]- 鐙珛鎵撳紑 SimVision
+> [!example]- 独立打开 SimVision
 > ```bash
 > export DISPLAY=localhost:0
 > simvision -64 /path/to/wave.vcd &
 > ```
 
-> [!example]- SHM 鏁版嵁搴?> ```bash
+> [!example]- SHM 数据库
+> ```bash
 > simvision -64 /path/to/shm_dir &
 > ```
 
-### 鍥炲綊娴嬭瘯
+### 回归测试
 
 ```bash
 for TEST in test1 test2 test3; do
@@ -148,70 +165,74 @@ done
 
 ---
 
-## 馃搨 鏂囦欢璺緞鏄犲皠
+## 📂 文件路径映射
 
-| Windows 璺緞 | WSL 璺緞 |
+| Windows 路径 | WSL 路径 |
 |-------------|---------|
 | `C:\Users\MI\` | `/mnt/c/Users/MI/` |
 | `D:\` | `/mnt/d/` |
 | `E:\` | `/mnt/e/` |
-| WSL 涓荤洰褰?| `/home/muyuEDA/` |
+| WSL 主目录 | `/home/muyuEDA/` |
 
-> [!tip] 鎻愮ず
-> Windows 璺緞鍦?WSL 涓洿鎺ラ€氳繃 `/mnt/` 璁块棶锛屾棤闇€澶嶅埗鏂囦欢銆?
+> [!tip] 提示
+> Windows 路径在 WSL 中直接通过 `/mnt/` 访问，无需复制文件。
+
 ---
 
-## 鉂?甯歌闂
+## ❓ 常见问题
 
-> [!failure]- SimVision 绌虹櫧鎴栧崱椤?> ```powershell
-> # 妫€鏌?VcXsrv 鏄惁杩愯
+> [!failure]- SimVision 空白或卡顿
+> ```powershell
+> # 检查 VcXsrv 是否运行
 > Get-Process vcxsrv
 >
-> # 濡傛灉娌℃湁杩愯锛屽惎鍔ㄥ畠
+> # 如果没有运行，启动它
 > Start-Process 'C:\Program Files (x86)\VcXsrv\vcxsrv.exe' -ArgumentList ':0 -multiwindow -ac -nowgl -listen tcp'
 > ```
 >
-> 鐒跺悗鍦?WSL 涓細
+> 然后在 WSL 中：
 > ```bash
 > export DISPLAY=localhost:0
 > ```
 
-> [!failure]- VcXsrv 杩炴帴澶辫触
-> 1. 纭闃茬伀澧欏凡鏀捐 VcXsrv
-> 2. 浠ョ鐞嗗憳韬唤杩愯 PowerShell锛屾墽琛岋細
+> [!failure]- VcXsrv 连接失败
+> 1. 确认防火墙已放行 VcXsrv
+> 2. 以管理员身份运行 PowerShell，执行：
 > ```powershell
 > New-NetFirewallRule -DisplayName "VcXsrv" -Direction Inbound -Program "C:\Program Files (x86)\VcXsrv\vcxsrv.exe" -Action Allow
 > ```
 
-> [!failure]- xrun 缂栬瘧閿欒
-> - 妫€鏌?include 璺緞锛歚+incdir+./sv`
-> - 纭 UVM 搴撳彲鐢紙Xcelium 鑷甫锛?> - 璁剧疆鏃堕棿鍗曚綅锛歚-timescale 1ns/1ps`
+> [!failure]- xrun 编译错误
+> - 检查 include 路径：`+incdir+./sv`
+> - 确认 UVM 库可用（Xcelium 自带）
+> - 设置时间单位：`-timescale 1ns/1ps`
 
-> [!failure]- 鏉冮檺闂
+> [!failure]- 权限问题
 > ```bash
 > chmod +x <script>
-> ls -la <file>  # 妫€鏌ユ枃浠舵潈闄?> ```
+> ls -la <file>  # 检查文件权限
+> ```
 
 ---
 
-## 馃捑 瀛樺偍绌洪棿
+## 💾 存储空间
 
-| 鍒嗗尯 | 鎬诲閲?| 鍙敤 | 璇存槑 |
+| 分区 | 总容量 | 可用 | 说明 |
 |------|--------|------|------|
-| WSL 鏍圭洰褰?| 1007G | 607G | 瀛樻斁 EDA 宸ュ叿鍜岄」鐩?|
-| E:\ | 932G | 89G | WSL 铏氭嫙纾佺洏瀛樻斁浣嶇疆锛岄渶娉ㄦ剰绌洪棿 |
+| WSL 根目录 | 1007G | 607G | 存放 EDA 工具和项目 |
+| E:\ | 932G | 89G | WSL 虚拟磁盘存放位置，需注意空间 |
 
 ---
 
-## 馃殌 蹇€熷弬鑰?
-> [!done] 鍦?Claude Code 涓殑甯哥敤鎸囦护
+## 🚀 快速参考
+
+> [!done] 在 Claude Code 中的常用指令
 > ```
-> "鍦?alma 閲岃繍琛?xrun tb_top.sv -uvm -gui"   鈫?鑷姩鎵ц浠跨湡
-> "鐪嬬湅娉㈠舰"                                     鈫?鑷姩鎵撳紑 SimVision
-> "鍦?AlmaLinux 閲岃窇涓€涓嬫祴璇?                    鈫?鑷姩瑙﹀彂 eda-sim skill
+> "在 alma 里运行 xrun tb_top.sv -uvm -gui"   → 自动执行仿真
+> "看看波形"                                     → 自动打开 SimVision
+> "在 AlmaLinux 里跑一下测试"                    → 自动触发 eda-sim skill
 > ```
 
 ---
 
-*鏈€鍚庢洿鏂帮細2026-05-15*
-
+*最后更新：2026-05-15*

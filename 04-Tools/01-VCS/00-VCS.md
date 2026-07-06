@@ -1,4 +1,4 @@
----
+﻿---
 tags:
   - Tools
   - VCS
@@ -706,4 +706,3 @@ urg -dir cov/*.vdb -report merged_cov
 
 > [!warning] 注意
 > 仿真运行时的选项必须与编译时一致（如覆盖率选项），否则会报错或数据不完整。
-

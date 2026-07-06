@@ -1,90 +1,90 @@
-﻿---
-tags: [Script, Makefile, 鏋勫缓, 宸ュ叿]
+---
+tags: [Script, Makefile, 构建, 工具]
 created: 2026-04-17
 updated: 2026-06-02
 ---
 
 # 00-Makefile
 
-tags: #Makefile #鏋勫缓 #鑷姩鍖?
+tags: #Makefile #构建 #自动化
 
-## Makefile 鍩虹
+## Makefile 基础
 
-Makefile 鏄?Unix/Linux 绯荤粺鐨勬瀯寤哄伐鍏凤紝鐢ㄤ簬鑷姩鍖栫紪璇戙€佹祴璇曞拰楠岃瘉娴佺▼銆?
+Makefile 是 Unix/Linux 系统的构建工具，用于自动化编译、测试和验证流程。
 
-## 鍩烘湰璇硶
+## 基本语法
 
 ```makefile
-# 娉ㄩ噴
-# 鍙橀噺瀹氫箟
+# 注释
+# 变量定义
 VAR = value
 
-# 鐩爣: 渚濊禆
+# 目标: 依赖
 target: dependencies
     command1
     command2
 
-# 浼洰鏍?
+# 伪目标
 .PHONY: clean all
 
-# 甯哥敤鍙橀噺
-$@   # 鐩爣鏂囦欢
-$<   # 绗竴涓緷璧?
-$^   # 鎵€鏈変緷璧?
-$?   # 鎵€鏈夋瘮鐩爣鏂扮殑渚濊禆
+# 常用变量
+$@   # 目标文件
+$<   # 第一个依赖
+$^   # 所有依赖
+$?   # 所有比目标新的依赖
 ```
 
-## 鍙橀噺
+## 变量
 
-### 瀹氫箟鍜岃祴鍊?
+### 定义和赋值
 
 ```makefile
-# 绠€鍗曡祴鍊?(绔嬪嵆灞曞紑)
+# 简单赋值 (立即展开)
 VAR := value
 
-# 閫掑綊璧嬪€?(寤惰繜灞曞紑)
+# 递归赋值 (延迟展开)
 VAR = value
 
-# 鏉′欢璧嬪€?
+# 条件赋值
 VAR ?= default_value
 
-# 杩藉姞
+# 追加
 VAR += additional_value
 ```
 
-### 鑷姩鍙橀噺
+### 自动变量
 
 ```makefile
-# 绀轰緥
+# 示例
 target: a.o b.o
     gcc $^ -o $@    # gcc a.o b.o -o target
 ```
 
-### 甯哥敤鍙橀噺
+### 常用变量
 
 ```makefile
-# 宸ュ叿閾?
+# 工具链
 CC = gcc
 CXX = g++
 VLOG = vlog
 VSIM = vsim
 
-# 鏍囧織
+# 标志
 CFLAGS = -Wall -g
 LDFLAGS = -lm
 ```
 
-## 瑙勫垯
+## 规则
 
-### 妯″紡瑙勫垯
+### 模式规则
 
 ```makefile
-# 缂栬瘧 .c 鍒?.o
+# 编译 .c 到 .o
 %.o: %.c
     $(CC) $(CFLAGS) -c $< -o $@
 ```
 
-### 闈欐€佹ā寮忚鍒?
+### 静态模式规则
 
 ```makefile
 OBJS = main.o utils.o
@@ -92,17 +92,17 @@ $(OBJS): %.o: %.c
     $(CC) $(CFLAGS) -c $< -o $@
 ```
 
-### 闅愬惈瑙勫垯
+### 隐含规则
 
 ```makefile
-# 鑷姩鎺ㄥ
+# 自动推导
 main.o: main.c main.h utils.h
-# make 鑷姩浣跨敤: $(CC) $(CFLAGS) -c main.c -o main.o
+# make 自动使用: $(CC) $(CFLAGS) -c main.c -o main.o
 ```
 
-## UVM 浠跨湡 Makefile
+## UVM 仿真 Makefile
 
-### 鍩虹妯℃澘
+### 基础模板
 
 ```makefile
 # ============== Configuration ==============
@@ -251,7 +251,7 @@ sim_vcs:
 	       -l sim.log
 ```
 
-### 瀹屾暣楠岃瘉鐜 Makefile
+### 完整验证环境 Makefile
 
 ```makefile
 # ============== Variables ==============
@@ -372,61 +372,60 @@ wave:
 		-ntb_opts uvm-1.2 &
 ```
 
-## 甯哥敤鎶€宸?
+## 常用技巧
 
-### 鏉′欢鍒ゆ柇
+### 条件判断
 
 ```makefile
-# 鍒ゆ柇鍙橀噺鏄惁瀹氫箟
+# 判断变量是否定义
 ifdef DEBUG
     CFLAGS += -g -O0
 else
     CFLAGS += -O2
 endif
 
-# 鍒ゆ柇鏂囦欢鏄惁瀛樺湪
+# 判断文件是否存在
 ifeq ($(wildcard $(CONFIG_FILE)),)
     $(error CONFIG_FILE not found)
 endif
 ```
 
-### 鍑芥暟
+### 函数
 
 ```makefile
-# 鏇挎崲鍚庣紑
+# 替换后缀
 $(SRCS:.c=.o)      # a.c b.c -> a.o b.o
 
-# 杩囨护
-$(filter %.sv,$(FILES))  # 鍙繚鐣?.sv 鏂囦欢
+# 过滤
+$(filter %.sv,$(FILES))  # 只保留 .sv 文件
 
-# 閬嶅巻
+# 遍历
 $(foreach var,list,expr)
 
-# 妯″紡鏇挎崲
+# 模式替换
 $(patsubst pattern,replacement,text)
 ```
 
-### 璋冭瘯
+### 调试
 
 ```makefile
-# 鎵撳嵃鍙橀噺
+# 打印变量
 $(info $(VAR))
 
-# 鎵撳嵃璀﹀憡
+# 打印警告
 $(warning message)
 
-# 鎵撳嵃閿欒
+# 打印错误
 $(error message)
 ```
 
-## 鐩稿叧閾炬帴
+## 相关链接
 
-- [[00-Python鑴氭湰]] - Python 鑴氭湰
-- [[01-Log瑙ｆ瀽]] - 鏃ュ織瑙ｆ瀽
-- [[00-鎬荤储寮昡] - 杩斿洖鎬荤储寮?
+- [[00-Python脚本]] - Python 脚本
+- [[01-Log解析]] - 日志解析
+- [[00-总索引]] - 返回总索引
 
 ---
 
-*鍒涘缓鏃堕棿: 2026-04-17*
-*鏇存柊鏃堕棿: 2026-04-17*
-
+*创建时间: 2026-04-17*
+*更新时间: 2026-04-17*

@@ -1663,4 +1663,3 @@ end
 - [[03-Protocol/10-握手协议]] - Valid-Ready 握手与 FIFO 流控的结合
 - [[09-Notes/05-流水线设计]] - 流水线中的 FIFO 缓冲应用
 - **时隙（Time Slot）** - 见本文第 4 章，异步 FIFO 中数据传输的时间窗口分析
-

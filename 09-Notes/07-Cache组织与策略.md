@@ -1,163 +1,162 @@
-﻿---
+---
 tags: [Architecture, Cache, MMU, VIPT, PIPT]
 created: 2026-07-06
 ---
 
-# Cache 缁勭粐鏂瑰紡涓庣瓥鐣?
+# Cache 组织方式与策略
 
-> cache 鎺у埗鍣ㄦ牴鎹湴鍧€鍒ゆ柇鍛戒腑鐨勪緷鎹細铏氭嫙鍦板潃 (VA) 杩樻槸鐗╃悊鍦板潃 (PA)銆?
+> cache 控制器根据地址判断命中的依据：虚拟地址 (VA) 还是物理地址 (PA)。
 
-CPU 鍙戝嚭铏氭嫙鍦板潃 鈫?MMU 杞崲鎴愮墿鐞嗗湴鍧€ 鈫?璇诲彇鏁版嵁銆俢ache 鍙敤 VA銆丳A 鎴栦袱鑰呯粍鍚堛€?
+CPU 发出虚拟地址 → MMU 转换成物理地址 → 读取数据。cache 可用 VA、PA 或两者组合。
 
-## 1. VIVT锛堣櫄鎷熼珮閫熺紦瀛橈級
+## 1. VIVT（虚拟高速缓存）
 
-Index 鍜?Tag 鍧囧彇鑷櫄鎷熷湴鍧€銆?
+Index 和 Tag 均取自虚拟地址。
 
 ```mermaid
 flowchart LR
-    CPU[CPU] --> VA[铏氭嫙鍦板潃]
-    VA --> CACHE[CACHE<br/>Index + Tag 閮界敤 VA]
-    CACHE -->|HIT| DATA[杩斿洖鏁版嵁]
-    CACHE -->|MISS| MMU[MMU 杞崲]
-    MMU --> MEM[涓诲瓨]
+    CPU[CPU] --> VA[虚拟地址]
+    VA --> CACHE[CACHE<br/>Index + Tag 都用 VA]
+    CACHE -->|HIT| DATA[返回数据]
+    CACHE -->|MISS| MMU[MMU 转换]
+    MMU --> MEM[主存]
 ```
 
-**浼樼偣**锛氭棤闇€鍦板潃杞崲鍗冲彲鏌?cache锛岄€熷害蹇€?
+**优点**：无需地址转换即可查 cache，速度快。
 
-**闂 1锛氭涔?* 鈥?鐩稿悓 VA 鏄犲皠涓嶅悓 PA
+**问题 1：歧义** — 相同 VA 映射不同 PA
 
 ```mermaid
 flowchart LR
-    T1["绾跨▼ A<br/>VA=0x1000 鈫?PA=0xA000<br/>鏁版嵁: 1234"] --> CL["Cache Line<br/>Tag=0x1000"]
-    T2["绾跨▼ B<br/>VA=0x1000 鈫?PA=0xB000<br/>鏁版嵁: 5678"] --> CL
-    CL --> ERR["B 鍛戒腑 A 鐨勬棫鏁版嵁!<br/>(姝т箟)"]
+    T1["线程 A<br/>VA=0x1000 → PA=0xA000<br/>数据: 1234"] --> CL["Cache Line<br/>Tag=0x1000"]
+    T2["线程 B<br/>VA=0x1000 → PA=0xB000<br/>数据: 5678"] --> CL
+    CL --> ERR["B 命中 A 的旧数据!<br/>(歧义)"]
     style ERR fill:#f99,stroke:#c33
 ```
 
-- 瑙ｅ喅锛氬垏鎹㈡椂 flush cache锛堝啓鍥炶剰鏁版嵁 + 鏃犳晥鍖栵級
+- 解决：切换时 flush cache（写回脏数据 + 无效化）
 
-**闂 2锛氬埆鍚?* 鈥?涓嶅悓 VA 鏄犲皠鐩稿悓 PA锛屼笖 index 涓嶅悓
+**问题 2：别名** — 不同 VA 映射相同 PA，且 index 不同
 
 ```mermaid
 flowchart LR
-    VA1["VA=0x2000<br/>Index=0x200"] --> CL1["Cache Line 0x200<br/>鏁版嵁: 1234"]
-    VA2["VA=0x4000<br/>Index=0x400"] --> CL2["Cache Line 0x400<br/>鏁版嵁: 1234"]
-    PA["PA=0x8000<br/>鏁版嵁: 1234"] --> VA1
+    VA1["VA=0x2000<br/>Index=0x200"] --> CL1["Cache Line 0x200<br/>数据: 1234"]
+    VA2["VA=0x4000<br/>Index=0x400"] --> CL2["Cache Line 0x400<br/>数据: 1234"]
+    PA["PA=0x8000<br/>数据: 1234"] --> VA1
     PA --> VA2
-    MOD["CPU 鏀?VA=0x2000 鈫?5678"] --> CL1
-    READ["璇?VA=0x4000"] --> CL2
-    READ --> ERR["寰楀埌鏃ф暟鎹?1234<br/>(鍒悕涓嶄竴鑷?"]
+    MOD["CPU 改 VA=0x2000 → 5678"] --> CL1
+    READ["读 VA=0x4000"] --> CL2
+    READ --> ERR["得到旧数据 1234<br/>(别名不一致)"]
     style ERR fill:#f99,stroke:#c33
 ```
 
-- 瑙ｅ喅锛歯ocache 鏄犲皠銆乫lush cache銆佷繚璇?VA 绱㈠紩鍒扮浉鍚?cache line
+- 解决：nocache 映射、flush cache、保证 VA 索引到相同 cache line
 
-**缁撹**锛歏IVT 闂澶锛屽凡鍩烘湰娣樻卑銆?
+**结论**：VIVT 问题太多，已基本淘汰。
 
-## 2. PIPT锛堢墿鐞嗛珮閫熺紦瀛橈級
+## 2. PIPT（物理高速缓存）
 
-Index 鍜?Tag 鍧囧彇鑷墿鐞嗗湴鍧€銆?
+Index 和 Tag 均取自物理地址。
 
 ```mermaid
 flowchart LR
-    CPU[CPU] --> VA[铏氭嫙鍦板潃]
-    VA --> MMU[MMU 杞崲]
-    MMU --> PA[鐗╃悊鍦板潃]
-    PA --> CACHE[CACHE<br/>Index + Tag 閮界敤 PA]
-    CACHE -->|HIT| DATA[杩斿洖鏁版嵁]
-    CACHE -->|MISS| MEM[涓诲瓨]
-    MMU --> TLB[TLB<br/>鍔犻€?VA鈫扨A]
+    CPU[CPU] --> VA[虚拟地址]
+    VA --> MMU[MMU 转换]
+    MMU --> PA[物理地址]
+    PA --> CACHE[CACHE<br/>Index + Tag 都用 PA]
+    CACHE -->|HIT| DATA[返回数据]
+    CACHE -->|MISS| MEM[主存]
+    MMU --> TLB[TLB<br/>加速 VA→PA]
 ```
 
-**浼樼偣**锛?
-- Tag 鍞竴 鈫?鏃犳涔?
-- Index 鍞竴 鈫?鏃犲紓鍚?
-- 杞欢鏃犻渶缁存姢
+**优点**：
+- Tag 唯一 → 无歧义
+- Index 唯一 → 无异名
+- 软件无需维护
 
-**缂虹偣**锛?
-- 闇€绛夊緟 VA鈫扨A 杞崲鍚庢墠鑳芥煡 cache
-- 纭欢澶嶆潅
+**缺点**：
+- 需等待 VA→PA 转换后才能查 cache
+- 硬件复杂
 
-**鐜扮姸**锛歀inux 涓?PIPT 绠＄悊鍑芥暟鍏ㄤ负绌猴紝鏃犻渶缁存姢銆傜幇浠?CPU 鏅亶閲囩敤銆?
+**现状**：Linux 中 PIPT 管理函数全为空，无需维护。现代 CPU 普遍采用。
 
-## 3. VIPT锛堢墿鐞嗘爣璁扮殑铏氭嫙楂橀€熺紦瀛橈級
+## 3. VIPT（物理标记的虚拟高速缓存）
 
-Index 鍙栬嚜铏氭嫙鍦板潃锛孴ag 鍙栬嚜鐗╃悊鍦板潃銆傛煡 cache 涓?MMU 杞崲**鍚屾椂杩涜**銆?
+Index 取自虚拟地址，Tag 取自物理地址。查 cache 与 MMU 转换**同时进行**。
 
 ```mermaid
 flowchart LR
-    CPU[CPU] --> VA[铏氭嫙鍦板潃]
-    VA --> PATH1["鎻愬彇 Index<br/>(鏉ヨ嚜 VA)"]
-    VA --> PATH2["MMU 杞崲<br/>(鍚屾椂杩涜)"]
-    PATH1 --> CACHE[CACHE<br/>鐢?VA Index 鏌ヨ]
-    PATH2 --> PA[鐗╃悊鍦板潃]
-    PA --> TAG["鎻愬彇 Tag<br/>(鏉ヨ嚜 PA)"]
-    CACHE --> CMP["姣旇緝 Tag"]
+    CPU[CPU] --> VA[虚拟地址]
+    VA --> PATH1["提取 Index<br/>(来自 VA)"]
+    VA --> PATH2["MMU 转换<br/>(同时进行)"]
+    PATH1 --> CACHE[CACHE<br/>用 VA Index 查行]
+    PATH2 --> PA[物理地址]
+    PA --> TAG["提取 Tag<br/>(来自 PA)"]
+    CACHE --> CMP["比较 Tag"]
     TAG --> CMP
-    CMP -->|鍖归厤| HIT[HIT]
-    CMP -->|涓嶅尮閰峾 MISS[MISS 鈫?涓诲瓨]
+    CMP -->|匹配| HIT[HIT]
+    CMP -->|不匹配| MISS[MISS → 主存]
 ```
 
-**浼樼偣**锛氭€ц兘濂斤紙骞惰锛夛紝鏃犳涔夛紙tag 鏄墿鐞嗙殑锛夈€?
+**优点**：性能好（并行），无歧义（tag 是物理的）。
 
 ```mermaid
 flowchart TD
-    subgraph NoAlias[涓€璺?鈮?4KB: 鏃犲紓鍚峕
-        N1["VA 鍜?PA 鐨?[11:0] 鐩稿悓<br/>(椤靛唴鍋忕Щ)"] --> N2["Index 鍙栬嚜 [11:x]<br/>涓嶈秴鍑洪〉杈圭晫"]
-        N2 --> N3["绛変环浜?PIPT<br/>鏃犻渶棰濆缁存姢"]
+    subgraph NoAlias[一路 ≤ 4KB: 无异名]
+        N1["VA 和 PA 的 [11:0] 相同<br/>(页内偏移)"] --> N2["Index 取自 [11:x]<br/>不超出页边界"]
+        N2 --> N3["等价于 PIPT<br/>无需额外维护"]
     end
-    subgraph Alias[涓€璺?> 4KB: 鍙兘鍒悕]
-        A1["渚? 8KB 鐩存帴鏄犲皠<br/>256B line"] --> A2["Index 闇€瑕?bit12<br/>VA bit12 鈮?PA bit12"]
-        A2 --> A3["鐩稿悓 PA 鏁版嵁<br/>鍔犺浇鍒颁笉鍚?cache line"]
+    subgraph Alias[一路 > 4KB: 可能别名]
+        A1["例: 8KB 直接映射<br/>256B line"] --> A2["Index 需要 bit12<br/>VA bit12 ≠ PA bit12"]
+        A2 --> A3["相同 PA 数据<br/>加载到不同 cache line"]
     end
 ```
 
-**瑙ｅ喅鍒悕**锛?
-- 寤虹珛鍏变韩鏄犲皠鏃讹紝杩斿洖鐨勮櫄鎷熷湴鍧€鎸?cache size 瀵归綈11
-- 澶氳矾缁勭浉鑱旀椂鎸変竴璺ぇ灏忓榻?
+**解决别名**：
+- 建立共享映射时，返回的虚拟地址按 cache size 对齐11
+- 多路组相联时按一路大小对齐
 
-## 4. 涓夌鏂瑰紡瀵规瘮
+## 4. 三种方式对比
 
 ```mermaid
 flowchart TB
     subgraph VIVT_C[VIVT]
-        V1["VA 鈫?Tag(VA) + Index(VA)"]
+        V1["VA → Tag(VA) + Index(VA)"]
     end
     subgraph PIPT_C[PIPT]
-        P1["VA 鈫?MMU 鈫?PA 鈫?Tag(PA) + Index(PA)"]
+        P1["VA → MMU → PA → Tag(PA) + Index(PA)"]
     end
     subgraph VIPT_C[VIPT]
-        I1["VA Index 鈫?Cache<br/>VA 鈫?MMU 鈫?PA Tag 鈫?姣旇緝"]
+        I1["VA Index → Cache<br/>VA → MMU → PA Tag → 比较"]
     end
 ```
 
-| 鐗规€?        | VIVT | PIPT | VIPT         |
+| 特性         | VIVT | PIPT | VIPT         |
 | ---------- | ---- | ---- | ------------ |
-| Index 鏉ユ簮   | VA   | PA   | VA           |
-| Tag 鏉ユ簮     | VA   | PA   | PA           |
-| 姝т箟闂       | 鉂?鏈? | 鉁?鏃? | 鉁?鏃?         |
-| 鍒悕闂       | 鉂?鏈? | 鉁?鏃? | 鈿狅笍 涓€璺?4KB 鏃舵湁 |
-| 鏌?cache 鏃舵満 | 杞崲鍓? | 杞崲鍚? | 鍚屾椂           |
-| 杞欢缁存姢鎴愭湰     | 楂?   | 鏃?   | 浣?           |
-| 褰撳墠浣跨敤       | 娣樻卑   | 甯歌   | 甯歌锛堜竴璺墹4KB鏃讹級  |
+| Index 来源   | VA   | PA   | VA           |
+| Tag 来源     | VA   | PA   | PA           |
+| 歧义问题       | ❌ 有  | ✅ 无  | ✅ 无          |
+| 别名问题       | ❌ 有  | ✅ 无  | ⚠️ 一路>4KB 时有 |
+| 查 cache 时机 | 转换前  | 转换后  | 同时           |
+| 软件维护成本     | 高    | 无    | 低            |
+| 当前使用       | 淘汰   | 常见   | 常见（一路≤4KB时）  |
 
-## 5. 琛ュ厖锛歍LB
+## 5. 补充：TLB
 
 ```mermaid
 flowchart LR
-    CPU[CPU] --> VA[铏氭嫙鍦板潃]
-    VA --> TLB{"TLB<br/>(VA鈫扨A 缂撳瓨)"}
-    TLB -->|HIT| PA1[鐗╃悊鍦板潃 鈫?Cache]
-    TLB -->|MISS| PT[鏌ラ〉琛?br/>鎱㈤€熻矾寰刔
-    PT --> PA2[鐗╃悊鍦板潃]
-    PT --> TLB[鏇存柊 TLB]
+    CPU[CPU] --> VA[虚拟地址]
+    VA --> TLB{"TLB<br/>(VA→PA 缓存)"}
+    TLB -->|HIT| PA1[物理地址 → Cache]
+    TLB -->|MISS| PT[查页表<br/>慢速路径]
+    PT --> PA2[物理地址]
+    PT --> TLB[更新 TLB]
     style TLB fill:#6cf,stroke:#333
 ```
 
-MMU 涓紦瀛?VA鈫扨A 鏄犲皠鍏崇郴鐨勫皬瀹归噺 cache銆傚姞閫熷湴鍧€杞崲銆?
+MMU 中缓存 VA→PA 映射关系的小容量 cache。加速地址转换。
 
 ---
 
-**鍙傝**
-- [[09-Notes/06-Cache鍩虹涓庢槧灏勬柟寮廬] 鈥?鏄犲皠鏂瑰紡涓庣瓥鐣?
-
+**参见**
+- [[09-Notes/06-Cache基础与映射方式]] — 映射方式与策略

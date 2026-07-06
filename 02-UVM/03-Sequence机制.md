@@ -1,20 +1,40 @@
-﻿---
-tags: [UVM, Sequence, 鏈哄埗, 鏍稿績]
+---
+tags: [UVM, Sequence, 机制, 核心]
 created: 2026-05-13
 updated: 2026-06-02
 ---
 
-# UVM Sequence 鏈哄埗
+# UVM Sequence 机制
 
-> UVM涓殑婵€鍔辩敓鎴愪笌鍙戦€佹満鍒?
-## 鏋舵瀯姒傝
+> UVM中的激励生成与发送机制
+
+## 架构概览
 
 ```
-鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?鈹?             Sequencer               鈹?鈹? 鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?鈹?鈹? 鈹?       Sequence Layer          鈹?鈹?鈹? 鈹?  鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹?鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹?       鈹?鈹?鈹? 鈹?  鈹係eq 1  鈹?鈹係eq 2  鈹? ...  鈹?鈹?鈹? 鈹?  鈹斺攢鈹€鈹€鈹攢鈹€鈹€鈹?鈹斺攢鈹€鈹€鈹攢鈹€鈹€鈹?       鈹?鈹?鈹? 鈹?      鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹敇            鈹?鈹?鈹? 鈹?                鈻?             鈹?鈹?鈹? 鈹?     鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?     鈹?鈹?鈹? 鈹?     鈹? Sequence Item  鈹?     鈹?鈹?鈹? 鈹?     鈹?  (Transaction) 鈹?     鈹?鈹?鈹? 鈹?     鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?     鈹?鈹?鈹? 鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹尖攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?鈹?鈹?                鈻?                 鈹?鈹?           鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?           鈹?鈹?           鈹?Driver  鈹?           鈹?鈹?           鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?           鈹?鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?```
+┌──────────────────────────────────────┐
+│              Sequencer               │
+│  ┌────────────────────────────────┐ │
+│  │        Sequence Layer          │ │
+│  │   ┌───────┐ ┌───────┐        │ │
+│  │   │Seq 1  │ │Seq 2  │  ...  │ │
+│  │   └───┬───┘ └───┬───┘        │ │
+│  │       └─────────┬┘            │ │
+│  │                 ▼              │ │
+│  │      ┌─────────────────┐      │ │
+│  │      │  Sequence Item  │      │ │
+│  │      │   (Transaction) │      │ │
+│  │      └────────┬────────┘      │ │
+│  └──────────────┼────────────────┘ │
+│                 ▼                  │
+│            ┌─────────┐            │
+│            │ Driver  │            │
+│            └─────────┘            │
+└──────────────────────────────────────┘
+```
 
 ---
 
-## 1. Transaction 瀹氫箟
+## 1. Transaction 定义
 
 ```verilog
 class my_transaction extends uvm_sequence_item;
@@ -36,7 +56,7 @@ endclass
 
 ---
 
-## 2. Sequence 瀹氫箟
+## 2. Sequence 定义
 
 ```verilog
 class my_sequence extends uvm_sequence #(my_transaction);
@@ -61,23 +81,25 @@ endclass
 
 ---
 
-## 3. 甯哥敤瀹?
-| 瀹?| 璇存槑 |
-|-----|------|
-| `` `uvm_do(item) `` | 鍒涘缓銆侀殢鏈哄寲銆佸彂閫?|
-| `` `uvm_do_with(item, {constraints}) `` | 甯︾害鏉熷彂閫?|
-| `` `uvm_create(item) `` | 浠呭垱寤?|
-| `` `uvm_send(item) `` | 鍙戦€佸凡鍒涘缓鐨?|
+## 3. 常用宏
 
-### 绀轰緥
+| 宏 | 说明 |
+|-----|------|
+| `` `uvm_do(item) `` | 创建、随机化、发送 |
+| `` `uvm_do_with(item, {constraints}) `` | 带约束发送 |
+| `` `uvm_create(item) `` | 仅创建 |
+| `` `uvm_send(item) `` | 发送已创建的 |
+
+### 示例
 
 ```verilog
-// 鍩烘湰
+// 基本
 `uvm_do(req)
 
-// 甯︾害鏉?`uvm_do_with(req, { req.addr >= 0 && req.addr < 'h100; })
+// 带约束
+`uvm_do_with(req, { req.addr >= 0 && req.addr < 'h100; })
 
-// 鍒嗘
+// 分步
 `uvm_create(req)
 assert(req.randomize() with { addr == 0; });
 `uvm_send(req)
@@ -85,9 +107,9 @@ assert(req.randomize() with { addr == 0; });
 
 ---
 
-## 4. 鍚姩 Sequence
+## 4. 启动 Sequence
 
-### 鏂瑰紡1锛歝onfig_db
+### 方式1：config_db
 
 ```verilog
 class my_test extends uvm_test;
@@ -101,7 +123,7 @@ class my_test extends uvm_test;
 endclass
 ```
 
-### 鏂瑰紡2锛歴tart()
+### 方式2：start()
 
 ```verilog
 class my_test extends uvm_test;
@@ -115,27 +137,28 @@ endclass
 
 ---
 
-## 5. Sequencer 浠茶
+## 5. Sequencer 仲裁
 
 ```verilog
-// 璁剧疆浠茶妯″紡
-sqr.set_arbitration(UVM_SEQ_ARB_STRICT_RANDOM);  // 闅忔満
+// 设置仲裁模式
+sqr.set_arbitration(UVM_SEQ_ARB_STRICT_RANDOM);  // 随机
 sqr.set_arbitration(UVM_SEQ_ARB_FIFO);          // FIFO
-sqr.set_arbitration(UVM_SEQ_ARB_PRIORITY);        // 浼樺厛绾?
-// 浼樺厛绾?`uvm_do_pri(req, 100)    // 楂樹紭鍏堢骇
-`uvm_do_pri(req, 50)     // 浣庝紭鍏堢骇
+sqr.set_arbitration(UVM_SEQ_ARB_PRIORITY);        // 优先级
+
+// 优先级
+`uvm_do_pri(req, 100)    // 高优先级
+`uvm_do_pri(req, 50)     // 低优先级
 ```
 
 ---
 
-tags: #UVM #Sequence #Stimulus #鏍稿績
+tags: #UVM #Sequence #Stimulus #核心
 
-## 鐩稿叧绗旇
+## 相关笔记
 
-- [[02-UVM/00-鍏ラ棬|UVM 鍏ラ棬]] - UVM 鍩虹鍏ラ棬
-- [[01-Phase鏈哄埗]] - UVM Phase 鏈哄埗
-- [[02-config_db]] - config_db 閰嶇疆鏈哄埗
-- [[04-缁勪欢]] - UVM 缁勪欢缁撴瀯
-- [[05-Transaction闅忔満涓巆fg鑱斿姩]] - Transaction 闅忔満涓?cfg 鑱斿姩
-- [[06-TLM閫氫俊]] - TLM 閫氫俊鏈哄埗
-
+- [[02-UVM/00-入门|UVM 入门]] - UVM 基础入门
+- [[01-Phase机制]] - UVM Phase 机制
+- [[02-config_db]] - config_db 配置机制
+- [[04-组件]] - UVM 组件结构
+- [[05-Transaction随机与cfg联动]] - Transaction 随机与 cfg 联动
+- [[06-TLM通信]] - TLM 通信机制

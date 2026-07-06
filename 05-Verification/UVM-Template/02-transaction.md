@@ -1,15 +1,18 @@
-﻿---
-tags: [UVM, Verification, 妯℃澘, Transaction]
+---
+tags: [UVM, Verification, 模板, Transaction]
 created: 2026-04-17
 updated: 2026-06-02
 ---
 
-# 02 - Transaction 浜嬪姟绫?
-> UVM 楠岃瘉鐜鐨勬暟鎹ā鍨嬶紝drv/mon/ref_model 鍏辩敤
+# 02 - Transaction 事务类
 
-**璁捐鎬濊矾锛?*
-- 杈撳叆瀛楁锛歞river 濉紝椹卞姩鍒?DUT
-- 杈撳嚭瀛楁锛歮onitor 濉疄闄呭€硷紝ref_model 濉湡鏈涘€?- scoreboard 姣斿涓や釜 transaction 鐨勮緭鍑哄瓧娈?
+> UVM 验证环境的数据模型，drv/mon/ref_model 共用
+
+**设计思路：**
+- 输入字段：driver 填，驱动到 DUT
+- 输出字段：monitor 填实际值，ref_model 填期望值
+- scoreboard 比对两个 transaction 的输出字段
+
 ```verilog
 `ifndef SPI_TRANS_SV
 `define SPI_TRANS_SV
@@ -19,7 +22,8 @@ class spi_trans extends uvm_sequence_item;
     `uvm_object_utils(spi_trans)
 
     // =========================================================================
-    // 杈撳叆瀛楁锛坉river 鈫?DUT锛?    // =========================================================================
+    // 输入字段（driver → DUT）
+    // =========================================================================
 
     typedef enum bit [1:0] {
         WR_CMD      = 2'b01,
@@ -27,20 +31,23 @@ class spi_trans extends uvm_sequence_item;
         RD_DATA_CMD = 2'b11
     } cmd_e;
 
-    rand cmd_e      cmd;           // 鍛戒护绫诲瀷
-    rand bit [7:0]  addr;          // 鐩爣鍦板潃
-    rand bit [7:0]  data[];        // 鍐欐暟鎹?    rand int        data_len;      // 鏁版嵁闀垮害
-    rand bit        rd_en;         // 鏄惁璇绘暟鎹?    rand int        rd_len;        // 璇绘暟鎹暱搴?
-    // =========================================================================
-    // 杈撳嚭瀛楁锛坢onitor/ref_model 濉級
-    // =========================================================================
-
-    bit [7:0]       status_o;      // 鐘舵€佺爜
-    bit [7:0]       data_o[];      // 杩斿洖鏁版嵁
-    bit             error_o;       // 閿欒鏍囧織
+    rand cmd_e      cmd;           // 命令类型
+    rand bit [7:0]  addr;          // 目标地址
+    rand bit [7:0]  data[];        // 写数据
+    rand int        data_len;      // 数据长度
+    rand bit        rd_en;         // 是否读数据
+    rand int        rd_len;        // 读数据长度
 
     // =========================================================================
-    // 鍗忚鎺у埗瀛楁锛堝彲閫夛級
+    // 输出字段（monitor/ref_model 填）
+    // =========================================================================
+
+    bit [7:0]       status_o;      // 状态码
+    bit [7:0]       data_o[];      // 返回数据
+    bit             error_o;       // 错误标志
+
+    // =========================================================================
+    // 协议控制字段（可选）
     // =========================================================================
 
     rand int        spi_mode;
@@ -48,7 +55,7 @@ class spi_trans extends uvm_sequence_item;
     rand int        dummy_cycles;
 
     // =========================================================================
-    // 閿欒娉ㄥ叆瀛楁锛堝彲閫夛級
+    // 错误注入字段（可选）
     // =========================================================================
 
     rand bit        inject_crc_err;
@@ -56,7 +63,8 @@ class spi_trans extends uvm_sequence_item;
     rand bit        inject_invalid_cmd;
 
     // =========================================================================
-    // 鏋勯€犲嚱鏁?    // =========================================================================
+    // 构造函数
+    // =========================================================================
 
     function new(string name = "spi_trans");
         super.new(name);
@@ -64,7 +72,7 @@ class spi_trans extends uvm_sequence_item;
     endfunction
 
     // =========================================================================
-    // 绾︽潫
+    // 约束
     // =========================================================================
 
     constraint c_data_len {
@@ -81,7 +89,7 @@ class spi_trans extends uvm_sequence_item;
     }
 
     // =========================================================================
-    // 姣旇緝鏂规硶锛坰coreboard 鐢級
+    // 比较方法（scoreboard 用）
     // =========================================================================
 
     function bit do_compare(uvm_object rhs, uvm_comparer comparer);
@@ -98,16 +106,17 @@ endclass
 `endif
 ```
 
-**瀛楁鑱岃矗锛?*
+**字段职责：**
 
-| 瀛楁 | driver | monitor | ref_model | scb |
+| 字段 | driver | monitor | ref_model | scb |
 |------|--------|---------|-----------|-----|
-| cmd, addr, data... | 濉?| - | 璇?| - |
-| status_o | - | 濉疄闄呭€?| 濉湡鏈涘€?| 姣斿 |
-| data_o[] | - | 濉疄闄呭€?| 濉湡鏈涘€?| 姣斿 |
-| error_o | - | 濉疄闄呭€?| 濉湡鏈涘€?| 姣斿 |
+| cmd, addr, data... | 填 | - | 读 | - |
+| status_o | - | 填实际值 | 填期望值 | 比对 |
+| data_o[] | - | 填实际值 | 填期望值 | 比对 |
+| error_o | - | 填实际值 | 填期望值 | 比对 |
 
-## 鐩稿叧閾炬帴
+## 相关链接
 
-- [[05-Verification/UVM-Template/00-鎬昏|UVM 妯℃澘鎬昏]] - UVM 楠岃瘉鐜妯℃澘
-- [[01-SV璇硶/02-绫粅绫讳笌闈㈠悜瀵硅薄]] - SystemVerilog 绫?- [[00-鎬荤储寮昡] - 杩斿洖鎬荤储寮?
+- [[05-Verification/UVM-Template/00-总览|UVM 模板总览]] - UVM 验证环境模板
+- [[01-SV语法/02-类|类与面向对象]] - SystemVerilog 类
+- [[00-总索引]] - 返回总索引

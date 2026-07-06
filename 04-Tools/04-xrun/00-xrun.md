@@ -1,86 +1,89 @@
-﻿---
-tags: [Tools, xrun, 浠跨湡]
+---
+tags: [Tools, xrun, 仿真]
 ---
 
 # 00-xrun
 
-> Intel FPGA Verification Suite - 浠跨湡鍣?
-## 姒傝堪
+> Intel FPGA Verification Suite - 仿真器
 
-xrun 鏄?Intel FPGA Verification Suite (IFV) 涓殑缁熶竴浠跨湡鍛戒护锛屾暣鍚堜簡缂栬瘧銆乪laboration 鍜屼豢鐪熸祦绋嬨€?
-## 鍩烘湰璇硶
+## 概述
+
+xrun 是 Intel FPGA Verification Suite (IFV) 中的统一仿真命令，整合了编译、elaboration 和仿真流程。
+
+## 基本语法
 
 ```bash
 xrun [options] <files>
 ```
 
-## 甯哥敤閫夐」
+## 常用选项
 
-### 缂栬瘧閫夐」
+### 编译选项
 
-| 閫夐」 | 璇存槑 |
+| 选项 | 说明 |
 |------|------|
-| `-f <file>` | 璇诲彇 filelist |
-| `-incdir <dir>` | 鍖呭惈鐩綍 |
-| `-define <macro>` | 瀹氫箟瀹?|
-| `-sv` | 鍚敤 SystemVerilog |
-| `-uvm` | 鍚敤 UVM (绛夊悓 -uvmhome) |
-| `-uvmhome <path>` | UVM 搴撹矾寰?|
-| `-uvmversion 1.2` | 鎸囧畾 UVM 鐗堟湰 |
-| `-timescale <ts>` | 鏃堕棿鍒诲害 |
-| `-compile` | 浠呯紪璇?|
+| `-f <file>` | 读取 filelist |
+| `-incdir <dir>` | 包含目录 |
+| `-define <macro>` | 定义宏 |
+| `-sv` | 启用 SystemVerilog |
+| `-uvm` | 启用 UVM (等同 -uvmhome) |
+| `-uvmhome <path>` | UVM 库路径 |
+| `-uvmversion 1.2` | 指定 UVM 版本 |
+| `-timescale <ts>` | 时间刻度 |
+| `-compile` | 仅编译 |
 
-### 浠跨湡閫夐」
+### 仿真选项
 
-| 閫夐」 | 璇存槑 |
+| 选项 | 说明 |
 |------|------|
-| `-R` | 杩愯浠跨湡 |
-| `-seed <seed>` | 闅忔満绉嶅瓙 |
-| `-input <file>` | 杈撳叆鍛戒护鏂囦欢 |
-| `-do "<cmd>"` | 鎵ц鍛戒护 |
-| `-gui` | 鍚姩鍥惧舰鐣岄潰 |
-| `-access +rwc` | 淇″彿璁块棶鏉冮檺 |
+| `-R` | 运行仿真 |
+| `-seed <seed>` | 随机种子 |
+| `-input <file>` | 输入命令文件 |
+| `-do "<cmd>"` | 执行命令 |
+| `-gui` | 启动图形界面 |
+| `-access +rwc` | 信号访问权限 |
 
-### 瑕嗙洊鐜囬€夐」
+### 覆盖率选项
 
-| 閫夐」 | 璇存槑 |
+| 选项 | 说明 |
 |------|------|
-| `-coverage` | 鍚敤瑕嗙洊鐜?|
-| `-coverage all` | 鎵€鏈夎鐩栫巼绫诲瀷 |
-| `-coverage bcestf` | 琛?鍒嗘敮/鏉′欢/FSM/鍒囨崲 |
-| `-covfile <file>` | 瑕嗙洊鐜囬厤缃枃浠?|
-| `-linedebug` | 琛岀骇璋冭瘯 |
+| `-coverage` | 启用覆盖率 |
+| `-coverage all` | 所有覆盖率类型 |
+| `-coverage bcestf` | 行/分支/条件/FSM/切换 |
+| `-covfile <file>` | 覆盖率配置文件 |
+| `-linedebug` | 行级调试 |
 
-### 杈撳嚭閫夐」
+### 输出选项
 
-| 閫夐」 | 璇存槑 |
+| 选项 | 说明 |
 |------|------|
-| `-l <logfile>` | 鏃ュ織鏂囦欢 |
-| `-xmlibdirpath <dir>` | 缂栬瘧搴撶洰褰?|
-| `-errormax <n>` | 鏈€澶ч敊璇暟 |
-| `-quiet` | 闈欓粯妯″紡 |
-| `-verbose` | 璇︾粏杈撳嚭 |
+| `-l <logfile>` | 日志文件 |
+| `-xmlibdirpath <dir>` | 编译库目录 |
+| `-errormax <n>` | 最大错误数 |
+| `-quiet` | 静默模式 |
+| `-verbose` | 详细输出 |
 
 ---
 
-## 甯哥敤鍛戒护
+## 常用命令
 
-### 鍩烘湰缂栬瘧杩愯
+### 基本编译运行
 
 ```bash
-# 缂栬瘧骞惰繍琛?xrun design.sv tb_top.sv -R
+# 编译并运行
+xrun design.sv tb_top.sv -R
 
-# 缂栬瘧 UVM
+# 编译 UVM
 xrun -sv -uvm design.sv tb.sv -R
 
-# 鎸囧畾绉嶅瓙杩愯
+# 指定种子运行
 xrun design.sv tb.sv -R -seed 12345
 ```
 
-### UVM 浠跨湡
+### UVM 仿真
 
 ```bash
-# 瀹屾暣 UVM 浠跨湡
+# 完整 UVM 仿真
 xrun \
     -sv \
     -uvm \
@@ -91,22 +94,24 @@ xrun \
     -l sim.log \
     -R
 
-# 鎸囧畾 UVM 娴嬭瘯
+# 指定 UVM 测试
 xrun -sv -uvm -f filelist.f -R \
     +UVM_TESTNAME=my_test \
     +UVM_VERBOSITY=UVM_MEDIUM
 ```
 
-### 瑕嗙洊鐜囦豢鐪?
+### 覆盖率仿真
+
 ```bash
-# 鍚敤鎵€鏈夎鐩栫巼
+# 启用所有覆盖率
 xrun -sv -uvm -f filelist.f \
     -coverage all \
     -covfile coverage.cfg \
     -linedebug \
     -R
 
-# 鎸囧畾瑕嗙洊鐜囩被鍨?xrun -sv -uvm -f filelist.f \
+# 指定覆盖率类型
+xrun -sv -uvm -f filelist.f \
     -coverage bcesft \
     -seed random \
     -R
@@ -114,7 +119,7 @@ xrun -sv -uvm -f filelist.f \
 
 ---
 
-## 瀹屾暣 Makefile 绀轰緥
+## 完整 Makefile 示例
 
 ```makefile
 # ============== Configuration ==============
@@ -212,7 +217,7 @@ debug:
 
 ---
 
-## Filelist 鏍煎紡
+## Filelist 格式
 
 ```bash
 # filelist.f
@@ -234,59 +239,64 @@ $(UVM_HOME)/src/uvm.sv
 
 ---
 
-## UVM 閰嶇疆
+## UVM 配置
 
-### 鐜鍙橀噺
+### 环境变量
 
 ```bash
 export UVM_HOME=$QUESTA_HOME/verif_src/uvm_1.2
 export PATH=$QUESTA_HOME/bin:$PATH
 ```
 
-### 甯哥敤 + 鍔犲懡浠よ閫夐」
+### 常用 + 加命令行选项
 
 ```bash
-+UVM_TESTNAME=my_test              # 鎸囧畾娴嬭瘯鐢ㄤ緥
-+UVM_VERBOSITY=UVM_MEDIUM          # UVM 鍐椾綑搴?+UVM_OBJECTION_TRACE              # objection 杩借釜
-+UVM_PHASE_TRACE                  # phase 杩借釜
-+UVM_MAX_QUIT_COUNT=5             # 鏈€澶ч€€鍑鸿鏁?+ntb_random_seed=12345            # 闅忔満绉嶅瓙
++UVM_TESTNAME=my_test              # 指定测试用例
++UVM_VERBOSITY=UVM_MEDIUM          # UVM 冗余度
++UVM_OBJECTION_TRACE              # objection 追踪
++UVM_PHASE_TRACE                  # phase 追踪
++UVM_MAX_QUIT_COUNT=5             # 最大退出计数
++ntb_random_seed=12345            # 随机种子
 ```
 
 ---
 
-## 甯歌闂
+## 常见问题
 
-### 1. UVM 鐗堟湰涓嶅尮閰?
+### 1. UVM 版本不匹配
+
 ```bash
-# 瑙ｅ喅鏂规锛氭寚瀹氭纭殑 UVM 璺緞
+# 解决方案：指定正确的 UVM 路径
 xrun -sv -uvmhome CDNA -f filelist.f -R
-# 鎴?xrun -sv -uvm -uvmhome $QUESTA_HOME/verif_src/uvm_1.2 -f filelist.f -R
+# 或
+xrun -sv -uvm -uvmhome $QUESTA_HOME/verif_src/uvm_1.2 -f filelist.f -R
 ```
 
-### 2. 瑕嗙洊鐜囨枃浠朵笉瀛樺湪
+### 2. 覆盖率文件不存在
 
 ```bash
-# 纭繚鐩綍瀛樺湪涓旀湁鍐欏叆鏉冮檺
+# 确保目录存在且有写入权限
 mkdir -p coverage
 xrun -coverage all -covfile coverage.cfg -f filelist.f -R
 ```
 
-### 3. 浠跨湡瓒呮椂
+### 3. 仿真超时
 
 ```bash
-# 澧炲姞瓒呮椂鏃堕棿
+# 增加超时时间
 xrun -R +UVM_TESTNAME=long_test +timeout=10000
 ```
 
 ---
 
-## 鐩稿叧閾炬帴
+## 相关链接
 
-- [[00-imc]] - 瑕嗙洊鐜囧垎鏋愬伐鍏?- [[00-甯哥敤鍛戒护]] - Linux 鍛戒护
-- [[00-Makefile]] - Makefile 妯℃澘
-- [[00-鎬荤储寮昡] - 杩斿洖鎬荤储寮?
+- [[00-imc]] - 覆盖率分析工具
+- [[00-常用命令]] - Linux 命令
+- [[00-Makefile]] - Makefile 模板
+- [[00-总索引]] - 返回总索引
+
 ---
 
-*鍒涘缓鏃堕棿: 2026-04-17*
-*鏇存柊鏃堕棿: 2026-04-17*
-
+*创建时间: 2026-04-17*
+*更新时间: 2026-04-17*

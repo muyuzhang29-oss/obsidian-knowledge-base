@@ -1,128 +1,136 @@
-﻿---
-tags: [Tools, imc, 瑕嗙洊鐜嘳
+---
+tags: [Tools, imc, 覆盖率]
 ---
 
 # 00-imc
 
-> Integrated Coverage - 瑕嗙洊鐜囧垎鏋愬伐鍏?
-## 姒傝堪
+> Integrated Coverage - 覆盖率分析工具
 
-imc (Integrated Coverage Manager) 鏄?Intel FPGA Verification Suite 涓殑瑕嗙洊鐜囧垎鏋愬拰鎶ュ憡宸ュ叿锛岀敤浜庢煡鐪嬨€佸悎骞跺拰鍒嗘瀽浠跨湡瑕嗙洊鐜囨暟鎹€?
-## 鍩烘湰璇硶
+## 概述
+
+imc (Integrated Coverage Manager) 是 Intel FPGA Verification Suite 中的覆盖率分析和报告工具，用于查看、合并和分析仿真覆盖率数据。
+
+## 基本语法
 
 ```bash
 imc [options]
 ```
 
-### 甯哥敤妯″紡
+### 常用模式
 
-| 妯″紡 | 璇存槑 |
+| 模式 | 说明 |
 |------|------|
-| imc (鏃犲弬鏁? | 鍚姩 GUI |
-| imc -batch | 鎵瑰鐞嗘ā寮?|
-| imc -load | 鍔犺浇瑕嗙洊鐜囨暟鎹簱 |
-| imc -merge | 鍚堝苟瑕嗙洊鐜?|
-| imc -code | 鐢熸垚浠ｇ爜瑕嗙洊鐜囨姤鍛?|
-| imc -html | 鐢熸垚 HTML 鎶ュ憡 |
+| imc (无参数) | 启动 GUI |
+| imc -batch | 批处理模式 |
+| imc -load | 加载覆盖率数据库 |
+| imc -merge | 合并覆盖率 |
+| imc -code | 生成代码覆盖率报告 |
+| imc -html | 生成 HTML 报告 |
 
 ---
 
-## 鍛戒护琛岄€夐」
+## 命令行选项
 
-### 鍔犺浇鍜屼繚瀛?
-| 閫夐」 | 璇存槑 |
+### 加载和保存
+
+| 选项 | 说明 |
 |------|------|
-| `-load <db>` | 鍔犺浇瑕嗙洊鐜囨暟鎹簱 |
-| `-save <db>` | 淇濆瓨瑕嗙洊鐜囨暟鎹簱 |
-| `-session <file>` | 鍔犺浇浼氳瘽鏂囦欢 |
-| `-out <dir>` | 杈撳嚭鐩綍 |
+| `-load <db>` | 加载覆盖率数据库 |
+| `-save <db>` | 保存覆盖率数据库 |
+| `-session <file>` | 加载会话文件 |
+| `-out <dir>` | 输出目录 |
 
-### 鍚堝苟
+### 合并
 
-| 閫夐」 | 璇存槑 |
+| 选项 | 说明 |
 |------|------|
-| `-merge` | 鍚堝苟妯″紡 |
-| `-out <db>` | 鍚堝苟杈撳嚭鏂囦欢 |
-| `-input <db1,db2,...>` | 杈撳叆鏂囦欢鍒楄〃 |
-| `-鐏屽叆 <name>=<value>` | 鍚堝苟閫夐」 |
+| `-merge` | 合并模式 |
+| `-out <db>` | 合并输出文件 |
+| `-input <db1,db2,...>` | 输入文件列表 |
+| `-灌入 <name>=<value>` | 合并选项 |
 
-### 鎶ュ憡鐢熸垚
+### 报告生成
 
-| 閫夐」 | 璇存槑 |
+| 选项 | 说明 |
 |------|------|
-| `-code` | 鐢熸垚浠ｇ爜瑕嗙洊鐜囨姤鍛?|
-| `-detail` | 璇︾粏鎶ュ憡 |
-| `-html` | 鐢熸垚 HTML 鎶ュ憡 |
-| `-execRep` | 鎵ц鎶ュ憡鐢熸垚鍚庢墦寮€ |
-| `-cvg` | 鍔熻兘瑕嗙洊鐜囨姤鍛?|
-| `-show tests` | 鏄剧ず娴嬭瘯鍒楄〃 |
+| `-code` | 生成代码覆盖率报告 |
+| `-detail` | 详细报告 |
+| `-html` | 生成 HTML 报告 |
+| `-execRep` | 执行报告生成后打开 |
+| `-cvg` | 功能覆盖率报告 |
+| `-show tests` | 显示测试列表 |
 
-### 杩囨护
+### 过滤
 
-| 閫夐」 | 璇存槑 |
+| 选项 | 说明 |
 |------|------|
-| `-annotate` | 鐢熸垚娉ㄩ噴鏂囦欢 |
-| `-tests <test1,test2>` | 鎸囧畾娴嬭瘯 |
-| `-modules <mod1,mod2>` | 鎸囧畾妯″潡 |
-| `-lines <n>` | 鏈€灏忚瑕嗙洊鐜?|
+| `-annotate` | 生成注释文件 |
+| `-tests <test1,test2>` | 指定测试 |
+| `-modules <mod1,mod2>` | 指定模块 |
+| `-lines <n>` | 最小行覆盖率 |
 
 ---
 
-## 甯哥敤鍛戒护
+## 常用命令
 
-### 鍚姩 GUI
+### 启动 GUI
 
 ```bash
-# 鐩存帴鍚姩 GUI
+# 直接启动 GUI
 imc
 
-# 鍔犺浇宸叉湁鏁版嵁搴?imc -load coverage/verilog.ucdb
+# 加载已有数据库
+imc -load coverage/verilog.ucdb
 
-# 鍔犺浇骞舵墦寮€
+# 加载并打开
 imc -load coverage/test.ucdb -session my_session.ses
 ```
 
-### 鍚堝苟瑕嗙洊鐜囨暟鎹簱
+### 合并覆盖率数据库
 
 ```bash
-# 鍚堝苟澶氫釜娴嬭瘯鐨勮鐩栫巼
+# 合并多个测试的覆盖率
 imc -merge \
     -input "coverage/test1.ucdb,coverage/test2.ucdb,coverage/test3.ucdb" \
     -out coverage/merged.ucdb
 
-# 浣跨敤閫氶厤绗?imc -merge \
+# 使用通配符
+imc -merge \
     -input coverage/*.ucdb \
     -out coverage/merged.ucdb
 ```
 
-### 鐢熸垚鎶ュ憡
+### 生成报告
 
 ```bash
-# 鐢熸垚璇︾粏鎶ュ憡
+# 生成详细报告
 imc -load coverage/merged.ucdb \
     -code -detail \
     -out coverage/report
 
-# 鐢熸垚 HTML 鎶ュ憡
+# 生成 HTML 报告
 imc -load coverage/merged.ucdb \
     -html \
     -execRep \
     -out coverage/html_report
 
-# 鐢熸垚鍔熻兘瑕嗙洊鐜囨姤鍛?imc -load coverage/merged.ucdb \
+# 生成功能覆盖率报告
+imc -load coverage/merged.ucdb \
     -cvg \
     -out coverage/cvg_report
 ```
 
-### 鎵瑰鐞嗘ā寮?
+### 批处理模式
+
 ```bash
-# 鐢熸垚鎶ュ憡鍒版枃浠?imc -batch \
+# 生成报告到文件
+imc -batch \
     -load coverage/merged.ucdb \
     -code -detail \
     -out coverage/report.txt \
     2>&1 | tee imc.log
 
-# 鐢熸垚娴嬭瘯鍒楄〃
+# 生成测试列表
 imc -batch \
     -load coverage/merged.ucdb \
     -show tests \
@@ -131,9 +139,9 @@ imc -batch \
 
 ---
 
-## imc 鍛戒护鏂囦欢
+## imc 命令文件
 
-### .tcl 鍛戒护鏂囦欢
+### .tcl 命令文件
 
 ```tcl
 # generate_report.tcl
@@ -141,19 +149,21 @@ database -open cov_db -into merged.ucdb -shlib -code bcesft
 
 load_database merged.ucdb
 
-# 璁剧疆瑕嗙洊鐜囩洰鏍?set coverage_option -weight 100
+# 设置覆盖率目标
+set coverage_option -weight 100
 
-# 鐢熸垚鎶ュ憡
+# 生成报告
 report -all -file coverage_report.txt
 report -coverage -detail -file detail_report.txt
 
-# HTML 鎶ュ憡
+# HTML 报告
 report -html -out html_report
 
-# 閫€鍑?exit
+# 退出
+exit
 ```
 
-### 浣跨敤鍛戒护鏂囦欢
+### 使用命令文件
 
 ```bash
 imc -load merged.ucdb -do generate_report.tcl
@@ -161,7 +171,7 @@ imc -load merged.ucdb -do generate_report.tcl
 
 ---
 
-## Makefile 闆嗘垚
+## Makefile 集成
 
 ```makefile
 # ============== Coverage Targets ==============
@@ -206,22 +216,24 @@ cov_clean:
 
 ---
 
-## 瑕嗙洊鐜囩被鍨嬭瑙?
-### 浠ｇ爜瑕嗙洊鐜?(Code Coverage)
+## 覆盖率类型详解
 
-| 绫诲瀷 | 璇存槑 | 鍚敤閫夐」 |
+### 代码覆盖率 (Code Coverage)
+
+| 类型 | 说明 | 启用选项 |
 |------|------|----------|
-| **Line** | 璇彞瑕嗙洊 | `b` |
-| **Branch** | 鍒嗘敮瑕嗙洊 | `c` |
-| **Condition** | 鏉′欢瑕嗙洊 | `e` |
-| **FSM** | 鐘舵€佹満瑕嗙洊 | `s` |
-| **Toggle** | 缈昏浆瑕嗙洊 | `t` |
-| **Path** | 璺緞瑕嗙洊 | `f` |
+| **Line** | 语句覆盖 | `b` |
+| **Branch** | 分支覆盖 | `c` |
+| **Condition** | 条件覆盖 | `e` |
+| **FSM** | 状态机覆盖 | `s` |
+| **Toggle** | 翻转覆盖 | `t` |
+| **Path** | 路径覆盖 | `f` |
 
-### 鍔熻兘瑕嗙洊鐜?(Functional Coverage)
+### 功能覆盖率 (Functional Coverage)
 
 ```verilog
-// 瑕嗙洊缁勫畾涔?covergroup my_cg @(posedge clk);
+// 覆盖组定义
+covergroup my_cg @(posedge clk);
     option.per_instance = 1;
 
     cp_cmd: coverpoint cmd {
@@ -241,27 +253,27 @@ endgroup
 
 ---
 
-## 瑕嗙洊鐜囧垎鏋愬伐浣滄祦
+## 覆盖率分析工作流
 
 ```mermaid
 flowchart TD
-    subgraph Sim["浠跨湡闃舵"]
-        S1[test1 杩愯]
-        S2[test2 杩愯]
-        S3[test3 杩愯]
+    subgraph Sim["仿真阶段"]
+        S1[test1 运行]
+        S2[test2 运行]
+        S3[test3 运行]
     end
 
-    subgraph DB["鏁版嵁搴?]
+    subgraph DB["数据库"]
         D1[test1.ucdb]
         D2[test2.ucdb]
         D3[test3.ucdb]
     end
 
-    subgraph Merge["鍚堝苟闃舵"]
+    subgraph Merge["合并阶段"]
         IM[imc -merge]
     end
 
-    subgraph Report["鎶ュ憡闃舵"]
+    subgraph Report["报告阶段"]
         IR[imc -load]
         RC[Report Coverage]
         RH[Report HTML]
@@ -286,15 +298,16 @@ flowchart TD
 
 ---
 
-## 甯哥敤 imc 鍛戒护 (GUI)
+## 常用 imc 命令 (GUI)
 
-### 瑕嗙洊鐜囩洰鏍囪缃?
+### 覆盖率目标设置
+
 ```
 Coverage -> Set Goal...
 Coverage -> Coverage Options...
 ```
 
-### 鎶ュ憡瀵煎嚭
+### 报告导出
 
 ```
 Reports -> Generate Report...
@@ -302,7 +315,8 @@ Reports -> Export to CSV...
 Reports -> Generate HTML...
 ```
 
-### 瑕嗙洊鐜囪繃婊?
+### 覆盖率过滤
+
 ```
 Filter -> By Module...
 Filter -> By Test...
@@ -311,44 +325,47 @@ Filter -> By Coverage Type...
 
 ---
 
-## 甯歌闂
+## 常见问题
 
-### 1. 鍚堝苟澶辫触
+### 1. 合并失败
 
 ```bash
-# 妫€鏌ユ暟鎹簱鏄惁鎹熷潖
+# 检查数据库是否损坏
 imc -batch -load test.ucdb -show tests
 
-# 娓呯悊鍚庨噸鏂板悎骞?rm -f merged.ucdb
+# 清理后重新合并
+rm -f merged.ucdb
 imc -merge -input "*.ucdb" -out merged.ucdb
 ```
 
-### 2. 瑕嗙洊鐜囦笉鏄剧ず
+### 2. 覆盖率不显示
 
 ```bash
-# 妫€鏌ユ槸鍚︿娇鐢ㄤ簡姝ｇ‘鐨勮鐩栫巼閫夐」
-# 浠跨湡鏃堕渶瑕佹坊鍔?-coverage all
+# 检查是否使用了正确的覆盖率选项
+# 仿真时需要添加 -coverage all
 xrun -coverage all -covfile coverage.cfg -R
 
-# 妫€鏌ユ暟鎹簱鏄惁鐢熸垚
+# 检查数据库是否生成
 ls -la coverage/*.ucdb
 ```
 
-### 3. 鍐呭瓨涓嶈冻
+### 3. 内存不足
 
 ```bash
-# 浣跨敤鍒嗗尯鍚堝苟
+# 使用分区合并
 imc -merge -input "test*.ucdb" -out merged.ucdb -part 1000
 ```
 
 ---
 
-## 鐩稿叧閾炬帴
+## 相关链接
 
-- [[00-xrun]] - xrun 浠跨湡鍣?- [[01-瑕嗙洊鐜嘳] - 瑕嗙洊鐜囩煡璇?- [[00-Makefile]] - Makefile 妯℃澘
-- [[00-鎬荤储寮昡] - 杩斿洖鎬荤储寮?
+- [[00-xrun]] - xrun 仿真器
+- [[01-覆盖率]] - 覆盖率知识
+- [[00-Makefile]] - Makefile 模板
+- [[00-总索引]] - 返回总索引
+
 ---
 
-*鍒涘缓鏃堕棿: 2026-04-17*
-*鏇存柊鏃堕棿: 2026-04-17*
-
+*创建时间: 2026-04-17*
+*更新时间: 2026-04-17*
