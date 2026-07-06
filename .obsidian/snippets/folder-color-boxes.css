@@ -107,23 +107,8 @@
   margin-right: 4px;
 }
 
-/* 06-Environment - 绿色系 */
-.nav-folder-title-content[data-path="06-Environment"] {
-  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
-  color: #166534 !important;
-  padding: 4px 10px !important;
-  border-radius: 6px;
-  border-left: 4px solid #22c55e;
-  font-weight: 600;
-}
-
-.nav-folder-title-content[data-path="06-Environment"]::before {
-  content: "🏗️ ";
-  margin-right: 4px;
-}
-
-/* 07-Scripts - 黄色系 */
-.nav-folder-title-content[data-path="07-Scripts"] {
+/* 06-Scripts - 黄色系 */
+.nav-folder-title-content[data-path="06-Scripts"] {
   background: linear-gradient(135deg, #fef9c3, #fef08a);
   color: #854d0e !important;
   padding: 4px 10px !important;
@@ -132,13 +117,13 @@
   font-weight: 600;
 }
 
-.nav-folder-title-content[data-path="07-Scripts"]::before {
+.nav-folder-title-content[data-path="06-Scripts"]::before {
   content: "📜 ";
   margin-right: 4px;
 }
 
-/* 08-Projects - 靛蓝色系 */
-.nav-folder-title-content[data-path="08-Projects"] {
+/* 07-Projects - 靛蓝色系 */
+.nav-folder-title-content[data-path="07-Projects"] {
   background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
   color: #3730a3 !important;
   padding: 4px 10px !important;
@@ -147,13 +132,13 @@
   font-weight: 600;
 }
 
-.nav-folder-title-content[data-path="08-Projects"]::before {
+.nav-folder-title-content[data-path="07-Projects"]::before {
   content: "🚀 ";
   margin-right: 4px;
 }
 
-/* 09-Issues - 红色系 */
-.nav-folder-title-content[data-path="09-Issues"] {
+/* 08-Issues - 红色系 */
+.nav-folder-title-content[data-path="08-Issues"] {
   background: linear-gradient(135deg, #fee2e2, #fca5a5);
   color: #991b1b !important;
   padding: 4px 10px !important;
@@ -162,13 +147,13 @@
   font-weight: 600;
 }
 
-.nav-folder-title-content[data-path="09-Issues"]::before {
+.nav-folder-title-content[data-path="08-Issues"]::before {
   content: "⚠️ ";
   margin-right: 4px;
 }
 
-/* 10-Notes - 天蓝色系 */
-.nav-folder-title-content[data-path="10-Notes"] {
+/* 09-Notes - 天蓝色系 */
+.nav-folder-title-content[data-path="09-Notes"] {
   background: linear-gradient(135deg, #e0f2fe, #bae6fd);
   color: #0c4a6e !important;
   padding: 4px 10px !important;
@@ -177,7 +162,7 @@
   font-weight: 600;
 }
 
-.nav-folder-title-content[data-path="10-Notes"]::before {
+.nav-folder-title-content[data-path="09-Notes"]::before {
   content: "📒 ";
   margin-right: 4px;
 }
