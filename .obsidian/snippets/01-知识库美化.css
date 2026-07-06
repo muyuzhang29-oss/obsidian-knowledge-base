@@ -2574,22 +2574,20 @@ a.external-link {
 }
 
 .nav-folder-title[data-path^="04-Tools"],
-.nav-folder-title[data-path^="06-Environment"],
-.nav-folder-title[data-path^="07-Scripts"] {
+.nav-folder-title[data-path^="06-Scripts"] {
   color: var(--btz-gold) !important;
 }
 
 .nav-folder-title[data-path^="05-Verification"],
-.nav-folder-title[data-path^="09-Issues"] {
+.nav-folder-title[data-path^="08-Issues"] {
   color: var(--btz-rose) !important;
 }
 
-.nav-folder-title[data-path^="08-Projects"] {
+.nav-folder-title[data-path^="07-Projects"] {
   color: var(--btz-mint) !important;
 }
 
-.nav-folder-title[data-path^="10-Notes"],
-.nav-folder-title[data-path^="12-Life"] {
+.nav-folder-title[data-path^="09-Notes"] {
   color: var(--btz-muted) !important;
 }
 
@@ -3212,13 +3210,11 @@ a.external-link {
 .nav-folder-title[data-path^="03-Protocol"],
 .nav-folder-title[data-path^="04-Tools"],
 .nav-folder-title[data-path^="05-Verification"],
-.nav-folder-title[data-path^="06-Environment"],
-.nav-folder-title[data-path^="07-Scripts"],
-.nav-folder-title[data-path^="08-Projects"],
-.nav-folder-title[data-path^="09-Issues"],
-.nav-folder-title[data-path^="10-Notes"],
-.nav-folder-title[data-path^="11-UVM源码学习"],
-.nav-folder-title[data-path^="12-Life"] {
+.nav-folder-title[data-path^="06-Scripts"],
+.nav-folder-title[data-path^="07-Projects"],
+.nav-folder-title[data-path^="08-Issues"],
+.nav-folder-title[data-path^="09-Notes"],
+.nav-folder-title[data-path^="11-UVM源码学习"] {
   color: var(--ntz-text) !important;
 }
 
@@ -3463,22 +3459,20 @@ a.external-link {
 }
 
 .nav-folder-title[data-path^="04-Tools"],
-.nav-folder-title[data-path^="06-Environment"],
-.nav-folder-title[data-path^="07-Scripts"] {
+.nav-folder-title[data-path^="06-Scripts"] {
   color: var(--cc-accent-amber) !important;
 }
 
 .nav-folder-title[data-path^="05-Verification"],
-.nav-folder-title[data-path^="09-Issues"] {
+.nav-folder-title[data-path^="08-Issues"] {
   color: var(--cc-accent-pink) !important;
 }
 
-.nav-folder-title[data-path^="08-Projects"] {
+.nav-folder-title[data-path^="07-Projects"] {
   color: var(--cc-accent-green) !important;
 }
 
-.nav-folder-title[data-path^="10-Notes"],
-.nav-folder-title[data-path^="12-Life"] {
+.nav-folder-title[data-path^="09-Notes"] {
   color: var(--text-muted) !important;
 }
 
