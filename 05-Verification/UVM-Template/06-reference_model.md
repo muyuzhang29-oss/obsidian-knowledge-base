@@ -1,13 +1,11 @@
----
-tags: [UVM, Verification, 模板, ReferenceModel]
+﻿---
+tags: [UVM, Verification, 妯℃澘, ReferenceModel]
 created: 2026-04-17
 updated: 2026-06-02
 ---
 
-# 06 - Reference Model 参考模型
-
-> 根据 driver 的输入激励（通过 driver.ap 广播），计算期望输出，填入输出字段
-
+# 06 - Reference Model 鍙傝€冩ā鍨?
+> 鏍规嵁 driver 鐨勮緭鍏ユ縺鍔憋紙閫氳繃 driver.ap 骞挎挱锛夛紝璁＄畻鏈熸湜杈撳嚭锛屽～鍏ヨ緭鍑哄瓧娈?
 ```verilog
 `ifndef SPI_REF_MODEL_SV
 `define SPI_REF_MODEL_SV
@@ -16,9 +14,8 @@ class spi_ref_model extends uvm_component;
 
     `uvm_component_utils(spi_ref_model)
 
-    uvm_analysis_port #(spi_trans) exp_ap;  // 发送期望 transaction 给 scoreboard
-    uvm_analysis_imp #(spi_trans, spi_ref_model) imp;  // 接收 driver 的输入
-
+    uvm_analysis_port #(spi_trans) exp_ap;  // 鍙戦€佹湡鏈?transaction 缁?scoreboard
+    uvm_analysis_imp #(spi_trans, spi_ref_model) imp;  // 鎺ユ敹 driver 鐨勮緭鍏?
     function new(string name, uvm_component parent);
         super.new(name, parent);
     endfunction
@@ -30,29 +27,27 @@ class spi_ref_model extends uvm_component;
     endfunction
 
     // =========================================================================
-    // write: 接收输入 transaction，计算期望输出，发送给 scoreboard
+    // write: 鎺ユ敹杈撳叆 transaction锛岃绠楁湡鏈涜緭鍑猴紝鍙戦€佺粰 scoreboard
     // =========================================================================
     function void write(spi_trans tr);
         spi_trans exp_trans;
 
-        // 创建期望 transaction
+        // 鍒涘缓鏈熸湜 transaction
         exp_trans = spi_trans::type_id::create("exp_trans");
-        exp_trans.copy(tr);  // 拷贝输入字段
+        exp_trans.copy(tr);  // 鎷疯礉杈撳叆瀛楁
 
-        // 计算期望输出
+        // 璁＄畻鏈熸湜杈撳嚭
         compute_expected(exp_trans);
 
-        // 发送给 scoreboard
+        // 鍙戦€佺粰 scoreboard
         exp_ap.write(exp_trans);
     endfunction
 
     // =========================================================================
-    // compute_expected: 根据输入计算期望输出（核心逻辑）
-    // =========================================================================
+    // compute_expected: 鏍规嵁杈撳叆璁＄畻鏈熸湜杈撳嚭锛堟牳蹇冮€昏緫锛?    // =========================================================================
     function void compute_expected(spi_trans tr);
         case (tr.cmd)
-            // 写命令：期望写成功，无返回数据
-            spi_trans::WR_CMD: begin
+            // 鍐欏懡浠わ細鏈熸湜鍐欐垚鍔燂紝鏃犺繑鍥炴暟鎹?            spi_trans::WR_CMD: begin
                 tr.status_o = 8'h00;
                 tr.error_o  = 1'b0;
                 tr.data_o   = '{};
@@ -63,18 +58,16 @@ class spi_ref_model extends uvm_component;
                 end
             end
 
-            // 读命令：期望返回读数据
-            spi_trans::RD_CMD: begin
+            // 璇诲懡浠わ細鏈熸湜杩斿洖璇绘暟鎹?            spi_trans::RD_CMD: begin
                 tr.status_o = 8'h00;
                 tr.error_o  = 1'b0;
 
                 tr.data_o = new[tr.rd_len];
                 foreach (tr.data_o[i]) begin
-                    tr.data_o[i] = tr.addr + i;  // 根据 DUT 寄存器映射
-                end
+                    tr.data_o[i] = tr.addr + i;  // 鏍规嵁 DUT 瀵勫瓨鍣ㄦ槧灏?                end
             end
 
-            // 带数据的读：先写后读
+            // 甯︽暟鎹殑璇伙細鍏堝啓鍚庤
             spi_trans::RD_DATA_CMD: begin
                 tr.status_o = 8'h00;
                 tr.error_o  = 1'b0;
@@ -97,10 +90,9 @@ endclass
 `endif
 ```
 
-**ref_model 的职责：** 读输入字段 → 计算期望值 → 填入 `status_o`, `data_o[]`, `error_o` → 发送给 scoreboard
+**ref_model 鐨勮亴璐ｏ細** 璇昏緭鍏ュ瓧娈?鈫?璁＄畻鏈熸湜鍊?鈫?濉叆 `status_o`, `data_o[]`, `error_o` 鈫?鍙戦€佺粰 scoreboard
 
-## 相关链接
+## 鐩稿叧閾炬帴
 
-- [[05-Verification/UVM-Template/00-总览|UVM 模板总览]] - UVM 验证环境模板
-- [[05-Verification/UVM-Template/UVM-Analysis-Port数据流|Analysis Port 数据流]] - 数据流机制
-- [[00-总索引]] - 返回总索引
+- [[05-Verification/UVM-Template/00-鎬昏|UVM 妯℃澘鎬昏]] - UVM 楠岃瘉鐜妯℃澘
+- [[05-Verification/UVM-Template/UVM-Analysis-Port鏁版嵁娴亅Analysis Port 鏁版嵁娴乚] - 鏁版嵁娴佹満鍒?- [[00-鎬荤储寮昡] - 杩斿洖鎬荤储寮?

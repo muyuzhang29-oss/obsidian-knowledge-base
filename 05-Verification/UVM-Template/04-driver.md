@@ -1,12 +1,11 @@
----
-tags: [UVM, Verification, 模板, Driver]
+﻿---
+tags: [UVM, Verification, 妯℃澘, Driver]
 created: 2026-04-17
 updated: 2026-06-02
 ---
 
-# 04 - Driver 驱动器
-
-> 将 transaction 转换为 vif 上的信号
+# 04 - Driver 椹卞姩鍣?
+> 灏?transaction 杞崲涓?vif 涓婄殑淇″彿
 
 ```verilog
 `ifndef SPI_DRV_SV
@@ -18,14 +17,14 @@ class spi_driver extends uvm_driver #(spi_trans);
 
     virtual spi_if vif;
 
-    uvm_analysis_port #(spi_trans) ap;  // 广播 transaction 给 ref_model
+    uvm_analysis_port #(spi_trans) ap;  // 骞挎挱 transaction 缁?ref_model
 
     function new(string name, uvm_component parent);
         super.new(name, parent);
     endfunction
 
     // =========================================================================
-    // build_phase: 获取虚拟接口
+    // build_phase: 鑾峰彇铏氭嫙鎺ュ彛
     // =========================================================================
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
@@ -36,19 +35,18 @@ class spi_driver extends uvm_driver #(spi_trans);
     endfunction
 
     // =========================================================================
-    // run_phase: 主循环
-    // =========================================================================
+    // run_phase: 涓诲惊鐜?    // =========================================================================
     virtual task run_phase(uvm_phase phase);
         spi_trans tr;
 
-        vif.drv_cb.cs_n  <= 1'b1;  // CS 默认无效
+        vif.drv_cb.cs_n  <= 1'b1;  // CS 榛樿鏃犳晥
         vif.drv_cb.mosi  <= 1'b0;
         vif.drv_busy     <= 1'b0;
 
-        @(posedge vif.rst_n);  // 等待复位释放
+        @(posedge vif.rst_n);  // 绛夊緟澶嶄綅閲婃斁
 
         forever begin
-            seq_item_port.get_next_item(tr);  // 从 sequencer 获取 transaction
+            seq_item_port.get_next_item(tr);  // 浠?sequencer 鑾峰彇 transaction
 
             `uvm_info("DRV", $sformatf("Driving: cmd=%s addr=0x%02h", tr.cmd.name(), tr.addr), UVM_LOW)
 
@@ -62,23 +60,21 @@ class spi_driver extends uvm_driver #(spi_trans);
             endcase
 
             vif.drv_busy <= 1'b0;
-            ap.write(tr);  // 广播 transaction 给 ref_model
-            seq_item_port.item_done();  // 通知 sequencer 完成
+            ap.write(tr);  // 骞挎挱 transaction 缁?ref_model
+            seq_item_port.item_done();  // 閫氱煡 sequencer 瀹屾垚
         end
     endtask
 
     // =========================================================================
-    // drive_write: 驱动写操作
-    // =========================================================================
+    // drive_write: 椹卞姩鍐欐搷浣?    // =========================================================================
     task drive_write(spi_trans tr);
         vif.drv_cb.cs_n <= 1'b0;
         @(posedge vif.clk);
 
-        drive_byte(tr.addr);  // 发送地址
+        drive_byte(tr.addr);  // 鍙戦€佸湴鍧€
 
         foreach (tr.data[i]) begin
-            drive_byte(tr.data[i]);  // 发送数据
-        end
+            drive_byte(tr.data[i]);  // 鍙戦€佹暟鎹?        end
 
         @(posedge vif.clk);
         vif.drv_cb.cs_n <= 1'b1;
@@ -86,8 +82,7 @@ class spi_driver extends uvm_driver #(spi_trans);
     endtask
 
     // =========================================================================
-    // drive_read: 驱动读操作
-    // =========================================================================
+    // drive_read: 椹卞姩璇绘搷浣?    // =========================================================================
     task drive_read(spi_trans tr, bit has_write_data);
         vif.drv_cb.cs_n <= 1'b0;
         @(posedge vif.clk);
@@ -100,8 +95,7 @@ class spi_driver extends uvm_driver #(spi_trans);
             end
         end
 
-        // 读取数据（由 DUT 驱动 miso，monitor 负责采集）
-        repeat (tr.rd_len) begin
+        // 璇诲彇鏁版嵁锛堢敱 DUT 椹卞姩 miso锛宮onitor 璐熻矗閲囬泦锛?        repeat (tr.rd_len) begin
             @(posedge vif.clk);
         end
 
@@ -110,8 +104,7 @@ class spi_driver extends uvm_driver #(spi_trans);
     endtask
 
     // =========================================================================
-    // drive_byte: 逐 bit 驱动一个字节
-    // =========================================================================
+    // drive_byte: 閫?bit 椹卞姩涓€涓瓧鑺?    // =========================================================================
     task drive_byte(bit [7:0] data);
         for (int i = 7; i >= 0; i--) begin
             vif.drv_cb.mosi <= data[i];
@@ -124,15 +117,13 @@ endclass
 `endif
 ```
 
-**关键点：**
-- driver 做两件事：把 transaction 转换为 vif 信号 + 通过 ap 广播给 ref_model
-- 通过 `get_next_item`/`item_done` 与 sequencer 交互
-- 使用 clocking block 驱动信号（`vif.drv_cb.signal <= value`）
-- driver 不负责采集 DUT 响应，那是 monitor 的事
-- `item_done()` 之前调用 `ap.write(tr)`，确保 ref_model 收到输入激励
+**鍏抽敭鐐癸細**
+- driver 鍋氫袱浠朵簨锛氭妸 transaction 杞崲涓?vif 淇″彿 + 閫氳繃 ap 骞挎挱缁?ref_model
+- 閫氳繃 `get_next_item`/`item_done` 涓?sequencer 浜や簰
+- 浣跨敤 clocking block 椹卞姩淇″彿锛坄vif.drv_cb.signal <= value`锛?- driver 涓嶈礋璐ｉ噰闆?DUT 鍝嶅簲锛岄偅鏄?monitor 鐨勪簨
+- `item_done()` 涔嬪墠璋冪敤 `ap.write(tr)`锛岀‘淇?ref_model 鏀跺埌杈撳叆婵€鍔?
+## 鐩稿叧閾炬帴
 
-## 相关链接
-
-- [[05-Verification/UVM-Template/00-总览|UVM 模板总览]] - UVM 验证环境模板
-- [[02-UVM/04-组件|UVM 组件]] - UVM 组件详解
-- [[00-总索引]] - 返回总索引
+- [[05-Verification/UVM-Template/00-鎬昏|UVM 妯℃澘鎬昏]] - UVM 楠岃瘉鐜妯℃澘
+- [[02-UVM/04-缁勪欢|UVM 缁勪欢]] - UVM 缁勪欢璇﹁В
+- [[00-鎬荤储寮昡] - 杩斿洖鎬荤储寮?

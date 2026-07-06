@@ -1,149 +1,132 @@
----
-tags: [UVM, Verification, 模板, TLM, 数据流]
+﻿---
+tags: [UVM, Verification, 妯℃澘, TLM, 鏁版嵁娴乚
 created: 2026-04-17
 updated: 2026-06-02
 ---
 
-# UVM Analysis Port 数据流机制
-
-> driver → ref_model / monitor → scoreboard 的完整数据流解析
+# UVM Analysis Port 鏁版嵁娴佹満鍒?
+> driver 鈫?ref_model / monitor 鈫?scoreboard 鐨勫畬鏁存暟鎹祦瑙ｆ瀽
 
 ---
 
-## 一、Analysis Port 回调机制
+## 涓€銆丄nalysis Port 鍥炶皟鏈哄埗
 
-UVM 的 `uvm_analysis_port` 是**一对多广播**：一个 `ap.write(tr)` 会自动调用所有连接的 `write(tr)` 函数。
-
+UVM 鐨?`uvm_analysis_port` 鏄?*涓€瀵瑰骞挎挱**锛氫竴涓?`ap.write(tr)` 浼氳嚜鍔ㄨ皟鐢ㄦ墍鏈夎繛鎺ョ殑 `write(tr)` 鍑芥暟銆?
 ```verilog
-// driver 侧：广播
-ap.write(tr);  // tr 是 driver 的原始输入 trans
+// driver 渚э細骞挎挱
+ap.write(tr);  // tr 鏄?driver 鐨勫師濮嬭緭鍏?trans
 
-// ref_model 侧：自动被回调
-function void write(spi_trans tr);  // tr 就是 driver 传过来的那个对象
-    // 直接使用 tr，不需要额外传递
-endfunction
+// ref_model 渚э細鑷姩琚洖璋?function void write(spi_trans tr);  // tr 灏辨槸 driver 浼犺繃鏉ョ殑閭ｄ釜瀵硅薄
+    // 鐩存帴浣跨敤 tr锛屼笉闇€瑕侀澶栦紶閫?endfunction
 ```
 
-**关键理解：** `write(spi_trans tr)` 的参数 `tr` 就是调用方 `ap.write(tr)` 传过来的对象，UVM 框架自动完成回调，不需要手动传递。
-
+**鍏抽敭鐞嗚В锛?* `write(spi_trans tr)` 鐨勫弬鏁?`tr` 灏辨槸璋冪敤鏂?`ap.write(tr)` 浼犺繃鏉ョ殑瀵硅薄锛孶VM 妗嗘灦鑷姩瀹屾垚鍥炶皟锛屼笉闇€瑕佹墜鍔ㄤ紶閫掋€?
 ---
 
-## 二、完整数据流架构
+## 浜屻€佸畬鏁存暟鎹祦鏋舵瀯
 
 ```
 sequence
-   ↓
-sequencer
-   ↓
-driver ← get_next_item ── transaction (输入字段: cmd, addr, data[], rd_len)
-   ↓            ↓
-  DUT      driver.ap.write(tr)  ← 广播原始输入 trans
-   ↓                ↓
-monitor         ref_model.write(tr)
-   ↓                ↓
-monitor 采集     exp_trans.copy(tr) ← 拷贝输入字段
-DUT 实际输出     compute_expected(exp_trans) ← 读输入字段，填输出字段
-   ↓                ↓
-rx_trans         exp_trans
-(输出字段:       (输出字段:
- 实际值)          期望值)
-   ↓                ↓
-   └──→ scoreboard ←──┘
-         比对 rx_trans vs exp_trans
+   鈫?sequencer
+   鈫?driver 鈫?get_next_item 鈹€鈹€ transaction (杈撳叆瀛楁: cmd, addr, data[], rd_len)
+   鈫?           鈫?  DUT      driver.ap.write(tr)  鈫?骞挎挱鍘熷杈撳叆 trans
+   鈫?               鈫?monitor         ref_model.write(tr)
+   鈫?               鈫?monitor 閲囬泦     exp_trans.copy(tr) 鈫?鎷疯礉杈撳叆瀛楁
+DUT 瀹為檯杈撳嚭     compute_expected(exp_trans) 鈫?璇昏緭鍏ュ瓧娈碉紝濉緭鍑哄瓧娈?   鈫?               鈫?rx_trans         exp_trans
+(杈撳嚭瀛楁:       (杈撳嚭瀛楁:
+ 瀹為檯鍊?          鏈熸湜鍊?
+   鈫?               鈫?   鈹斺攢鈹€鈫?scoreboard 鈫愨攢鈹€鈹?         姣斿 rx_trans vs exp_trans
 ```
 
 ---
 
-## 三、各组件职责
+## 涓夈€佸悇缁勪欢鑱岃矗
 
-| 组件 | 输入 | 输出 | 职责 |
+| 缁勪欢 | 杈撳叆 | 杈撳嚭 | 鑱岃矗 |
 |------|------|------|------|
-| driver | sequencer 的 trans | vif 信号 + ap 广播 | 驱动 DUT + 广播输入给 ref_model |
-| monitor | vif 信号 | rx_trans（输出字段实际值） | 采集 DUT 输出 |
-| ref_model | driver.ap 的 tr | exp_trans（输出字段期望值） | 读输入字段，计算期望输出 |
-| scoreboard | rx_trans + exp_trans | 比对结果 | 比对实际值 vs 期望值 |
+| driver | sequencer 鐨?trans | vif 淇″彿 + ap 骞挎挱 | 椹卞姩 DUT + 骞挎挱杈撳叆缁?ref_model |
+| monitor | vif 淇″彿 | rx_trans锛堣緭鍑哄瓧娈靛疄闄呭€硷級 | 閲囬泦 DUT 杈撳嚭 |
+| ref_model | driver.ap 鐨?tr | exp_trans锛堣緭鍑哄瓧娈垫湡鏈涘€硷級 | 璇昏緭鍏ュ瓧娈碉紝璁＄畻鏈熸湜杈撳嚭 |
+| scoreboard | rx_trans + exp_trans | 姣斿缁撴灉 | 姣斿瀹為檯鍊?vs 鏈熸湜鍊?|
 
 ---
 
-## 四、Transaction 字段分工
+## 鍥涖€乀ransaction 瀛楁鍒嗗伐
 
 ```verilog
 class spi_trans extends uvm_sequence_item;
-    // 输入字段：driver 填，ref_model 读
-    rand cmd_t  cmd;
+    // 杈撳叆瀛楁锛歞river 濉紝ref_model 璇?    rand cmd_t  cmd;
     rand bit [7:0]  addr;
     rand bit [7:0]  data[];
     rand int        data_len;
     rand bit        rd_en;
     rand int        rd_len;
 
-    // 输出字段：monitor 填实际值，ref_model 填期望值
-    bit [7:0]  status_o;
+    // 杈撳嚭瀛楁锛歮onitor 濉疄闄呭€硷紝ref_model 濉湡鏈涘€?    bit [7:0]  status_o;
     bit [7:0]  data_o[];
     bit        error_o;
 endclass
 ```
 
-**同一个 transaction 类，不同组件用不同字段：**
-- **driver**：填输入字段 → 驱动 DUT + 广播给 ref_model
-- **ref_model**：读输入字段 → 填输出字段（期望值）
-- **monitor**：填输出字段（实际值）
-- **scoreboard**：只比对输出字段
+**鍚屼竴涓?transaction 绫伙紝涓嶅悓缁勪欢鐢ㄤ笉鍚屽瓧娈碉細**
+- **driver**锛氬～杈撳叆瀛楁 鈫?椹卞姩 DUT + 骞挎挱缁?ref_model
+- **ref_model**锛氳杈撳叆瀛楁 鈫?濉緭鍑哄瓧娈碉紙鏈熸湜鍊硷級
+- **monitor**锛氬～杈撳嚭瀛楁锛堝疄闄呭€硷級
+- **scoreboard**锛氬彧姣斿杈撳嚭瀛楁
 
 ---
 
-## 五、连接关系（env connect_phase）
-
+## 浜斻€佽繛鎺ュ叧绯伙紙env connect_phase锛?
 ```verilog
 function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
 
-    // monitor 实际输出 → scoreboard
+    // monitor 瀹為檯杈撳嚭 鈫?scoreboard
     agent.ap.connect(scb.rx_imp);
 
-    // driver 输入激励 → ref_model
+    // driver 杈撳叆婵€鍔?鈫?ref_model
     agent.drv_ap.connect(ref_model.imp);
 
-    // ref_model 期望输出 → scoreboard
+    // ref_model 鏈熸湜杈撳嚭 鈫?scoreboard
     ref_model.exp_ap.connect(scb.exp_imp);
 endfunction
 ```
 
-**agent 内部连接：**
+**agent 鍐呴儴杩炴帴锛?*
 ```verilog
 function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
-    drv.seq_item_port.connect(seqr.seq_item_export);  // driver ↔ sequencer
-    mon.ap.connect(ap);        // monitor.ap → agent.ap（对外暴露）
-    drv.ap.connect(drv_ap);    // driver.ap → agent.drv_ap（对外暴露）
+    drv.seq_item_port.connect(seqr.seq_item_export);  // driver 鈫?sequencer
+    mon.ap.connect(ap);        // monitor.ap 鈫?agent.ap锛堝澶栨毚闇诧級
+    drv.ap.connect(drv_ap);    // driver.ap 鈫?agent.drv_ap锛堝澶栨毚闇诧級
 endfunction
 ```
 
 ---
 
-## 六、为什么用 driver.ap 而不是 monitor.ap 给 ref_model
+## 鍏€佷负浠€涔堢敤 driver.ap 鑰屼笉鏄?monitor.ap 缁?ref_model
 
-| | driver.ap → ref_model | monitor.ap → ref_model |
+| | driver.ap 鈫?ref_model | monitor.ap 鈫?ref_model |
 |---|---|---|
-| 输入来源 | driver 发出的原始激励 | monitor 采集的 DUT 输入 |
-| 时序 | 更早（driver 发完立即广播） | 更晚（等 monitor 采集） |
-| 可靠性 | 直接，无延迟 | 需要 monitor 能看到输入信号 |
-| 适用场景 | DUT 不修改输入 | DUT 可能修改输入 |
+| 杈撳叆鏉ユ簮 | driver 鍙戝嚭鐨勫師濮嬫縺鍔?| monitor 閲囬泦鐨?DUT 杈撳叆 |
+| 鏃跺簭 | 鏇存棭锛坉river 鍙戝畬绔嬪嵆骞挎挱锛?| 鏇存櫄锛堢瓑 monitor 閲囬泦锛?|
+| 鍙潬鎬?| 鐩存帴锛屾棤寤惰繜 | 闇€瑕?monitor 鑳界湅鍒拌緭鍏ヤ俊鍙?|
+| 閫傜敤鍦烘櫙 | DUT 涓嶄慨鏀硅緭鍏?| DUT 鍙兘淇敼杈撳叆 |
 
-**推荐用 driver.ap：**
-- driver 发完数据后直接广播，ref_model 不需要等 monitor
-- monitor 只负责采集 DUT 输出，职责更清晰
-- 不依赖 monitor 能否看到输入信号
-
----
-
-## 相关链接
-
-- [[02-UVM/06-TLM通信|TLM 通信机制]] - UVM TLM 通信详解
-- [[05-Verification/UVM-Template/00-总览|UVM 模板总览]] - UVM 验证环境模板
-- [[02-UVM/04-组件|UVM 组件]] - UVM 组件结构
-- [[00-总索引]] - 返回总索引
+**鎺ㄨ崘鐢?driver.ap锛?*
+- driver 鍙戝畬鏁版嵁鍚庣洿鎺ュ箍鎾紝ref_model 涓嶉渶瑕佺瓑 monitor
+- monitor 鍙礋璐ｉ噰闆?DUT 杈撳嚭锛岃亴璐ｆ洿娓呮櫚
+- 涓嶄緷璧?monitor 鑳藉惁鐪嬪埌杈撳叆淇″彿
 
 ---
 
-*创建时间: 2026-06-01*
+## 鐩稿叧閾炬帴
+
+- [[02-UVM/06-TLM閫氫俊|TLM 閫氫俊鏈哄埗]] - UVM TLM 閫氫俊璇﹁В
+- [[05-Verification/UVM-Template/00-鎬昏|UVM 妯℃澘鎬昏]] - UVM 楠岃瘉鐜妯℃澘
+- [[02-UVM/04-缁勪欢|UVM 缁勪欢]] - UVM 缁勪欢缁撴瀯
+- [[00-鎬荤储寮昡] - 杩斿洖鎬荤储寮?
+---
+
+*鍒涘缓鏃堕棿: 2026-06-01*
+

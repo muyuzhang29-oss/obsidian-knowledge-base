@@ -1,869 +1,796 @@
-SPI Slave 验证文档
+﻿SPI Slave 楠岃瘉鏂囨。
 
 ---
 
-# **1. 验证概述**
+# **1. 楠岃瘉姒傝堪**
 
-## **1.1 文档目的**
+## **1.1 鏂囨。鐩殑**
 
-本文档针对 SPI Slave 模块的 UVM 验证平台，详细描述验证环境架构、测试点规划、测试用例设计等内容，为验证工作的执行和回归提供参考依据。
+鏈枃妗ｉ拡瀵?SPI Slave 妯″潡鐨?UVM 楠岃瘉骞冲彴锛岃缁嗘弿杩伴獙璇佺幆澧冩灦鏋勩€佹祴璇曠偣瑙勫垝銆佹祴璇曠敤渚嬭璁＄瓑鍐呭锛屼负楠岃瘉宸ヤ綔鐨勬墽琛屽拰鍥炲綊鎻愪緵鍙傝€冧緷鎹€?
+## **1.2 楠岃瘉鏂规硶瀛?*
 
-## **1.2 验证方法学**
+鏈獙璇佸钩鍙伴噰鐢?UVM锛圲niversal Verification Methodology锛?鏂规硶瀛︼紝鍩轰簬 SystemVerilog 璇█瀹炵幇銆傞獙璇佺瓥鐣ュ涓嬶細
 
-本验证平台采用 UVM（Universal Verification Methodology） 方法学，基于 SystemVerilog 语言实现。验证策略如下：
+路聽婵€鍔辩敓鎴愶細閫氳繃 UVM Sequence 鏈哄埗鐢熸垚鍚勭被 SPI 浜嬪姟婵€鍔憋紝瑕嗙洊姝ｅ父鎿嶄綔鍜屽紓甯稿満鏅?
+路聽鍗忚妫€鏌ワ細Monitor 瀹炴椂閲囨牱鎺ュ彛淇″彿锛岃繘琛屽崗璁悎瑙勬€ф鏌ュ拰 CRC 鏍￠獙
 
-· 激励生成：通过 UVM Sequence 机制生成各类 SPI 事务激励，覆盖正常操作和异常场景
-
-· 协议检查：Monitor 实时采样接口信号，进行协议合规性检查和 CRC 校验
-
-· 功能覆盖：通过 Covergroup 量化验证覆盖率，确保所有功能点被充分验证
-
-· 断言验证：在 Monitor 中嵌入 SVA 并发断言，对 FSM 状态转换、错误处理等关键行为进行实时检查
-
-## **1.3 验证目标**
+路聽鍔熻兘瑕嗙洊锛氶€氳繃 Covergroup 閲忓寲楠岃瘉瑕嗙洊鐜囷紝纭繚鎵€鏈夊姛鑳界偣琚厖鍒嗛獙璇?
+路聽鏂█楠岃瘉锛氬湪 Monitor 涓祵鍏?SVA 骞跺彂鏂█锛屽 FSM 鐘舵€佽浆鎹€侀敊璇鐞嗙瓑鍏抽敭琛屼负杩涜瀹炴椂妫€鏌?
+## **1.3 楠岃瘉鐩爣**
 
 |   |   |
 |---|---|
-|**目标**|**说明**|
-|功能正确性|验证 SPI Slave 在所有 SPI 模式下正确处理写命令、读命令和读数据命令|
-|协议合规性|验证帧格式、CRC-8 校验、CS 时序等符合协议规范|
-|错误处理|验证 CRC 错误、超时错误、无效地址等异常场景下的行为|
-|边界条件|验证最小/最大 payload、边界地址等极端情况|
-|状态机覆盖|验证 FSM 全部 8 个状态及所有合法状态转换路径|
-|覆盖率达标|功能覆盖率达到 100%，代码覆盖率达到目标值|
+|**鐩爣**|**璇存槑**|
+|鍔熻兘姝ｇ‘鎬楠岃瘉 SPI Slave 鍦ㄦ墍鏈?SPI 妯″紡涓嬫纭鐞嗗啓鍛戒护銆佽鍛戒护鍜岃鏁版嵁鍛戒护|
+|鍗忚鍚堣鎬楠岃瘉甯ф牸寮忋€丆RC-8 鏍￠獙銆丆S 鏃跺簭绛夌鍚堝崗璁鑼億
+|閿欒澶勭悊|楠岃瘉 CRC 閿欒銆佽秴鏃堕敊璇€佹棤鏁堝湴鍧€绛夊紓甯稿満鏅笅鐨勮涓簗
+|杈圭晫鏉′欢|楠岃瘉鏈€灏?鏈€澶?payload銆佽竟鐣屽湴鍧€绛夋瀬绔儏鍐祙
+|鐘舵€佹満瑕嗙洊|楠岃瘉 FSM 鍏ㄩ儴 8 涓姸鎬佸強鎵€鏈夊悎娉曠姸鎬佽浆鎹㈣矾寰剕
+|瑕嗙洊鐜囪揪鏍噟鍔熻兘瑕嗙洊鐜囪揪鍒?100%锛屼唬鐮佽鐩栫巼杈惧埌鐩爣鍊紎
 
-## **1.4 验证环境结构**
+## **1.4 楠岃瘉鐜缁撴瀯**
 
-┌─────────────────────────────────────────────────────────────┐  
-│                    spi_base_test (测试层)                     │  
-│    ├── spi_config ─── config_db ──> 所有组件                  │  
-│    └── spi_env (环境层)                                       │  
-│         ├── spi_agent (代理层)                                │  
-│         │    ├── uvm_sequencer#(spi_transaction)  (排序器)    │  
-│         │    ├── spi_driver  <── vif.DRV          (驱动器)    │  
-│         │    └── spi_monitor <── vif.MON ──> ap   (监测器)    │  
-│         └── spi_coverage    <── ap (analysis_export) (覆盖率) │  
-├─────────────────────────────────────────────────────────────┤  
-│                    tb_top (顶层测试平台)                       │  
-│    ├── spi_slave_intf (接口)                                  │  
-│    ├── ips_lib_asyc_fifo (RX 异步 FIFO)                      │  
-│    ├── spi_slave_wrapper -> spi_slave (DUT)                   │  
-│    └── config_db 桥接: spi_config -> 接口信号                  │  
-└─────────────────────────────────────────────────────────────┘
-
+鈹屸攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹? 
+鈹?聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽spi_base_test (娴嬭瘯灞? 聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽鈹? 
+鈹?聽聽聽鈹溾攢鈹€ spi_config 鈹€鈹€鈹€ config_db 鈹€鈹€> 鎵€鏈夌粍浠?聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽鈹? 
+鈹?聽聽聽鈹斺攢鈹€ spi_env (鐜灞? 聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽鈹? 
+鈹?聽聽聽聽聽聽聽聽鈹溾攢鈹€ spi_agent (浠ｇ悊灞? 聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽鈹? 
+鈹?聽聽聽聽聽聽聽聽鈹?聽聽聽鈹溾攢鈹€ uvm_sequencer#(spi_transaction) 聽(鎺掑簭鍣? 聽聽聽鈹? 
+鈹?聽聽聽聽聽聽聽聽鈹?聽聽聽鈹溾攢鈹€ spi_driver 聽<鈹€鈹€ vif.DRV 聽聽聽聽聽聽聽聽聽(椹卞姩鍣? 聽聽聽鈹? 
+鈹?聽聽聽聽聽聽聽聽鈹?聽聽聽鈹斺攢鈹€ spi_monitor <鈹€鈹€ vif.MON 鈹€鈹€> ap 聽聽(鐩戞祴鍣? 聽聽聽鈹? 
+鈹?聽聽聽聽聽聽聽聽鈹斺攢鈹€ spi_coverage 聽聽聽<鈹€鈹€ ap (analysis_export) (瑕嗙洊鐜? 鈹? 
+鈹溾攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹? 
+鈹?聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽tb_top (椤跺眰娴嬭瘯骞冲彴) 聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽鈹? 
+鈹?聽聽聽鈹溾攢鈹€ spi_slave_intf (鎺ュ彛) 聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽鈹? 
+鈹?聽聽聽鈹溾攢鈹€ ips_lib_asyc_fifo (RX 寮傛 FIFO) 聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽鈹? 
+鈹?聽聽聽鈹溾攢鈹€ spi_slave_wrapper -> spi_slave (DUT) 聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽鈹? 
+鈹?聽聽聽鈹斺攢鈹€ config_db 妗ユ帴: spi_config -> 鎺ュ彛淇″彿 聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽聽鈹? 
+鈹斺攢鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹?
 ---
 
-# **2. 待测设计概述**
+# **2. 寰呮祴璁捐姒傝堪**
 
-## **2.1 DUT 模块说明**
+## **2.1 DUT 妯″潡璇存槑**
 
-待测设计（DUT）为 spi_slave 模块，由 spi_slave_wrapper 封装实例化。该模块实现了一个 SPI 从设备接口，支持与外部 SPI 主设备进行串行通信，并通过异步 FIFO 与片上 SOC 进行数据交互。
+寰呮祴璁捐锛圖UT锛変负 spi_slave 妯″潡锛岀敱 spi_slave_wrapper 灏佽瀹炰緥鍖栥€傝妯″潡瀹炵幇浜嗕竴涓?SPI 浠庤澶囨帴鍙ｏ紝鏀寔涓庡閮?SPI 涓昏澶囪繘琛屼覆琛岄€氫俊锛屽苟閫氳繃寮傛 FIFO 涓庣墖涓?SOC 杩涜鏁版嵁浜や簰銆?
+## **2.2 DUT 绔彛鍒楄〃**
 
-## **2.2 DUT 端口列表**
-
-### **2.2.1 SPI 总线信号**
-
-|   |   |   |   |
-|---|---|---|---|
-|**信号名**|**方向**|**位宽**|**说明**|
-|spi_clk|input|1|SPI 时钟域|
-|spi_rst_n|input|1|低电平有效复位|
-|clk_100mhz|input|1|100MHz 系统时钟|
-|rst_100mhz|input|1|系统复位（高电平有效）|
-|spi_sck|input|1|SPI 串行时钟（来自主设备）|
-|spi_cs|input|1|SPI 片选信号|
-|spi_mosi|input|1|SPI 主出从入数据线|
-|spi_miso|output|1|SPI 主入从出数据线|
-
-### **2.2.2 异步 FIFO TX 接口（DUT → SOC）**
+### **2.2.1 SPI 鎬荤嚎淇″彿**
 
 |   |   |   |   |
 |---|---|---|---|
-|**信号名**|**方向**|**位宽**|**说明**|
-|asyc_fifo_tx_n_empty|output|1|TX FIFO 非空标志|
-|asyc_fifo_tx_rd_en|input|1|TX FIFO 读使能|
-|asyc_fifo_tx_rdata|output|10|TX FIFO 读数据|
+|**淇″彿鍚?*|**鏂瑰悜**|**浣嶅**|**璇存槑**|
+|spi_clk|input|1|SPI 鏃堕挓鍩焲
+|spi_rst_n|input|1|浣庣數骞虫湁鏁堝浣峾
+|clk_100mhz|input|1|100MHz 绯荤粺鏃堕挓|
+|rst_100mhz|input|1|绯荤粺澶嶄綅锛堥珮鐢靛钩鏈夋晥锛墊
+|spi_sck|input|1|SPI 涓茶鏃堕挓锛堟潵鑷富璁惧锛墊
+|spi_cs|input|1|SPI 鐗囬€変俊鍙穦
+|spi_mosi|input|1|SPI 涓诲嚭浠庡叆鏁版嵁绾縷
+|spi_miso|output|1|SPI 涓诲叆浠庡嚭鏁版嵁绾縷
 
-### **2.2.3 异步 FIFO RX 接口（SOC → DUT）**
-
-|   |   |   |   |
-|---|---|---|---|
-|**信号名**|**方向**|**位宽**|**说明**|
-|asyc_fifo_rx_wr_en|input|1|RX FIFO 写使能|
-|asyc_fifo_rx_n_full|output|1|RX FIFO 非满标志|
-|asyc_fifo_rx_wdata|input|8|RX FIFO 写数据|
-|asyc_fifo_rx_n_empty|output|1|RX FIFO 非空标志|
-|asyc_fifo_rx_rd_en|input|1|RX FIFO 读使能（DUT 侧）|
-|asyc_fifo_rx_rdata|output|8|RX FIFO 读数据|
-
-### **2.2.4 配置寄存器**
+### **2.2.2 寮傛 FIFO TX 鎺ュ彛锛圖UT 鈫?SOC锛?*
 
 |   |   |   |   |
 |---|---|---|---|
-|**信号名**|**方向**|**位宽**|**说明**|
-|spi_slv_en_reg|input|1|从设备使能|
-|spi_cpol_reg|input|1|时钟极性|
-|spi_cpha_reg|input|1|时钟相位|
-|spi_cs_act_pol_reg|input|1|CS 有效极性|
-|spis_ext_data_len_ins_reg|input|1|扩展数据长度模式|
-|spis_dummy_ins_reg|input|8|Dummy 字节数|
-|spis_state_ack_tout_step_reg|input|2|超时步长|
-|spis_state_ack_thrs_reg|input|8|超时阈值|
+|**淇″彿鍚?*|**鏂瑰悜**|**浣嶅**|**璇存槑**|
+|asyc_fifo_tx_n_empty|output|1|TX FIFO 闈炵┖鏍囧織|
+|asyc_fifo_tx_rd_en|input|1|TX FIFO 璇讳娇鑳絴
+|asyc_fifo_tx_rdata|output|10|TX FIFO 璇绘暟鎹畖
 
-### **2.2.5 状态输出**
+### **2.2.3 寮傛 FIFO RX 鎺ュ彛锛圫OC 鈫?DUT锛?*
 
 |   |   |   |   |
 |---|---|---|---|
-|**信号名**|**方向**|**位宽**|**说明**|
-|spis_state_code|output|3|FSM 状态编码（S0-S7）|
-|spis_state_code_vld|output|1|状态码有效标志|
-|spis_fail_state_data|output|64|失败状态数据（8×8 bit）|
+|**淇″彿鍚?*|**鏂瑰悜**|**浣嶅**|**璇存槑**|
+|asyc_fifo_rx_wr_en|input|1|RX FIFO 鍐欎娇鑳絴
+|asyc_fifo_rx_n_full|output|1|RX FIFO 闈炴弧鏍囧織|
+|asyc_fifo_rx_wdata|input|8|RX FIFO 鍐欐暟鎹畖
+|asyc_fifo_rx_n_empty|output|1|RX FIFO 闈炵┖鏍囧織|
+|asyc_fifo_rx_rd_en|input|1|RX FIFO 璇讳娇鑳斤紙DUT 渚э級|
+|asyc_fifo_rx_rdata|output|8|RX FIFO 璇绘暟鎹畖
 
-### **2.2.6 错误输出**
+### **2.2.4 閰嶇疆瀵勫瓨鍣?*
+
+|   |   |   |   |
+|---|---|---|---|
+|**淇″彿鍚?*|**鏂瑰悜**|**浣嶅**|**璇存槑**|
+|spi_slv_en_reg|input|1|浠庤澶囦娇鑳絴
+|spi_cpol_reg|input|1|鏃堕挓鏋佹€
+|spi_cpha_reg|input|1|鏃堕挓鐩镐綅|
+|spi_cs_act_pol_reg|input|1|CS 鏈夋晥鏋佹€
+|spis_ext_data_len_ins_reg|input|1|鎵╁睍鏁版嵁闀垮害妯″紡|
+|spis_dummy_ins_reg|input|8|Dummy 瀛楄妭鏁皘
+|spis_state_ack_tout_step_reg|input|2|瓒呮椂姝ラ暱|
+|spis_state_ack_thrs_reg|input|8|瓒呮椂闃堝€紎
+
+### **2.2.5 鐘舵€佽緭鍑?*
+
+|   |   |   |   |
+|---|---|---|---|
+|**淇″彿鍚?*|**鏂瑰悜**|**浣嶅**|**璇存槑**|
+|spis_state_code|output|3|FSM 鐘舵€佺紪鐮侊紙S0-S7锛墊
+|spis_state_code_vld|output|1|鐘舵€佺爜鏈夋晥鏍囧織|
+|spis_fail_state_data|output|64|澶辫触鐘舵€佹暟鎹紙8脳8 bit锛墊
+
+### **2.2.6 閿欒杈撳嚭**
 
 |   |   |   |
 |---|---|---|
-|**信号名**|**方向**|**说明**|
-|loc_rw_err|output|LOC/RW 错误|
-|wait_read_data_cmd_flag_0_err|output|等待读数据标志 0 错误|
-|wait_read_data_cmd_flag_1_err|output|等待读数据标志 1 错误|
-|read_data_cmd_mp_head_mis_err|output|读数据命令 MP 头部不匹配错误|
-|cmd_crc8_err|output|CRC-8 校验错误|
-|wr_cmd_rcd_err|output|写命令 RCD 错误|
-|rd_cmd_rcd_err|output|读命令 RCD 错误|
-|spis_state_ack_tout_err|output|状态确认超时错误|
+|**淇″彿鍚?*|**鏂瑰悜**|**璇存槑**|
+|loc_rw_err|output|LOC/RW 閿欒|
+|wait_read_data_cmd_flag_0_err|output|绛夊緟璇绘暟鎹爣蹇?0 閿欒|
+|wait_read_data_cmd_flag_1_err|output|绛夊緟璇绘暟鎹爣蹇?1 閿欒|
+|read_data_cmd_mp_head_mis_err|output|璇绘暟鎹懡浠?MP 澶撮儴涓嶅尮閰嶉敊璇瘄
+|cmd_crc8_err|output|CRC-8 鏍￠獙閿欒|
+|wr_cmd_rcd_err|output|鍐欏懡浠?RCD 閿欒|
+|rd_cmd_rcd_err|output|璇诲懡浠?RCD 閿欒|
+|spis_state_ack_tout_err|output|鐘舵€佺‘璁よ秴鏃堕敊璇瘄
 
-## **2.3 FSM 状态定义**
+## **2.3 FSM 鐘舵€佸畾涔?*
 
-DUT 内部状态机包含 8 个状态，3-bit 编码：
-
+DUT 鍐呴儴鐘舵€佹満鍖呭惈 8 涓姸鎬侊紝3-bit 缂栫爜锛?
 |   |   |   |
 |---|---|---|
-|**编码**|**状态名**|**说明**|
-|S0 (000)|IDLE|空闲状态，等待 CS 有效|
-|S1 (001)|WRITE_CMD|处理写命令|
-|S2 (010)|WAIT_WRITE_CONFIRM|等待 SOC 写确认|
-|S3 (011)|READ_CMD|处理读命令|
-|S4 (100)|WAIT_READ_CONFIRM|等待 SOC 读确认|
-|S5 (101)|READ_SUCCESS|读操作成功|
-|S6 (110)|READ_FAIL|读操作失败|
-|S7 (111)|READ_DATA_CMD|处理读数据命令|
+|**缂栫爜**|**鐘舵€佸悕**|**璇存槑**|
+|S0 (000)|IDLE|绌洪棽鐘舵€侊紝绛夊緟 CS 鏈夋晥|
+|S1 (001)|WRITE_CMD|澶勭悊鍐欏懡浠
+|S2 (010)|WAIT_WRITE_CONFIRM|绛夊緟 SOC 鍐欑‘璁
+|S3 (011)|READ_CMD|澶勭悊璇诲懡浠
+|S4 (100)|WAIT_READ_CONFIRM|绛夊緟 SOC 璇荤‘璁
+|S5 (101)|READ_SUCCESS|璇绘搷浣滄垚鍔焲
+|S6 (110)|READ_FAIL|璇绘搷浣滃け璐
+|S7 (111)|READ_DATA_CMD|澶勭悊璇绘暟鎹懡浠
 
-## **2.4 SPI 协议帧格式**
+## **2.4 SPI 鍗忚甯ф牸寮?*
 
-### **2.4.1 帧结构**
+### **2.4.1 甯х粨鏋?*
 
 |   |   |
 |---|---|
-|**命令类型**|**帧内容**|
+|**鍛戒护绫诲瀷**|**甯у唴瀹?*|
 |WR_CMD (01)|cmd_byte + addr_l + ctrl_h + ctrl_l + payload[N] + crc_cmd|
 |RD_CMD (10, rd_en=0)|cmd_byte + addr_l + ctrl_h + ctrl_l + crc_cmd|
 |RD_CMD (10, rd_en=1)|cmd_byte + addr_l + ctrl_h + ctrl_l + payload[rd_length] + crc_cmd|
 |RD_DATA_CMD (11)|cmd_byte + addr_l + ctrl_h + ctrl_l + crc_cmd + dummy[M] + data[N] + crc_data|
 
-### **2.4.2 字段说明**
+### **2.4.2 瀛楁璇存槑**
 
-· cmd_byte：{1'b1, DST_ADDR[1:0]=01, cmd[1:0], DST_PORT[2:0]=010}，8 bit
+路聽cmd_byte锛歿1'b1, DST_ADDR[1:0]=01, cmd[1:0], DST_PORT[2:0]=010}锛? bit
 
-· addr_l：目标地址，8 bit
+路聽addr_l锛氱洰鏍囧湴鍧€锛? bit
 
-· ctrl_h：{rd_en, 1'b0, rd_length[6:0]}，8 bit
+路聽ctrl_h锛歿rd_en, 1'b0, rd_length[6:0]}锛? bit
 
-· ctrl_l：data_len[7:0]，8 bit
+路聽ctrl_l锛歞ata_len[7:0]锛? bit
 
-· CRC-8：多项式 0x2F，初始值 0xFF，输入取反，输出取反
+路聽CRC-8锛氬椤瑰紡 0x2F锛屽垵濮嬪€?0xFF锛岃緭鍏ュ彇鍙嶏紝杈撳嚭鍙栧弽
 
-### **2.4.3 SPI 模式**
+### **2.4.3 SPI 妯″紡**
 
 |   |   |   |   |
 |---|---|---|---|
-|**模式**|**CPOL**|**CPHA**|**说明**|
-|Mode 0|0|0|空闲低电平，第一个边沿采样|
-|Mode 1|0|1|空闲低电平，第二个边沿采样|
-|Mode 2|1|0|空闲高电平，第一个边沿采样|
-|Mode 3|1|1|空闲高电平，第二个边沿采样|
+|**妯″紡**|**CPOL**|**CPHA**|**璇存槑**|
+|Mode 0|0|0|绌洪棽浣庣數骞筹紝绗竴涓竟娌块噰鏍穦
+|Mode 1|0|1|绌洪棽浣庣數骞筹紝绗簩涓竟娌块噰鏍穦
+|Mode 2|1|0|绌洪棽楂樼數骞筹紝绗竴涓竟娌块噰鏍穦
+|Mode 3|1|1|绌洪棽楂樼數骞筹紝绗簩涓竟娌块噰鏍穦
 
 ---
 
-# **3. 验证环境组件详解**
+# **3. 楠岃瘉鐜缁勪欢璇﹁В**
 
-## **3.1 顶层测试平台（tb_top）**
+## **3.1 椤跺眰娴嬭瘯骞冲彴锛坱b_top锛?*
 
-顶层模块 tb_top 负责：
+椤跺眰妯″潡 tb_top 璐熻矗锛?
+1. 鏃堕挓鐢熸垚锛氱敓鎴?SPI 鏃堕挓锛堢害 333MHz锛夊拰 100MHz 绯荤粺鏃堕挓
 
-1. 时钟生成：生成 SPI 时钟（约 333MHz）和 100MHz 系统时钟
+2. 澶嶄綅绠＄悊锛氫骇鐢熷浣嶄俊鍙峰苟绠＄悊澶嶄綅鏃跺簭
 
-2. 复位管理：产生复位信号并管理复位时序
+3. 鎺ュ彛瀹炰緥鍖栵細瀹炰緥鍖?spi_slave_intf 鎺ュ彛
 
-3. 接口实例化：实例化 spi_slave_intf 接口
+4. DUT 瀹炰緥鍖栵細瀹炰緥鍖?RX 寮傛 FIFO 鍜?DUT wrapper
 
-4. DUT 实例化：实例化 RX 异步 FIFO 和 DUT wrapper
+5. 閰嶇疆妗ユ帴锛氫粠 UVM config_db 璇诲彇 spi_config 瀵硅薄锛屽皢鍏跺瓧娈垫槧灏勫埌鎺ュ彛淇″彿绾?
+6. UVM 鍚姩锛氶€氳繃 run_test() 鍚姩 UVM 楠岃瘉骞冲彴
 
-5. 配置桥接：从 UVM config_db 读取 spi_config 对象，将其字段映射到接口信号线
+7. 瓒呮椂鎺у埗锛氳缃?10ms 浠跨湡瓒呮椂
 
-6. UVM 启动：通过 run_test() 启动 UVM 验证平台
+## **3.2 鎺ュ彛锛坰pi_slave_intf锛?*
 
-7. 超时控制：设置 10ms 仿真超时
+鎺ュ彛瀹氫箟浜嗘墍鏈?SPI 鎬荤嚎淇″彿銆侀厤缃瘎瀛樺櫒淇″彿銆丗IFO 淇″彿鍜?DUT 杈撳嚭淇″彿锛屽苟鍖呭惈锛?
+路聽椹卞姩鏃堕挓鍧楋紙drv_cb锛夛細鐢ㄤ簬 Driver 椹卞姩淇″彿鐨勬椂搴忔帶鍒?
+路聽鐩戞祴鏃堕挓鍧楋紙mon_cb锛夛細鐢ㄤ簬 Monitor 閲囨牱淇″彿鐨勬椂搴忔帶鍒?
+路聽Modport DRV锛欴river 渚х鍙ｈ鍥?
+路聽Modport MON锛歁onitor 渚х鍙ｈ鍥?
+## **3.3 閰嶇疆瀵硅薄锛坰pi_config锛?*
 
-## **3.2 接口（spi_slave_intf）**
+spi_config 缁ф壙鑷?uvm_object锛屽寘鍚袱绫婚厤缃細
 
-接口定义了所有 SPI 总线信号、配置寄存器信号、FIFO 信号和 DUT 输出信号，并包含：
-
-· 驱动时钟块（drv_cb）：用于 Driver 驱动信号的时序控制
-
-· 监测时钟块（mon_cb）：用于 Monitor 采样信号的时序控制
-
-· Modport DRV：Driver 侧端口视图
-
-· Modport MON：Monitor 侧端口视图
-
-## **3.3 配置对象（spi_config）**
-
-spi_config 继承自 uvm_object，包含两类配置：
-
-### **3.3.1 DUT 寄存器配置**
+### **3.3.1 DUT 瀵勫瓨鍣ㄩ厤缃?*
 
 |   |   |   |   |
 |---|---|---|---|
-|**字段**|**类型**|**默认值**|**说明**|
-|cpol|bit|随机|时钟极性|
-|cpha|bit|随机|时钟相位|
-|cs_act_pol|bit|0|CS 有效极性|
-|ext_data_len|bit|随机|扩展数据长度模式|
-|dummy_ins|bit[7:0]|0|Dummy 字节数|
-|slv_en|bit|1|从设备使能|
-|tout_step|bit[1:0]|随机|超时步长|
-|tout_thrs|bit[7:0]|随机|超时阈值|
+|**瀛楁**|**绫诲瀷**|**榛樿鍊?*|**璇存槑**|
+|cpol|bit|闅忔満|鏃堕挓鏋佹€
+|cpha|bit|闅忔満|鏃堕挓鐩镐綅|
+|cs_act_pol|bit|0|CS 鏈夋晥鏋佹€
+|ext_data_len|bit|闅忔満|鎵╁睍鏁版嵁闀垮害妯″紡|
+|dummy_ins|bit[7:0]|0|Dummy 瀛楄妭鏁皘
+|slv_en|bit|1|浠庤澶囦娇鑳絴
+|tout_step|bit[1:0]|闅忔満|瓒呮椂姝ラ暱|
+|tout_thrs|bit[7:0]|闅忔満|瓒呮椂闃堝€紎
 
-### **3.3.2 测试流程参数**
-
-|   |   |   |
-|---|---|---|
-|**字段**|**类型**|**说明**|
-|num_txns|int|事务数量|
-|sck_period_ns|real|SPI 时钟周期（ns）|
-
-支持通过 plusarg 进行参数覆盖。
-
-## **3.4 事务项（spi_transaction）**
-
-spi_transaction 继承自 uvm_sequence_item，建模一个完整的 SPI 命令帧。
-
-### **3.4.1 主要字段**
+### **3.3.2 娴嬭瘯娴佺▼鍙傛暟**
 
 |   |   |   |
 |---|---|---|
-|**字段**|**类型**|**说明**|
-|cmd|bit[1:0]|命令类型：WR_CMD=01, RD_CMD=10, RD_DATA_CMD=11|
-|addr_l|bit[7:0]|目标地址|
-|rd_en|bit|读使能标志|
-|rd_length|bit[6:0]|读取长度|
-|data_len|bit[7:0]|数据长度|
-|payload_data|bit[7:0][]|payload 数据数组|
-|inject_crc_err|bit|CRC 错误注入标志|
-|early_cs_deassert|bit|提前 CS 撤销标志|
-|mst_cmd|bit|主设备命令：MST_SUCCESS / MST_FAIL|
-|mst_resp_data|bit[7:0][]|主设备响应数据|
-|resp_data|bit[7:0][]|响应数据|
+|**瀛楁**|**绫诲瀷**|**璇存槑**|
+|num_txns|int|浜嬪姟鏁伴噺|
+|sck_period_ns|real|SPI 鏃堕挓鍛ㄦ湡锛坣s锛墊
 
-### **3.4.2 约束条件**
+鏀寔閫氳繃 plusarg 杩涜鍙傛暟瑕嗙洊銆?
+## **3.4 浜嬪姟椤癸紙spi_transaction锛?*
 
-· payload 大小根据命令类型约束
-
-· 错误注入分布：CRC 错误 5%，提前 CS 撤销 5%，主设备失败 20%
-
-### **3.4.3 关键方法**
-
-· cal_crc8() / calc_crc8()：CRC-8 计算
-
-· build_queue()：构建帧数据队列
-
-· get_frame_len()：计算帧长度
-
-## **3.5 序列（Sequences）**
+spi_transaction 缁ф壙鑷?uvm_sequence_item锛屽缓妯′竴涓畬鏁寸殑 SPI 鍛戒护甯с€?
+### **3.4.1 涓昏瀛楁**
 
 |   |   |   |
 |---|---|---|
-|**序列类名**|**说明**|**激励内容**|
-|spi_base_seq|基础序列类|空实现，作为父类|
-|spi_mixed_seq|混合序列|生成 N 个随机类型的事务|
-|spi_write_seq|写序列|生成 N 个写命令（WR_CMD）事务|
-|spi_read_seq|读序列|生成 N 个读命令（RD_CMD）事务|
-|spi_read_data_seq|读数据序列|生成 N 个读数据命令（RD_DATA_CMD）事务|
-|spi_err_inject_seq|错误注入序列|故意注入错误：3 个 CRC 错误 + 3 个无效地址 + 3 个提前 CS 撤销|
-|spi_boundary_seq|边界序列|边界条件：最小 payload（1 byte）、最大 payload（64 bytes）、零地址、最大地址（0xFF）|
-|spi_b2b_seq|背靠背序列|连续写事务，无帧间间隔|
+|**瀛楁**|**绫诲瀷**|**璇存槑**|
+|cmd|bit[1:0]|鍛戒护绫诲瀷锛歐R_CMD=01, RD_CMD=10, RD_DATA_CMD=11|
+|addr_l|bit[7:0]|鐩爣鍦板潃|
+|rd_en|bit|璇讳娇鑳芥爣蹇梶
+|rd_length|bit[6:0]|璇诲彇闀垮害|
+|data_len|bit[7:0]|鏁版嵁闀垮害|
+|payload_data|bit[7:0][]|payload 鏁版嵁鏁扮粍|
+|inject_crc_err|bit|CRC 閿欒娉ㄥ叆鏍囧織|
+|early_cs_deassert|bit|鎻愬墠 CS 鎾ら攢鏍囧織|
+|mst_cmd|bit|涓昏澶囧懡浠わ細MST_SUCCESS / MST_FAIL|
+|mst_resp_data|bit[7:0][]|涓昏澶囧搷搴旀暟鎹畖
+|resp_data|bit[7:0][]|鍝嶅簲鏁版嵁|
 
-## **3.6 驱动器（spi_driver）**
+### **3.4.2 绾︽潫鏉′欢**
 
-spi_driver 继承自 uvm_driver#(spi_transaction)，承担双重角色：
+路聽payload 澶у皬鏍规嵁鍛戒护绫诲瀷绾︽潫
 
-### **3.6.1 SPI 主设备角色**
+路聽閿欒娉ㄥ叆鍒嗗竷锛欳RC 閿欒 5%锛屾彁鍓?CS 鎾ら攢 5%锛屼富璁惧澶辫触 20%
 
-· 生成 SPI 时钟（可配置周期和极性）
+### **3.4.3 鍏抽敭鏂规硶**
 
-· 驱动 CS 和 MOSI 信号
+路聽cal_crc8() / calc_crc8()锛欳RC-8 璁＄畻
 
-· 采样 MISO 信号
+路聽build_queue()锛氭瀯寤哄抚鏁版嵁闃熷垪
 
-· 支持全部 4 种 SPI 模式（CPOL/CPHA 组合）
+路聽get_frame_len()锛氳绠楀抚闀垮害
 
-### **3.6.2 SOC 主机角色**
+## **3.5 搴忓垪锛圫equences锛?*
 
-· 每个 SPI 帧完成后，向 RX FIFO 写入主设备响应（确认或确认+失败数据）
+|   |   |   |
+|---|---|---|
+|**搴忓垪绫诲悕**|**璇存槑**|**婵€鍔卞唴瀹?*|
+|spi_base_seq|鍩虹搴忓垪绫粅绌哄疄鐜帮紝浣滀负鐖剁被|
+|spi_mixed_seq|娣峰悎搴忓垪|鐢熸垚 N 涓殢鏈虹被鍨嬬殑浜嬪姟|
+|spi_write_seq|鍐欏簭鍒梶鐢熸垚 N 涓啓鍛戒护锛圵R_CMD锛変簨鍔
+|spi_read_seq|璇诲簭鍒梶鐢熸垚 N 涓鍛戒护锛圧D_CMD锛変簨鍔
+|spi_read_data_seq|璇绘暟鎹簭鍒梶鐢熸垚 N 涓鏁版嵁鍛戒护锛圧D_DATA_CMD锛変簨鍔
+|spi_err_inject_seq|閿欒娉ㄥ叆搴忓垪|鏁呮剰娉ㄥ叆閿欒锛? 涓?CRC 閿欒 + 3 涓棤鏁堝湴鍧€ + 3 涓彁鍓?CS 鎾ら攢|
+|spi_boundary_seq|杈圭晫搴忓垪|杈圭晫鏉′欢锛氭渶灏?payload锛? byte锛夈€佹渶澶?payload锛?4 bytes锛夈€侀浂鍦板潃銆佹渶澶у湴鍧€锛?xFF锛墊
+|spi_b2b_seq|鑳岄潬鑳屽簭鍒梶杩炵画鍐欎簨鍔★紝鏃犲抚闂撮棿闅攟
 
-· 从 TX FIFO 读取数据
+## **3.6 椹卞姩鍣紙spi_driver锛?*
 
-### **3.6.3 内部状态机**
+spi_driver 缁ф壙鑷?uvm_driver#(spi_transaction)锛屾壙鎷呭弻閲嶈鑹诧細
 
-Driver 包含 8 个内部状态：
+### **3.6.1 SPI 涓昏澶囪鑹?*
 
-|   |   |
-|---|---|
-|**状态**|**说明**|
-|IDLE|空闲等待|
-|CS_ACTIVE|CS 有效|
-|HEADER|发送帧头（4 字节）|
-|PAYLOAD|发送 payload 数据|
-|CRC|发送 CRC 校验字节|
-|CS_DEASSERT|CS 撤销|
-|MST_RX_CMD|主设备接收命令|
-|MST_RX_DATA|主设备接收数据|
+路聽鐢熸垚 SPI 鏃堕挓锛堝彲閰嶇疆鍛ㄦ湡鍜屾瀬鎬э級
 
-### **3.6.4 驱动流程**
+路聽椹卞姩 CS 鍜?MOSI 淇″彿
 
-1. 从 Sequencer 获取事务项
+路聽閲囨牱 MISO 淇″彿
 
-2. 根据配置生成 SPI 时钟
+路聽鏀寔鍏ㄩ儴 4 绉?SPI 妯″紡锛圕POL/CPHA 缁勫悎锛?
+### **3.6.2 SOC 涓绘満瑙掕壊**
 
-3. 驱动 CS 有效
+路聽姣忎釜 SPI 甯у畬鎴愬悗锛屽悜 RX FIFO 鍐欏叆涓昏澶囧搷搴旓紙纭鎴栫‘璁?澶辫触鏁版嵁锛?
+路聽浠?TX FIFO 璇诲彇鏁版嵁
 
-4. 逐 bit 发送帧头（cmd_byte + addr_l + ctrl_h + ctrl_l）
+### **3.6.3 鍐呴儴鐘舵€佹満**
 
-5. 逐 bit 发送 payload（如有）
-
-6. 逐 bit 发送 CRC
-
-7. 对 RD_DATA_CMD：发送 dummy 字节，然后接收数据字节和 CRC
-
-8. 驱动 CS 撤销
-
-9. 向 RX FIFO 写入主设备响应
-
-10. 复位信号状态
-
-## **3.7 监测器（spi_monitor）**
-
-spi_monitor 继承自 uvm_mymonitor，是验证平台的核心检查组件，包含 635 行代码，运行 6 个并行检查任务。
-
-### **3.7.1 帧收集任务（collect_spi_frames）**
-
-· 检测 CS 上升沿/下降沿
-
-· 逐 bit 采样 MOSI/MISO 数据
-
-· 验证首字节（loc=1, rw!=00）
-
-· 帧结束时进行 CRC-8 校验
-
-· 验证帧结构（header + payload + CRC 长度一致性）
-
-· 解析字节为 spi_transaction 并发送到分析端口
-
-### **3.7.2 FSM 状态转换检查（check_fsm_transitions）**
-
-· 跟踪 spis_state_code 变化
-
-· 验证所有 FSM 状态转换是否符合合法状态图（13 条合法转换路径）
-
-### **3.7.3 错误标志检查（check_error_flags）**
-
-· 监测 7 个错误输出信号
-
-· 记录每个错误事件
-
-· 验证 CRC 错误后 FSM 在 20 个周期内返回 IDLE
-
-· 验证超时错误后 FSM 在 10 个周期内返回 IDLE
-
-· 检查 CRC 错误和超时错误的互斥性
-
-### **3.7.4 计数器检查（check_counters）**
-
-· 周期精确的计数器检查（预留接口）
-
-### **3.7.5 FIFO 接口检查（check_fifo_interfaces）**
-
-· 监测 RX FIFO 满状态
-
-### **3.7.6 信号完整性检查（check_signal_integrity）**
-
-· 检查 state_code_vld 信号无 X/Z
-
-· 检查 state_code 在有效时无 X/Z
-
-· 检查错误输出信号无 X/Z
-
-· 检查活跃帧期间 MISO 信号无 X/Z
-
-### **3.7.7 SVA 并发断言（A1-A13）**
+Driver 鍖呭惈 8 涓唴閮ㄧ姸鎬侊細
 
 |   |   |
 |---|---|
-|**断言ID**|**检查内容**|
-|A1|复位后 FSM 进入 IDLE 状态|
-|A2|IDLE 状态下不发生超时|
-|A3|状态码有效范围（0-7）|
-|A4|state_code_vld 信号无 X/Z|
-|A5|错误输出信号无 X/Z|
-|A6|合法 FSM 状态转换|
-|A7|CRC 错误强制返回 IDLE|
-|A8|超时错误强制返回 IDLE|
-|A9|单步 FSM 跳转|
-|A10|vld=0 时状态码稳定|
-|A11|CRC 错误与超时错误互斥|
-|A12|帧期间 CS 保持有效|
-|A13|复位期间信号初始化|
+|**鐘舵€?*|**璇存槑**|
+|IDLE|绌洪棽绛夊緟|
+|CS_ACTIVE|CS 鏈夋晥|
+|HEADER|鍙戦€佸抚澶达紙4 瀛楄妭锛墊
+|PAYLOAD|鍙戦€?payload 鏁版嵁|
+|CRC|鍙戦€?CRC 鏍￠獙瀛楄妭|
+|CS_DEASSERT|CS 鎾ら攢|
+|MST_RX_CMD|涓昏澶囨帴鏀跺懡浠
+|MST_RX_DATA|涓昏澶囨帴鏀舵暟鎹畖
 
-### **3.7.8 监测器内部覆盖组（cg_mon）**
+### **3.6.4 椹卞姩娴佺▼**
 
-· 覆盖全部 8 个 FSM 状态
+1. 浠?Sequencer 鑾峰彇浜嬪姟椤?
+2. 鏍规嵁閰嶇疆鐢熸垚 SPI 鏃堕挓
 
-· 覆盖所有错误标志
+3. 椹卞姩 CS 鏈夋晥
 
-· CPOL × CPHA 交叉覆盖
+4. 閫?bit 鍙戦€佸抚澶达紙cmd_byte + addr_l + ctrl_h + ctrl_l锛?
+5. 閫?bit 鍙戦€?payload锛堝鏈夛級
 
-### **3.7.9 仿真结束统计报告**
+6. 閫?bit 鍙戦€?CRC
 
-在仿真结束时输出：帧计数、各错误计数、覆盖率百分比。
+7. 瀵?RD_DATA_CMD锛氬彂閫?dummy 瀛楄妭锛岀劧鍚庢帴鏀舵暟鎹瓧鑺傚拰 CRC
 
-## **3.8 覆盖率收集器（spi_coverage）**
+8. 椹卞姩 CS 鎾ら攢
 
-spi_coverage 继承自 uvm_subscriber#(spi_transaction)，通过分析端口连接到 Monitor，包含 3 个覆盖组：
+9. 鍚?RX FIFO 鍐欏叆涓昏澶囧搷搴?
+10. 澶嶄綅淇″彿鐘舵€?
+## **3.7 鐩戞祴鍣紙spi_monitor锛?*
 
-### **3.8.1 命令覆盖组（cg_cmd）**
+spi_monitor 缁ф壙鑷?uvm_mymonitor锛屾槸楠岃瘉骞冲彴鐨勬牳蹇冩鏌ョ粍浠讹紝鍖呭惈 635 琛屼唬鐮侊紝杩愯 6 涓苟琛屾鏌ヤ换鍔°€?
+### **3.7.1 甯ф敹闆嗕换鍔★紙collect_spi_frames锛?*
+
+路聽妫€娴?CS 涓婂崌娌?涓嬮檷娌?
+路聽閫?bit 閲囨牱 MOSI/MISO 鏁版嵁
+
+路聽楠岃瘉棣栧瓧鑺傦紙loc=1, rw!=00锛?
+路聽甯х粨鏉熸椂杩涜 CRC-8 鏍￠獙
+
+路聽楠岃瘉甯х粨鏋勶紙header + payload + CRC 闀垮害涓€鑷存€э級
+
+路聽瑙ｆ瀽瀛楄妭涓?spi_transaction 骞跺彂閫佸埌鍒嗘瀽绔彛
+
+### **3.7.2 FSM 鐘舵€佽浆鎹㈡鏌ワ紙check_fsm_transitions锛?*
+
+路聽璺熻釜 spis_state_code 鍙樺寲
+
+路聽楠岃瘉鎵€鏈?FSM 鐘舵€佽浆鎹㈡槸鍚︾鍚堝悎娉曠姸鎬佸浘锛?3 鏉″悎娉曡浆鎹㈣矾寰勶級
+
+### **3.7.3 閿欒鏍囧織妫€鏌ワ紙check_error_flags锛?*
+
+路聽鐩戞祴 7 涓敊璇緭鍑轰俊鍙?
+路聽璁板綍姣忎釜閿欒浜嬩欢
+
+路聽楠岃瘉 CRC 閿欒鍚?FSM 鍦?20 涓懆鏈熷唴杩斿洖 IDLE
+
+路聽楠岃瘉瓒呮椂閿欒鍚?FSM 鍦?10 涓懆鏈熷唴杩斿洖 IDLE
+
+路聽妫€鏌?CRC 閿欒鍜岃秴鏃堕敊璇殑浜掓枼鎬?
+### **3.7.4 璁℃暟鍣ㄦ鏌ワ紙check_counters锛?*
+
+路聽鍛ㄦ湡绮剧‘鐨勮鏁板櫒妫€鏌ワ紙棰勭暀鎺ュ彛锛?
+### **3.7.5 FIFO 鎺ュ彛妫€鏌ワ紙check_fifo_interfaces锛?*
+
+路聽鐩戞祴 RX FIFO 婊＄姸鎬?
+### **3.7.6 淇″彿瀹屾暣鎬ф鏌ワ紙check_signal_integrity锛?*
+
+路聽妫€鏌?state_code_vld 淇″彿鏃?X/Z
+
+路聽妫€鏌?state_code 鍦ㄦ湁鏁堟椂鏃?X/Z
+
+路聽妫€鏌ラ敊璇緭鍑轰俊鍙锋棤 X/Z
+
+路聽妫€鏌ユ椿璺冨抚鏈熼棿 MISO 淇″彿鏃?X/Z
+
+### **3.7.7 SVA 骞跺彂鏂█锛圓1-A13锛?*
 
 |   |   |
 |---|---|
-|**覆盖点**|**覆盖项**|
+|**鏂█ID**|**妫€鏌ュ唴瀹?*|
+|A1|澶嶄綅鍚?FSM 杩涘叆 IDLE 鐘舵€亅
+|A2|IDLE 鐘舵€佷笅涓嶅彂鐢熻秴鏃秥
+|A3|鐘舵€佺爜鏈夋晥鑼冨洿锛?-7锛墊
+|A4|state_code_vld 淇″彿鏃?X/Z|
+|A5|閿欒杈撳嚭淇″彿鏃?X/Z|
+|A6|鍚堟硶 FSM 鐘舵€佽浆鎹
+|A7|CRC 閿欒寮哄埗杩斿洖 IDLE|
+|A8|瓒呮椂閿欒寮哄埗杩斿洖 IDLE|
+|A9|鍗曟 FSM 璺宠浆|
+|A10|vld=0 鏃剁姸鎬佺爜绋冲畾|
+|A11|CRC 閿欒涓庤秴鏃堕敊璇簰鏂
+|A12|甯ф湡闂?CS 淇濇寔鏈夋晥|
+|A13|澶嶄綅鏈熼棿淇″彿鍒濆鍖東
+
+### **3.7.8 鐩戞祴鍣ㄥ唴閮ㄨ鐩栫粍锛坈g_mon锛?*
+
+路聽瑕嗙洊鍏ㄩ儴 8 涓?FSM 鐘舵€?
+路聽瑕嗙洊鎵€鏈夐敊璇爣蹇?
+路聽CPOL 脳 CPHA 浜ゅ弶瑕嗙洊
+
+### **3.7.9 浠跨湡缁撴潫缁熻鎶ュ憡**
+
+鍦ㄤ豢鐪熺粨鏉熸椂杈撳嚭锛氬抚璁℃暟銆佸悇閿欒璁℃暟銆佽鐩栫巼鐧惧垎姣斻€?
+## **3.8 瑕嗙洊鐜囨敹闆嗗櫒锛坰pi_coverage锛?*
+
+spi_coverage 缁ф壙鑷?uvm_subscriber#(spi_transaction)锛岄€氳繃鍒嗘瀽绔彛杩炴帴鍒?Monitor锛屽寘鍚?3 涓鐩栫粍锛?
+### **3.8.1 鍛戒护瑕嗙洊缁勶紙cg_cmd锛?*
+
+|   |   |
+|---|---|
+|**瑕嗙洊鐐?*|**瑕嗙洊椤?*|
 |cmd_type|WR_CMD, RD_CMD, RD_DATA_CMD|
 |crc_err|0, 1|
-|spi_mode|CPOL × CPHA（4 bins）|
-|cmd × mode|命令类型与 SPI 模式交叉|
-|cmd × error|命令类型与错误注入交叉|
+|spi_mode|CPOL 脳 CPHA锛? bins锛墊
+|cmd 脳 mode|鍛戒护绫诲瀷涓?SPI 妯″紡浜ゅ弶|
+|cmd 脳 error|鍛戒护绫诲瀷涓庨敊璇敞鍏ヤ氦鍙墊
 
-### **3.8.2 Payload 长度覆盖组（cg_payload_len）**
+### **3.8.2 Payload 闀垮害瑕嗙洊缁勶紙cg_payload_len锛?*
 
 |   |   |   |
 |---|---|---|
-|**区间**|**范围**|**说明**|
-|min|1 byte|最小 payload|
-|short|2-8 bytes|短 payload|
-|medium|9-32 bytes|中等 payload|
-|long|33-63 bytes|长 payload|
-|max|64 bytes|最大 payload|
+|**鍖洪棿**|**鑼冨洿**|**璇存槑**|
+|min|1 byte|鏈€灏?payload|
+|short|2-8 bytes|鐭?payload|
+|medium|9-32 bytes|涓瓑 payload|
+|long|33-63 bytes|闀?payload|
+|max|64 bytes|鏈€澶?payload|
 
-### **3.8.3 地址覆盖组（cg_addr）**
+### **3.8.3 鍦板潃瑕嗙洊缁勶紙cg_addr锛?*
 
 |   |   |
 |---|---|
-|**区间**|**范围**|
+|**鍖洪棿**|**鑼冨洿**|
 |low|0-127|
 |high|128-255|
 
-## **3.9 代理（spi_agent）**
+## **3.9 浠ｇ悊锛坰pi_agent锛?*
 
-spi_agent 继承自 uvm_agent，包含：
+spi_agent 缁ф壙鑷?uvm_agent锛屽寘鍚細
 
-· spi_driver：驱动器
+路聽spi_driver锛氶┍鍔ㄥ櫒
 
-· spi_monitor：监测器
+路聽spi_monitor锛氱洃娴嬪櫒
 
-· uvm_sequencer#(spi_transaction)：排序器
+路聽uvm_sequencer#(spi_transaction)锛氭帓搴忓櫒
 
-在 ACTIVE 模式下创建 Driver 并连接 Sequencer 到 Driver 的 seq_item_port；始终创建 Monitor。
+鍦?ACTIVE 妯″紡涓嬪垱寤?Driver 骞惰繛鎺?Sequencer 鍒?Driver 鐨?seq_item_port锛涘缁堝垱寤?Monitor銆?
+## **3.10 鐜锛坰pi_env锛?*
 
-## **3.10 环境（spi_env）**
+spi_env 缁ф壙鑷?uvm_env锛屽寘鍚細
 
-spi_env 继承自 uvm_env，包含：
-
-· spi_agent：代理
-
-· spi_coverage：覆盖率收集器
-
-连接 Monitor 的分析端口到覆盖率收集器的 analysis_export。
-
-注意：本验证平台没有独立的 Scoreboard，所有检查均在 Monitor 内部通过断言和即时检查完成。
-
+路聽spi_agent锛氫唬鐞?
+路聽spi_coverage锛氳鐩栫巼鏀堕泦鍣?
+杩炴帴 Monitor 鐨勫垎鏋愮鍙ｅ埌瑕嗙洊鐜囨敹闆嗗櫒鐨?analysis_export銆?
+娉ㄦ剰锛氭湰楠岃瘉骞冲彴娌℃湁鐙珛鐨?Scoreboard锛屾墍鏈夋鏌ュ潎鍦?Monitor 鍐呴儴閫氳繃鏂█鍜屽嵆鏃舵鏌ュ畬鎴愩€?
 ---
 
-# **4. 测试点与需求**
+# **4. 娴嬭瘯鐐逛笌闇€姹?*
 
-## **4.1 测试点矩阵**
+## **4.1 娴嬭瘯鐐圭煩闃?*
 
 |   |   |   |   |
 |---|---|---|---|
-|**编号**|**测试点**|**优先级**|**覆盖测试**|
-|TP-01|写命令基本功能|P0|smoke, all_modes, wr_rd|
-|TP-02|读命令基本功能（无数据）|P0|all_modes, wr_rd|
-|TP-03|读命令基本功能（有数据）|P0|all_modes, wr_rd|
-|TP-04|读数据命令基本功能|P0|all_modes|
-|TP-05|CRC-8 校验正确性|P0|smoke, all_modes|
-|TP-06|CRC 错误检测与处理|P0|err|
-|TP-07|超时错误检测与处理|P1|err|
-|TP-08|无效地址处理|P1|err|
-|TP-09|提前 CS 撤销处理|P1|err|
-|TP-10|SPI Mode 0（CPOL=0, CPHA=0）|P0|all_modes|
-|TP-11|SPI Mode 1（CPOL=0, CPHA=1）|P0|all_modes|
-|TP-12|SPI Mode 2（CPOL=1, CPHA=0）|P0|all_modes|
-|TP-13|SPI Mode 3（CPOL=1, CPHA=1）|P0|all_modes|
-|TP-14|最小 payload（1 byte）|P1|boundary|
-|TP-15|最大 payload（64 bytes）|P1|boundary|
-|TP-16|零地址|P2|boundary|
-|TP-17|最大地址（0xFF）|P2|boundary|
-|TP-18|背靠背连续传输|P1|b2b|
-|TP-19|FSM 状态全覆盖|P0|regression|
-|TP-20|FSM 合法状态转换全覆盖|P0|regression|
-|TP-21|CRC 错误后 FSM 返回 IDLE|P0|err|
-|TP-22|超时错误后 FSM 返回 IDLE|P0|err|
-|TP-23|CRC 与超时错误互斥|P1|err|
-|TP-24|信号完整性（无 X/Z）|P1|all|
-|TP-25|RX FIFO 满状态处理|P2|b2b|
-|TP-26|主设备成功响应|P0|smoke, wr_rd|
-|TP-27|主设备失败响应|P1|all_modes|
+|**缂栧彿**|**娴嬭瘯鐐?*|**浼樺厛绾?*|**瑕嗙洊娴嬭瘯**|
+|TP-01|鍐欏懡浠ゅ熀鏈姛鑳絴P0|smoke, all_modes, wr_rd|
+|TP-02|璇诲懡浠ゅ熀鏈姛鑳斤紙鏃犳暟鎹級|P0|all_modes, wr_rd|
+|TP-03|璇诲懡浠ゅ熀鏈姛鑳斤紙鏈夋暟鎹級|P0|all_modes, wr_rd|
+|TP-04|璇绘暟鎹懡浠ゅ熀鏈姛鑳絴P0|all_modes|
+|TP-05|CRC-8 鏍￠獙姝ｇ‘鎬P0|smoke, all_modes|
+|TP-06|CRC 閿欒妫€娴嬩笌澶勭悊|P0|err|
+|TP-07|瓒呮椂閿欒妫€娴嬩笌澶勭悊|P1|err|
+|TP-08|鏃犳晥鍦板潃澶勭悊|P1|err|
+|TP-09|鎻愬墠 CS 鎾ら攢澶勭悊|P1|err|
+|TP-10|SPI Mode 0锛圕POL=0, CPHA=0锛墊P0|all_modes|
+|TP-11|SPI Mode 1锛圕POL=0, CPHA=1锛墊P0|all_modes|
+|TP-12|SPI Mode 2锛圕POL=1, CPHA=0锛墊P0|all_modes|
+|TP-13|SPI Mode 3锛圕POL=1, CPHA=1锛墊P0|all_modes|
+|TP-14|鏈€灏?payload锛? byte锛墊P1|boundary|
+|TP-15|鏈€澶?payload锛?4 bytes锛墊P1|boundary|
+|TP-16|闆跺湴鍧€|P2|boundary|
+|TP-17|鏈€澶у湴鍧€锛?xFF锛墊P2|boundary|
+|TP-18|鑳岄潬鑳岃繛缁紶杈搢P1|b2b|
+|TP-19|FSM 鐘舵€佸叏瑕嗙洊|P0|regression|
+|TP-20|FSM 鍚堟硶鐘舵€佽浆鎹㈠叏瑕嗙洊|P0|regression|
+|TP-21|CRC 閿欒鍚?FSM 杩斿洖 IDLE|P0|err|
+|TP-22|瓒呮椂閿欒鍚?FSM 杩斿洖 IDLE|P0|err|
+|TP-23|CRC 涓庤秴鏃堕敊璇簰鏂P1|err|
+|TP-24|淇″彿瀹屾暣鎬э紙鏃?X/Z锛墊P1|all|
+|TP-25|RX FIFO 婊＄姸鎬佸鐞唡P2|b2b|
+|TP-26|涓昏澶囨垚鍔熷搷搴攟P0|smoke, wr_rd|
+|TP-27|涓昏澶囧け璐ュ搷搴攟P1|all_modes|
 
-## **4.2 覆盖率目标**
-
-|   |   |   |
-|---|---|---|
-|**覆盖率类型**|**目标**|**说明**|
-|FSM 状态覆盖率|100%|全部 8 个状态均被访问|
-|SPI 模式覆盖率|100%|全部 4 种 CPOL/CPHA 组合|
-|错误标志覆盖率|100%|每个错误标志至少触发一次|
-|命令类型覆盖率|100%|Write、Read、ReadData 命令|
-|FIFO 覆盖率|100%|TX/RX FIFO 读写均被验证|
-|边界覆盖率|100%|字节数限制、数据长度边界|
-|Payload 长度覆盖率|100%|5 个区间（min/short/medium/long/max）|
-|地址覆盖率|100%|低地址和高地址区间|
-
-## **4.3 SVA 断言检查清单**
+## **4.2 瑕嗙洊鐜囩洰鏍?*
 
 |   |   |   |
 |---|---|---|
-|**ID**|**断言描述**|**检查内容**|
-|A1|复位后状态检查|复位释放后 FSM 进入 IDLE|
-|A2|IDLE 超时检查|IDLE 状态下不发生超时错误|
-|A3|状态码范围检查|状态码在合法范围 0-7 内|
-|A4|有效信号 X/Z 检查|state_code_vld 无 X/Z|
-|A5|错误信号 X/Z 检查|所有错误输出无 X/Z|
-|A6|FSM 转换合法性|状态转换符合定义的状态图|
-|A7|CRC 错误强制 IDLE|CRC 错误后强制返回 IDLE|
-|A8|超时错误强制 IDLE|超时错误后强制返回 IDLE|
-|A9|单步跳转检查|FSM 每次只跳转一个状态|
-|A10|状态稳定检查|vld=0 时状态码保持稳定|
-|A11|错误互斥检查|CRC 错误和超时错误不同时发生|
-|A12|CS 保持检查|帧传输期间 CS 保持有效|
-|A13|复位初始化检查|复位期间信号正确初始化|
+|**瑕嗙洊鐜囩被鍨?*|**鐩爣**|**璇存槑**|
+|FSM 鐘舵€佽鐩栫巼|100%|鍏ㄩ儴 8 涓姸鎬佸潎琚闂畖
+|SPI 妯″紡瑕嗙洊鐜噟100%|鍏ㄩ儴 4 绉?CPOL/CPHA 缁勫悎|
+|閿欒鏍囧織瑕嗙洊鐜噟100%|姣忎釜閿欒鏍囧織鑷冲皯瑙﹀彂涓€娆
+|鍛戒护绫诲瀷瑕嗙洊鐜噟100%|Write銆丷ead銆丷eadData 鍛戒护|
+|FIFO 瑕嗙洊鐜噟100%|TX/RX FIFO 璇诲啓鍧囪楠岃瘉|
+|杈圭晫瑕嗙洊鐜噟100%|瀛楄妭鏁伴檺鍒躲€佹暟鎹暱搴﹁竟鐣寍
+|Payload 闀垮害瑕嗙洊鐜噟100%|5 涓尯闂达紙min/short/medium/long/max锛墊
+|鍦板潃瑕嗙洊鐜噟100%|浣庡湴鍧€鍜岄珮鍦板潃鍖洪棿|
+
+## **4.3 SVA 鏂█妫€鏌ユ竻鍗?*
+
+|   |   |   |
+|---|---|---|
+|**ID**|**鏂█鎻忚堪**|**妫€鏌ュ唴瀹?*|
+|A1|澶嶄綅鍚庣姸鎬佹鏌澶嶄綅閲婃斁鍚?FSM 杩涘叆 IDLE|
+|A2|IDLE 瓒呮椂妫€鏌IDLE 鐘舵€佷笅涓嶅彂鐢熻秴鏃堕敊璇瘄
+|A3|鐘舵€佺爜鑼冨洿妫€鏌鐘舵€佺爜鍦ㄥ悎娉曡寖鍥?0-7 鍐厊
+|A4|鏈夋晥淇″彿 X/Z 妫€鏌state_code_vld 鏃?X/Z|
+|A5|閿欒淇″彿 X/Z 妫€鏌鎵€鏈夐敊璇緭鍑烘棤 X/Z|
+|A6|FSM 杞崲鍚堟硶鎬鐘舵€佽浆鎹㈢鍚堝畾涔夌殑鐘舵€佸浘|
+|A7|CRC 閿欒寮哄埗 IDLE|CRC 閿欒鍚庡己鍒惰繑鍥?IDLE|
+|A8|瓒呮椂閿欒寮哄埗 IDLE|瓒呮椂閿欒鍚庡己鍒惰繑鍥?IDLE|
+|A9|鍗曟璺宠浆妫€鏌FSM 姣忔鍙烦杞竴涓姸鎬亅
+|A10|鐘舵€佺ǔ瀹氭鏌vld=0 鏃剁姸鎬佺爜淇濇寔绋冲畾|
+|A11|閿欒浜掓枼妫€鏌CRC 閿欒鍜岃秴鏃堕敊璇笉鍚屾椂鍙戠敓|
+|A12|CS 淇濇寔妫€鏌甯т紶杈撴湡闂?CS 淇濇寔鏈夋晥|
+|A13|澶嶄綅鍒濆鍖栨鏌澶嶄綅鏈熼棿淇″彿姝ｇ‘鍒濆鍖東
 
 ---
 
-# **5. 测试用例详细说明**
+# **5. 娴嬭瘯鐢ㄤ緥璇︾粏璇存槑**
 
-## **5.1 测试用例总览**
+## **5.1 娴嬭瘯鐢ㄤ緥鎬昏**
 
 |   |   |   |   |
 |---|---|---|---|
-|**测试名称**|**测试类**|**使用序列**|**说明**|
-|spi_smoke_test|spi_smoke_test|spi_write_seq ×5|基础写操作冒烟测试|
-|spi_all_modes_test|spi_all_modes_test|spi_mixed_seq ×10|全 SPI 模式混合命令测试|
-|spi_err_test|spi_err_test|spi_write_seq ×3 + spi_err_inject_seq|错误注入测试|
-|spi_wr_rd_test|spi_wr_rd_test|spi_write_seq ×3 + spi_read_seq ×3|写后读测试|
-|spi_boundary_test|spi_boundary_test|spi_boundary_seq|边界条件测试|
-|spi_b2b_test|spi_b2b_test|spi_b2b_seq ×10|背靠背传输测试|
-|spi_regression_test|spi_regression_test|spi_write_seq ×10 + spi_read_seq ×10 + spi_err_inject_seq + spi_boundary_seq|完整回归测试|
+|**娴嬭瘯鍚嶇О**|**娴嬭瘯绫?*|**浣跨敤搴忓垪**|**璇存槑**|
+|spi_smoke_test|spi_smoke_test|spi_write_seq 脳5|鍩虹鍐欐搷浣滃啋鐑熸祴璇晐
+|spi_all_modes_test|spi_all_modes_test|spi_mixed_seq 脳10|鍏?SPI 妯″紡娣峰悎鍛戒护娴嬭瘯|
+|spi_err_test|spi_err_test|spi_write_seq 脳3 + spi_err_inject_seq|閿欒娉ㄥ叆娴嬭瘯|
+|spi_wr_rd_test|spi_wr_rd_test|spi_write_seq 脳3 + spi_read_seq 脳3|鍐欏悗璇绘祴璇晐
+|spi_boundary_test|spi_boundary_test|spi_boundary_seq|杈圭晫鏉′欢娴嬭瘯|
+|spi_b2b_test|spi_b2b_test|spi_b2b_seq 脳10|鑳岄潬鑳屼紶杈撴祴璇晐
+|spi_regression_test|spi_regression_test|spi_write_seq 脳10 + spi_read_seq 脳10 + spi_err_inject_seq + spi_boundary_seq|瀹屾暣鍥炲綊娴嬭瘯|
 
-## **5.2 spi_smoke_test（冒烟测试）**
+## **5.2 spi_smoke_test锛堝啋鐑熸祴璇曪級**
 
-目的：验证基本的写操作功能，确认验证环境搭建正确。
+鐩殑锛氶獙璇佸熀鏈殑鍐欐搷浣滃姛鑳斤紝纭楠岃瘉鐜鎼缓姝ｇ‘銆?
+娴嬭瘯娴佺▼锛?
+1. 鍒涘缓 spi_config锛屼娇鐢ㄩ粯璁ら厤缃紙slv_en=1, cs_act_pol=0锛?
+2. 鎵ц spi_write_seq锛岀敓鎴?5 涓啓鍛戒护浜嬪姟
 
-测试流程：
+3. 姣忎釜浜嬪姟鍖呭惈闅忔満 payload锛?-64 bytes锛?
+4. 楠岃瘉 DUT 姝ｇ‘鎺ユ敹鏁版嵁骞跺啓鍏?RX FIFO
 
-1. 创建 spi_config，使用默认配置（slv_en=1, cs_act_pol=0）
+棰勬湡缁撴灉锛?
+路聽鎵€鏈?5 涓啓浜嬪姟鎴愬姛瀹屾垚
 
-2. 执行 spi_write_seq，生成 5 个写命令事务
+路聽鏃?CRC 閿欒
 
-3. 每个事务包含随机 payload（1-64 bytes）
+路聽Monitor 鏃?uvm_error 鎶ュ憡
 
-4. 验证 DUT 正确接收数据并写入 RX FIFO
+路聽FSM 姝ｅ父缁忓巻 IDLE 鈫?WRITE_CMD 鈫?WAIT_WRITE_CONFIRM 鈫?IDLE 杞崲
 
-预期结果：
-
-· 所有 5 个写事务成功完成
-
-· 无 CRC 错误
-
-· Monitor 无 uvm_error 报告
-
-· FSM 正常经历 IDLE → WRITE_CMD → WAIT_WRITE_CONFIRM → IDLE 转换
-
-覆盖测试点：TP-01, TP-05, TP-10, TP-24, TP-26
+瑕嗙洊娴嬭瘯鐐癸細TP-01, TP-05, TP-10, TP-24, TP-26
 
 ---
 
-## **5.3 spi_all_modes_test（全模式测试）**
+## **5.3 spi_all_modes_test锛堝叏妯″紡娴嬭瘯锛?*
 
-目的：验证 DUT 在所有 4 种 SPI 模式下正确处理各种命令类型。
+鐩殑锛氶獙璇?DUT 鍦ㄦ墍鏈?4 绉?SPI 妯″紡涓嬫纭鐞嗗悇绉嶅懡浠ょ被鍨嬨€?
+娴嬭瘯娴佺▼锛?
+1. 鍒涘缓 spi_config锛岄殢鏈哄寲 CPOL 鍜?CPHA
 
-测试流程：
+2. 鎵ц spi_mixed_seq锛岀敓鎴?10 涓殢鏈虹被鍨嬩簨鍔?
+3. 浜嬪姟绫诲瀷闅忔満閫夋嫨锛歐R_CMD銆丷D_CMD銆丷D_DATA_CMD
 
-1. 创建 spi_config，随机化 CPOL 和 CPHA
+4. 姣忔浠跨湡瑕嗙洊涓嶅悓鐨?SPI 妯″紡缁勫悎
 
-2. 执行 spi_mixed_seq，生成 10 个随机类型事务
+棰勬湡缁撴灉锛?
+路聽鎵€鏈変簨鍔″湪瀵瑰簲 SPI 妯″紡涓嬫纭畬鎴?
+路聽MISO 鏁版嵁閲囨牱姝ｇ‘
 
-3. 事务类型随机选择：WR_CMD、RD_CMD、RD_DATA_CMD
+路聽CRC 鏍￠獙閫氳繃
 
-4. 每次仿真覆盖不同的 SPI 模式组合
-
-预期结果：
-
-· 所有事务在对应 SPI 模式下正确完成
-
-· MISO 数据采样正确
-
-· CRC 校验通过
-
-· FSM 状态转换正确
-
-覆盖测试点：TP-01 ~ TP-05, TP-10 ~ TP-13, TP-24, TP-26
+路聽FSM 鐘舵€佽浆鎹㈡纭?
+瑕嗙洊娴嬭瘯鐐癸細TP-01 ~ TP-05, TP-10 ~ TP-13, TP-24, TP-26
 
 ---
 
-## **5.4 spi_err_test（错误注入测试）**
+## **5.4 spi_err_test锛堥敊璇敞鍏ユ祴璇曪級**
 
-目的：验证 DUT 对各类错误的检测和处理能力。
+鐩殑锛氶獙璇?DUT 瀵瑰悇绫婚敊璇殑妫€娴嬪拰澶勭悊鑳藉姏銆?
+娴嬭瘯娴佺▼锛?
+1. 鍏堟墽琛?spi_write_seq 脳3 浣滀负鐑韩锛岀‘淇?DUT 姝ｅ父宸ヤ綔
 
-测试流程：
-
-1. 先执行 spi_write_seq ×3 作为热身，确保 DUT 正常工作
-
-2. 执行 spi_err_inject_seq，注入以下错误：
+2. 鎵ц spi_err_inject_seq锛屾敞鍏ヤ互涓嬮敊璇細
 
 |   |   |   |
 |---|---|---|
-|**错误类型**|**数量**|**注入方式**|
-|CRC 错误|3|将 CRC 字节按位取反|
-|无效地址|3|设置 addr_l = 0x00|
-|提前 CS 撤销|3|在 payload 传输中途撤销 CS|
+|**閿欒绫诲瀷**|**鏁伴噺**|**娉ㄥ叆鏂瑰紡**|
+|CRC 閿欒|3|灏?CRC 瀛楄妭鎸変綅鍙栧弽|
+|鏃犳晥鍦板潃|3|璁剧疆 addr_l = 0x00|
+|鎻愬墠 CS 鎾ら攢|3|鍦?payload 浼犺緭涓€旀挙閿€ CS|
 
-预期结果：
+棰勬湡缁撴灉锛?
+路聽CRC 閿欒锛欴UT 妫€娴嬪埌 cmd_crc8_err锛孎SM 鍦?20 涓懆鏈熷唴杩斿洖 IDLE
 
-· CRC 错误：DUT 检测到 cmd_crc8_err，FSM 在 20 个周期内返回 IDLE
+路聽鏃犳晥鍦板潃锛欴UT 妫€娴嬪埌 loc_rw_err
 
-· 无效地址：DUT 检测到 loc_rw_err
+路聽鎻愬墠 CS 鎾ら攢锛欴UT 妫€娴嬪埌鐩稿簲閿欒鏍囧織
 
-· 提前 CS 撤销：DUT 检测到相应错误标志
+路聽鐑韩闃舵鏃犻敊璇?
+路聽CRC 閿欒涓庤秴鏃堕敊璇笉鍚屾椂鍙戠敓
 
-· 热身阶段无错误
-
-· CRC 错误与超时错误不同时发生
-
-覆盖测试点：TP-06, TP-08, TP-09, TP-21, TP-23, TP-24
+瑕嗙洊娴嬭瘯鐐癸細TP-06, TP-08, TP-09, TP-21, TP-23, TP-24
 
 ---
 
-## **5.5 spi_wr_rd_test（写后读测试）**
+## **5.5 spi_wr_rd_test锛堝啓鍚庤娴嬭瘯锛?*
 
-目的：验证写操作后读操作的正确性，模拟实际使用场景。
+鐩殑锛氶獙璇佸啓鎿嶄綔鍚庤鎿嶄綔鐨勬纭€э紝妯℃嫙瀹為檯浣跨敤鍦烘櫙銆?
+娴嬭瘯娴佺▼锛?
+1. 鎵ц spi_write_seq 脳3锛屽啓鍏ユ暟鎹埌 DUT
 
-测试流程：
+2. 鎵ц spi_read_seq 脳3锛屼粠 DUT 璇诲彇鏁版嵁
 
-1. 执行 spi_write_seq ×3，写入数据到 DUT
+3. 楠岃瘉璇诲啓鎿嶄綔鐨勭嫭绔嬫€у拰姝ｇ‘鎬?
+棰勬湡缁撴灉锛?
+路聽鍐欎簨鍔℃垚鍔熷畬鎴愶紝鏁版嵁鍐欏叆 RX FIFO
 
-2. 执行 spi_read_seq ×3，从 DUT 读取数据
+路聽璇讳簨鍔℃垚鍔熷畬鎴愶紝鏁版嵁浠?TX FIFO 璇诲嚭
 
-3. 验证读写操作的独立性和正确性
-
-预期结果：
-
-· 写事务成功完成，数据写入 RX FIFO
-
-· 读事务成功完成，数据从 TX FIFO 读出
-
-· FSM 正确经历写路径和读路径的状态转换
-
-· 读写操作之间无干扰
-
-覆盖测试点：TP-01, TP-02, TP-03, TP-05, TP-26
+路聽FSM 姝ｇ‘缁忓巻鍐欒矾寰勫拰璇昏矾寰勭殑鐘舵€佽浆鎹?
+路聽璇诲啓鎿嶄綔涔嬮棿鏃犲共鎵?
+瑕嗙洊娴嬭瘯鐐癸細TP-01, TP-02, TP-03, TP-05, TP-26
 
 ---
 
-## **5.6 spi_boundary_test（边界测试）**
+## **5.6 spi_boundary_test锛堣竟鐣屾祴璇曪級**
 
-目的：验证 DUT 在边界条件下的行为。
-
-测试流程：
-
-执行 spi_boundary_seq，覆盖以下边界场景：
+鐩殑锛氶獙璇?DUT 鍦ㄨ竟鐣屾潯浠朵笅鐨勮涓恒€?
+娴嬭瘯娴佺▼锛?
+鎵ц spi_boundary_seq锛岃鐩栦互涓嬭竟鐣屽満鏅細
 
 |   |   |   |
 |---|---|---|
-|**场景**|**参数**|**说明**|
-|最小 payload|data_len = 1|1 字节 payload|
-|最大 payload|data_len = 64|64 字节 payload|
-|零地址|addr_l = 0x00|地址下界|
-|最大地址|addr_l = 0xFF|地址上界|
+|**鍦烘櫙**|**鍙傛暟**|**璇存槑**|
+|鏈€灏?payload|data_len = 1|1 瀛楄妭 payload|
+|鏈€澶?payload|data_len = 64|64 瀛楄妭 payload|
+|闆跺湴鍧€|addr_l = 0x00|鍦板潃涓嬬晫|
+|鏈€澶у湴鍧€|addr_l = 0xFF|鍦板潃涓婄晫|
 
-预期结果：
+棰勬湡缁撴灉锛?
+路聽鎵€鏈夎竟鐣屼簨鍔℃纭畬鎴?
+路聽甯ч暱搴﹁绠楁纭?
+路聽CRC 鏍￠獙姝ｇ‘
 
-· 所有边界事务正确完成
+路聽鏃犳孩鍑烘垨鎴柇
 
-· 帧长度计算正确
-
-· CRC 校验正确
-
-· 无溢出或截断
-
-覆盖测试点：TP-14, TP-15, TP-16, TP-17
+瑕嗙洊娴嬭瘯鐐癸細TP-14, TP-15, TP-16, TP-17
 
 ---
 
-## **5.7 spi_b2b_test（背靠背测试）**
+## **5.7 spi_b2b_test锛堣儗闈犺儗娴嬭瘯锛?*
 
-目的：验证连续无间隔传输的可靠性。
+鐩殑锛氶獙璇佽繛缁棤闂撮殧浼犺緭鐨勫彲闈犳€с€?
+娴嬭瘯娴佺▼锛?
+1. 鎵ц spi_b2b_seq 脳10
 
-测试流程：
+2. 姣忎釜搴忓垪鐢熸垚杩炵画鐨勫啓鍛戒护锛屽抚闂存棤浠讳綍寤惰繜
 
-1. 执行 spi_b2b_seq ×10
+3. CS 鎾ら攢鍚庣珛鍗宠繘琛屼笅涓€娆?CS 鏈夋晥
 
-2. 每个序列生成连续的写命令，帧间无任何延迟
+棰勬湡缁撴灉锛?
+路聽鎵€鏈夎儗闈犺儗浜嬪姟姝ｇ‘瀹屾垚
 
-3. CS 撤销后立即进行下一次 CS 有效
+路聽DUT 鑳藉姝ｇ‘澶勭悊杩炵画浼犺緭
 
-预期结果：
+路聽FIFO 鐘舵€佹纭洿鏂?
+路聽鏃犳暟鎹涪澶辨垨瑕嗙洊
 
-· 所有背靠背事务正确完成
-
-· DUT 能够正确处理连续传输
-
-· FIFO 状态正确更新
-
-· 无数据丢失或覆盖
-
-覆盖测试点：TP-18, TP-25
+瑕嗙洊娴嬭瘯鐐癸細TP-18, TP-25
 
 ---
 
-## **5.8 spi_regression_test（回归测试）**
+## **5.8 spi_regression_test锛堝洖褰掓祴璇曪級**
 
-目的：全面回归验证，覆盖所有功能点。
-
-测试流程：
-
-分 4 个阶段执行：
+鐩殑锛氬叏闈㈠洖褰掗獙璇侊紝瑕嗙洊鎵€鏈夊姛鑳界偣銆?
+娴嬭瘯娴佺▼锛?
+鍒?4 涓樁娈垫墽琛岋細
 
 |   |   |   |   |
 |---|---|---|---|
-|**阶段**|**序列**|**数量**|**说明**|
-|1|spi_write_seq|10|写操作验证|
-|2|spi_read_seq|10|读操作验证|
-|3|spi_err_inject_seq|1|错误注入验证|
-|4|spi_boundary_seq|1|边界条件验证|
+|**闃舵**|**搴忓垪**|**鏁伴噺**|**璇存槑**|
+|1|spi_write_seq|10|鍐欐搷浣滈獙璇亅
+|2|spi_read_seq|10|璇绘搷浣滈獙璇亅
+|3|spi_err_inject_seq|1|閿欒娉ㄥ叆楠岃瘉|
+|4|spi_boundary_seq|1|杈圭晫鏉′欢楠岃瘉|
 
-预期结果：
+棰勬湡缁撴灉锛?
+路聽鎵€鏈夐樁娈甸€氳繃
 
-· 所有阶段通过
+路聽瑕嗙洊鐜囪揪鏍囷紙瑙?4.2 鑺傝鐩栫巼鐩爣锛?
+路聽鏃?uvm_error 鎶ュ憡
 
-· 覆盖率达标（见 4.2 节覆盖率目标）
+路聽SVA 鏂█鍏ㄩ儴閫氳繃
 
-· 无 uvm_error 报告
-
-· SVA 断言全部通过
-
-覆盖测试点：全部测试点 TP-01 ~ TP-27
+瑕嗙洊娴嬭瘯鐐癸細鍏ㄩ儴娴嬭瘯鐐?TP-01 ~ TP-27
 
 ---
 
-# **6. 仿真运行指南**
+# **6. 浠跨湡杩愯鎸囧崡**
 
-## **6.1 环境要求**
+## **6.1 鐜瑕佹眰**
 
-· 仿真器：Xcelium / VCS / Questa
+路聽浠跨湡鍣細Xcelium / VCS / Questa
 
-· SystemVerilog 支持
+路聽SystemVerilog 鏀寔
 
-· UVM 1.2 库
-
-## **6.2 运行命令**
+路聽UVM 1.2 搴?
+## **6.2 杩愯鍛戒护**
 
 ### **Xcelium**
 
-# 编译  
+# 缂栬瘧  
 make comp  
   
-# 运行指定测试  
+# 杩愯鎸囧畾娴嬭瘯  
 make sim TEST=spi_smoke_test SEED=random  
   
-# 运行回归测试  
+# 杩愯鍥炲綊娴嬭瘯  
 make sim TEST=spi_regression_test SEED=random  
   
-# 查看波形  
+# 鏌ョ湅娉㈠舰  
 make waves
 
 ### **VCS**
 
-# 编译  
+# 缂栬瘧  
 make comp SIM=vcs  
   
-# 运行  
+# 杩愯  
 make sim SIM=vcs TEST=spi_smoke_test SEED=random
 
 ### **Questa**
 
-# 编译  
+# 缂栬瘧  
 make comp SIM=questa  
   
-# 运行  
+# 杩愯  
 make sim SIM=questa TEST=spi_smoke_test SEED=random
 
-## **6.3 Plusarg 参数**
+## **6.3 Plusarg 鍙傛暟**
 
 |   |   |   |
 |---|---|---|
-|**参数**|**说明**|**示例**|
-|+UVM_TESTNAME|指定测试名|+UVM_TESTNAME=spi_smoke_test|
-|+UVM_VERBOSITY|日志级别|+UVM_VERBOSITY=UVM_HIGH|
-|+num_txns|事务数量|+num_txns=100|
-|+sck_period_ns|SPI 时钟周期|+sck_period_ns=3.0|
+|**鍙傛暟**|**璇存槑**|**绀轰緥**|
+|+UVM_TESTNAME|鎸囧畾娴嬭瘯鍚峾+UVM_TESTNAME=spi_smoke_test|
+|+UVM_VERBOSITY|鏃ュ織绾у埆|+UVM_VERBOSITY=UVM_HIGH|
+|+num_txns|浜嬪姟鏁伴噺|+num_txns=100|
+|+sck_period_ns|SPI 鏃堕挓鍛ㄦ湡|+sck_period_ns=3.0|
 
 ---
 
-# **7. 附录**
+# **7. 闄勫綍**
 
-## **7.1 文件清单**
+## **7.1 鏂囦欢娓呭崟**
 
 |   |   |
 |---|---|
-|**文件路径**|**说明**|
-|spi_slave_pkg.svh|UVM 包头文件，包含所有组件|
-|spi_slave_intf.sv|SPI 总线接口定义|
-|test_plan.md|测试计划文档|
-|Makefile|仿真构建脚本|
-|filelist.f|编译文件列表|
-|seq_item/spi_config.sv|配置对象|
-|seq_item/spi_transaction.sv|事务项|
-|sequences/spi_sequences.sv|所有序列类|
-|driver/spi_driver.sv|驱动器|
-|monitor/spi_monitor.sv|监测器|
-|coverage/spi_coverage.sv|覆盖率收集器|
-|agent/spi_agent.sv|代理|
-|env/spi_env.sv|环境|
-|test/spi_tests.sv|测试类|
-|top/tb_top.sv|顶层测试平台|
-|rtl_models/*.sv|DUT 子模块行为模型|
+|**鏂囦欢璺緞**|**璇存槑**|
+|spi_slave_pkg.svh|UVM 鍖呭ご鏂囦欢锛屽寘鍚墍鏈夌粍浠秥
+|spi_slave_intf.sv|SPI 鎬荤嚎鎺ュ彛瀹氫箟|
+|test_plan.md|娴嬭瘯璁″垝鏂囨。|
+|Makefile|浠跨湡鏋勫缓鑴氭湰|
+|filelist.f|缂栬瘧鏂囦欢鍒楄〃|
+|seq_item/spi_config.sv|閰嶇疆瀵硅薄|
+|seq_item/spi_transaction.sv|浜嬪姟椤箌
+|sequences/spi_sequences.sv|鎵€鏈夊簭鍒楃被|
+|driver/spi_driver.sv|椹卞姩鍣▅
+|monitor/spi_monitor.sv|鐩戞祴鍣▅
+|coverage/spi_coverage.sv|瑕嗙洊鐜囨敹闆嗗櫒|
+|agent/spi_agent.sv|浠ｇ悊|
+|env/spi_env.sv|鐜|
+|test/spi_tests.sv|娴嬭瘯绫粅
+|top/tb_top.sv|椤跺眰娴嬭瘯骞冲彴|
+|rtl_models/*.sv|DUT 瀛愭ā鍧楄涓烘ā鍨媩
 
-## **7.2 修订记录**
+## **7.2 淇璁板綍**
 
 |   |   |   |
 |---|---|---|
-|**版本**|**日期**|**修改内容**|
-|V1.0|-|初始版本|
+|**鐗堟湰**|**鏃ユ湡**|**淇敼鍐呭**|
+|V1.0|-|鍒濆鐗堟湰|

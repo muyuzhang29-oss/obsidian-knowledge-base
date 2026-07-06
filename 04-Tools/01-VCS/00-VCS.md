@@ -672,8 +672,8 @@ ls $VCS_HOME/doc/
 
 ### 常用文件模板
 
-- [[07-Scripts/01-Makefile|Makefile]] - Makefile 模板
-- [[07-Scripts/02-Python脚本|Python脚本]] - 运行脚本模板
+- [[06-Scripts/01-Makefile|Makefile]] - Makefile 模板
+- [[06-Scripts/02-Python脚本|Python脚本]] - 运行脚本模板
 
 ---
 
@@ -706,3 +706,4 @@ urg -dir cov/*.vdb -report merged_cov
 
 > [!warning] 注意
 > 仿真运行时的选项必须与编译时一致（如覆盖率选项），否则会报错或数据不完整。
+

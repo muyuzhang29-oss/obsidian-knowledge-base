@@ -1,34 +1,30 @@
----
-aliases: [索引, Index, 目录]
-tags: [索引]
----
-
-# 知识库索引
-
-> [!abstract] 快速定位
-> 本索引使用 **Dataview** 自动生成，添加新文件后按 `Ctrl+R` 刷新即可更新。
-
+﻿---
+aliases: [绱㈠紩, Index, 鐩綍]
+tags: [绱㈠紩]
 ---
 
-## 内容总览
+# 鐭ヨ瘑搴撶储寮?
+> [!abstract] 蹇€熷畾浣?> 鏈储寮曚娇鐢?**Dataview** 鑷姩鐢熸垚锛屾坊鍔犳柊鏂囦欢鍚庢寜 `Ctrl+R` 鍒锋柊鍗冲彲鏇存柊銆?
+---
 
-### 目录结构
+## 鍐呭鎬昏
+
+### 鐩綍缁撴瀯
 
 ```dataview
 TABLE
-length(file.children) as "文件数",
-choice(length(file.children) > 0, "📁 文件夹", "📄 单文件") as "类型"
-FROM "00-索引"
-WHERE file.name != "00-总索引" AND file.name != "00-总索引-新"
+length(file.children) as "鏂囦欢鏁?,
+choice(length(file.children) > 0, "馃搧 鏂囦欢澶?, "馃搫 鍗曟枃浠?) as "绫诲瀷"
+FROM "00-绱㈠紩"
+WHERE file.name != "00-鎬荤储寮? AND file.name != "00-鎬荤储寮?鏂?
 SORT file.name
 ```
 
-**总计**: ``=`length(list("01-SV语法", "02-UVM", "03-Protocol", "04-Tools", "05-Verification", "06-Environment", "07-Scripts", "10-Notes", "11-UVM源码学习"))` `` 个分类
-
-### 文件统计
+**鎬昏**: ``=`length(list("01-SV璇硶", "02-UVM", "03-Protocol", "04-Tools", "05-Verification", "06-Environment", "07-Scripts", "10-Notes", "11-UVM婧愮爜瀛︿範"))` `` 涓垎绫?
+### 鏂囦欢缁熻
 
 ```dataview
-TABLE length(rows) as "文件数"
+TABLE length(rows) as "鏂囦欢鏁?
 FROM ""
 WHERE file.extension = "md"
 GROUP BY file.folder
@@ -37,47 +33,45 @@ SORT file.folder
 
 ---
 
-## 核心文档
+## 鏍稿績鏂囨。
 
-> [!tip] 必读文档
-> 以下文档是整个知识体系的核心，建议优先掌握。
+> [!tip] 蹇呰鏂囨。
+> 浠ヤ笅鏂囨。鏄暣涓煡璇嗕綋绯荤殑鏍稿績锛屽缓璁紭鍏堟帉鎻°€?
+### 鍩虹鍏ラ棬
 
-### 基础入门
-
-| 文档 | 标签 | 说明 |
+| 鏂囨。 | 鏍囩 | 璇存槑 |
 |------|------|------|
-| [[00-入门]] | #SV #入门 | SystemVerilog 基础入门 |
-| [[00-入门]] | #UVM #入门 | UVM 验证方法学入门 |
-| [[00-环境搭建]] | #UVM #实践 | 完整验证环境搭建 |
+| [[00-鍏ラ棬]] | #SV #鍏ラ棬 | SystemVerilog 鍩虹鍏ラ棬 |
+| [[00-鍏ラ棬]] | #UVM #鍏ラ棬 | UVM 楠岃瘉鏂规硶瀛﹀叆闂?|
+| [[00-鐜鎼缓]] | #UVM #瀹炶返 | 瀹屾暣楠岃瘉鐜鎼缓 |
 
-### 核心机制
+### 鏍稿績鏈哄埗
 
-| 文档 | 标签 | 说明 |
+| 鏂囨。 | 鏍囩 | 璇存槑 |
 |------|------|------|
-| [[01-Phase机制]] | #UVM #核心 | Phase 执行顺序与机制 |
-| [[02-config_db]] | #UVM #核心 | 配置传递机制 |
-| [[03-Sequence机制]] | #UVM #核心 | Sequence 机制与使用 |
+| [[01-Phase鏈哄埗]] | #UVM #鏍稿績 | Phase 鎵ц椤哄簭涓庢満鍒?|
+| [[02-config_db]] | #UVM #鏍稿績 | 閰嶇疆浼犻€掓満鍒?|
+| [[03-Sequence鏈哄埗]] | #UVM #鏍稿績 | Sequence 鏈哄埗涓庝娇鐢?|
 
-### 协议规范
+### 鍗忚瑙勮寖
 
-| 文档 | 标签 | 说明 |
+| 鏂囨。 | 鏍囩 | 璇存槑 |
 |------|------|------|
-| [[00-AXI]] | #Protocol #AXI #核心 | AXI 总线协议详解 |
-| [[00-APB]] | #Protocol #APB | APB 总线协议 |
-| [[00-I2C]] | #Protocol #I2C | I2C 总线协议 |
+| [[00-AXI]] | #Protocol #AXI #鏍稿績 | AXI 鎬荤嚎鍗忚璇﹁В |
+| [[00-APB]] | #Protocol #APB | APB 鎬荤嚎鍗忚 |
+| [[00-I2C]] | #Protocol #I2C | I2C 鎬荤嚎鍗忚 |
 
-### 重要概念
+### 閲嶈姒傚康
 
-| 文档 | 标签 | 说明 |
+| 鏂囨。 | 鏍囩 | 璇存槑 |
 |------|------|------|
-| [[时隙-TimeSlot]] | #时序 #FIFO #核心 | 时隙原理与异步 FIFO |
-| [[数字寄存器]] | #寄存器 #核心 | 寄存器字段命名规范 |
-| [[01-覆盖率]] | #Verification #Coverage | 覆盖率驱动验证 |
+| [[鏃堕殭-TimeSlot]] | #鏃跺簭 #FIFO #鏍稿績 | 鏃堕殭鍘熺悊涓庡紓姝?FIFO |
+| [[鏁板瓧瀵勫瓨鍣╙] | #瀵勫瓨鍣?#鏍稿績 | 瀵勫瓨鍣ㄥ瓧娈靛懡鍚嶈鑼?|
+| [[01-瑕嗙洊鐜嘳] | #Verification #Coverage | 瑕嗙洊鐜囬┍鍔ㄩ獙璇?|
 
 ---
 
-## 按标签索引
-
+## 鎸夋爣绛剧储寮?
 ### #UVM
 
 ```dataview
@@ -90,7 +84,7 @@ SORT file.name
 
 ```dataview
 LIST
-FROM "01-SV语法"
+FROM "01-SV璇硶"
 SORT file.name
 ```
 
@@ -126,11 +120,11 @@ FROM "07-Scripts"
 SORT file.name
 ```
 
-### #UVM源码学习
+### #UVM婧愮爜瀛︿範
 
 ```dataview
 LIST
-FROM "11-UVM源码学习"
+FROM "11-UVM婧愮爜瀛︿範"
 SORT file.name
 ```
 
@@ -144,89 +138,79 @@ SORT file.name
 
 ---
 
-## 目录树
-
+## 鐩綍鏍?
 ```
 knowledge-base/
-├── 00-索引/          # 本文档
-├── 01-SV语法/        # SystemVerilog 语法与特性
-│   ├── 00-入门.md
-│   ├── 01-数据类型.md
-│   └── 02-类.md
-├── 02-UVM/           # UVM 验证方法学
-│   ├── 00-入门.md
-│   ├── 01-Phase机制.md
-│   ├── 02-config_db.md
-│   ├── 03-Sequence机制.md
-│   └── 04-组件.md
-├── 03-Protocol/      # 协议规范
-│   ├── AXI/
-│   ├── APB/
-│   ├── I2C/
-│   ├── SPI/
-│   └── UART/
-├── 04-Tools/         # 工具指令
-│   ├── Linux/
-│   ├── GVim/
-│   ├── xrun/         # Cadence 仿真器
-│   └── imc/          # 覆盖率分析
-├── 05-Verification/   # 验证方法学
-│   ├── 00-验证计划.md
-│   ├── 01-覆盖率.md
-│   └── 02-FMEA-FuSa.md
-├── 06-Environment/   # 环境搭建
-│   └── 00-环境搭建.md
-├── 07-Scripts/       # 脚本
-│   ├── 00-Makefile.md
-│   ├── 00-Python.md
-│   └── 01-Log解析.md
-├── 08-Projects/      # 项目（待填充）
-├── 09-Issues/        # 问题（待填充）
-├── 10-Notes/         # 笔记
-│   ├── 时隙-TimeSlot.md
-│   └── 数字寄存器.md
-└── 11-UVM源码学习/   # UVM 源码深入研究
-    ├── UVM-从run_test浅谈TestBench启动.md
-    ├── UVM-uvm_component与uvm_root.md
-    ├── UVM-uvm中的factory机制.md
-    └── UVM源代码研究.md
+鈹溾攢鈹€ 00-绱㈠紩/          # 鏈枃妗?鈹溾攢鈹€ 01-SV璇硶/        # SystemVerilog 璇硶涓庣壒鎬?鈹?  鈹溾攢鈹€ 00-鍏ラ棬.md
+鈹?  鈹溾攢鈹€ 01-鏁版嵁绫诲瀷.md
+鈹?  鈹斺攢鈹€ 02-绫?md
+鈹溾攢鈹€ 02-UVM/           # UVM 楠岃瘉鏂规硶瀛?鈹?  鈹溾攢鈹€ 00-鍏ラ棬.md
+鈹?  鈹溾攢鈹€ 01-Phase鏈哄埗.md
+鈹?  鈹溾攢鈹€ 02-config_db.md
+鈹?  鈹溾攢鈹€ 03-Sequence鏈哄埗.md
+鈹?  鈹斺攢鈹€ 04-缁勪欢.md
+鈹溾攢鈹€ 03-Protocol/      # 鍗忚瑙勮寖
+鈹?  鈹溾攢鈹€ AXI/
+鈹?  鈹溾攢鈹€ APB/
+鈹?  鈹溾攢鈹€ I2C/
+鈹?  鈹溾攢鈹€ SPI/
+鈹?  鈹斺攢鈹€ UART/
+鈹溾攢鈹€ 04-Tools/         # 宸ュ叿鎸囦护
+鈹?  鈹溾攢鈹€ Linux/
+鈹?  鈹溾攢鈹€ GVim/
+鈹?  鈹溾攢鈹€ xrun/         # Cadence 浠跨湡鍣?鈹?  鈹斺攢鈹€ imc/          # 瑕嗙洊鐜囧垎鏋?鈹溾攢鈹€ 05-Verification/   # 楠岃瘉鏂规硶瀛?鈹?  鈹溾攢鈹€ 00-楠岃瘉璁″垝.md
+鈹?  鈹溾攢鈹€ 01-瑕嗙洊鐜?md
+鈹?  鈹斺攢鈹€ 02-FMEA-FuSa.md
+鈹溾攢鈹€ 06-Environment/   # 鐜鎼缓
+鈹?  鈹斺攢鈹€ 00-鐜鎼缓.md
+鈹溾攢鈹€ 07-Scripts/       # 鑴氭湰
+鈹?  鈹溾攢鈹€ 00-Makefile.md
+鈹?  鈹溾攢鈹€ 00-Python.md
+鈹?  鈹斺攢鈹€ 01-Log瑙ｆ瀽.md
+鈹溾攢鈹€ 08-Projects/      # 椤圭洰锛堝緟濉厖锛?鈹溾攢鈹€ 09-Issues/        # 闂锛堝緟濉厖锛?鈹溾攢鈹€ 10-Notes/         # 绗旇
+鈹?  鈹溾攢鈹€ 鏃堕殭-TimeSlot.md
+鈹?  鈹斺攢鈹€ 鏁板瓧瀵勫瓨鍣?md
+鈹斺攢鈹€ 11-UVM婧愮爜瀛︿範/   # UVM 婧愮爜娣卞叆鐮旂┒
+    鈹溾攢鈹€ UVM-浠巖un_test娴呰皥TestBench鍚姩.md
+    鈹溾攢鈹€ UVM-uvm_component涓巙vm_root.md
+    鈹溾攢鈹€ UVM-uvm涓殑factory鏈哄埗.md
+    鈹斺攢鈹€ UVM婧愪唬鐮佺爺绌?md
 ```
 
 ---
 
-## 学习路径
+## 瀛︿範璺緞
 
-> [!example] UVM 学习路径
+> [!example] UVM 瀛︿範璺緞
 > ```
-> SV 入门 → UVM 入门 → Phase 机制 → config_db → Sequence → 环境搭建 → UVM 源码深入研究
-> ```
-
-> [!example] 协议学习路径
-> ```
-> APB（简单）→ AXI（复杂）→ I2C / SPI / UART（外设）
+> SV 鍏ラ棬 鈫?UVM 鍏ラ棬 鈫?Phase 鏈哄埗 鈫?config_db 鈫?Sequence 鈫?鐜鎼缓 鈫?UVM 婧愮爜娣卞叆鐮旂┒
 > ```
 
-> [!example] 工具掌握
+> [!example] 鍗忚瀛︿範璺緞
 > ```
-> Linux 基础 → GVim → Python 脚本 → Makefile
+> APB锛堢畝鍗曪級鈫?AXI锛堝鏉傦級鈫?I2C / SPI / UART锛堝璁撅級
 > ```
 
-> [!example] 验证方法学
+> [!example] 宸ュ叿鎺屾彙
 > ```
-> 验证计划 → 覆盖率 → FMEA/FuSa → 环境搭建
+> Linux 鍩虹 鈫?GVim 鈫?Python 鑴氭湰 鈫?Makefile
+> ```
+
+> [!example] 楠岃瘉鏂规硶瀛?> ```
+> 楠岃瘉璁″垝 鈫?瑕嗙洊鐜?鈫?FMEA/FuSa 鈫?鐜鎼缓
 > ```
 
 ---
 
-## 脚本工具
+## 鑴氭湰宸ュ叿
 
-| 脚本 | 功能 | 使用方法 |
+| 鑴氭湰 | 鍔熻兘 | 浣跨敤鏂规硶 |
 |------|------|----------|
-| `auto-classify.ps1` | 自动分类与标签 | `.\auto-classify.ps1 -AutoTag` |
-| `random-review.ps1` | 随机复习 | `.\random-review.ps1 -Count 5` |
-| `search-knowledgebase.ps1` | 搜索知识库 | `.\search-knowledgebase.ps1 -Query "关键词"` |
-| `sync-onedrive.ps1` | 同步到OneDrive | `.\sync-onedrive.ps1 -Action sync` |
+| `auto-classify.ps1` | 鑷姩鍒嗙被涓庢爣绛?| `.\auto-classify.ps1 -AutoTag` |
+| `random-review.ps1` | 闅忔満澶嶄範 | `.\random-review.ps1 -Count 5` |
+| `search-knowledgebase.ps1` | 鎼滅储鐭ヨ瘑搴?| `.\search-knowledgebase.ps1 -Query "鍏抽敭璇?` |
+| `sync-onedrive.ps1` | 鍚屾鍒癘neDrive | `.\sync-onedrive.ps1 -Action sync` |
 
 ---
 
-*最后更新: `=dateformat(date(now), "yyyy-MM-dd")`*
+*鏈€鍚庢洿鏂? `=dateformat(date(now), "yyyy-MM-dd")`*

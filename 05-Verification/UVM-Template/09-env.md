@@ -1,12 +1,12 @@
----
-tags: [UVM, Verification, 模板, Environment]
+﻿---
+tags: [UVM, Verification, 妯℃澘, Environment]
 created: 2026-04-17
 updated: 2026-06-02
 ---
 
-# 09 - Env 验证环境
+# 09 - Env 楠岃瘉鐜
 
-> 组装 agent + scoreboard + reference_model，连接数据流
+> 缁勮 agent + scoreboard + reference_model锛岃繛鎺ユ暟鎹祦
 
 ```verilog
 `ifndef SPI_ENV_SV
@@ -33,18 +33,17 @@ class spi_env extends uvm_env;
     endfunction
 
     // =========================================================================
-    // connect_phase: 连接数据流
-    // =========================================================================
+    // connect_phase: 杩炴帴鏁版嵁娴?    // =========================================================================
     function void connect_phase(uvm_phase phase);
         super.connect_phase(phase);
 
-        // monitor 的实际输出 → scoreboard 的 rx_imp
+        // monitor 鐨勫疄闄呰緭鍑?鈫?scoreboard 鐨?rx_imp
         agent.ap.connect(scb.rx_imp);
 
-        // driver 的输入激励 → ref_model（ref_model 读输入字段计算期望）
+        // driver 鐨勮緭鍏ユ縺鍔?鈫?ref_model锛坮ef_model 璇昏緭鍏ュ瓧娈佃绠楁湡鏈涳級
         agent.drv_ap.connect(ref_model.imp);
 
-        // ref_model 的期望输出 → scoreboard 的 exp_imp
+        // ref_model 鐨勬湡鏈涜緭鍑?鈫?scoreboard 鐨?exp_imp
         ref_model.exp_ap.connect(scb.exp_imp);
     endfunction
 
@@ -53,15 +52,15 @@ endclass
 `endif
 ```
 
-**数据流：**
+**鏁版嵁娴侊細**
 ```
-monitor.ap ──→ scb.rx_imp           (DUT 实际输出)
-driver.ap  ──→ ref_model.imp        (输入激励，用于计算期望)
-ref_model.exp_ap ──→ scb.exp_imp    (期望输出)
+monitor.ap 鈹€鈹€鈫?scb.rx_imp           (DUT 瀹為檯杈撳嚭)
+driver.ap  鈹€鈹€鈫?ref_model.imp        (杈撳叆婵€鍔憋紝鐢ㄤ簬璁＄畻鏈熸湜)
+ref_model.exp_ap 鈹€鈹€鈫?scb.exp_imp    (鏈熸湜杈撳嚭)
 ```
 
-## 相关链接
+## 鐩稿叧閾炬帴
 
-- [[05-Verification/UVM-Template/00-总览|UVM 模板总览]] - UVM 验证环境模板
-- [[02-UVM/04-组件|UVM 组件]] - UVM 组件详解
-- [[00-总索引]] - 返回总索引
+- [[05-Verification/UVM-Template/00-鎬昏|UVM 妯℃澘鎬昏]] - UVM 楠岃瘉鐜妯℃澘
+- [[02-UVM/04-缁勪欢|UVM 缁勪欢]] - UVM 缁勪欢璇﹁В
+- [[00-鎬荤储寮昡] - 杩斿洖鎬荤储寮?

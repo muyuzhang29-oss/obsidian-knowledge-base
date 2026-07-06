@@ -1,16 +1,16 @@
----
-tags: [Environment, 环境搭建, 工具, 核心]
+﻿---
+tags: [Environment, 鐜鎼缓, 宸ュ叿, 鏍稿績]
 created: 2026-05-13
 updated: 2026-06-02
 ---
 
-# UVM 验证环境搭建
+# UVM 楠岃瘉鐜鎼缓
 
-> 从零开始构建完整的 UVM 验证环境
+> 浠庨浂寮€濮嬫瀯寤哄畬鏁寸殑 UVM 楠岃瘉鐜
 
-tags: #UVM #Environment #实践 #核心
+tags: #UVM #Environment #瀹炶返 #鏍稿績
 
-## 验证平台架构图
+## 楠岃瘉骞冲彴鏋舵瀯鍥?
 
 ```mermaid
 graph TB
@@ -89,7 +89,7 @@ graph TB
     APB_IF --> DUT
 ```
 
-## 目录结构
+## 鐩綍缁撴瀯
 
 ```mermaid
 graph TD
@@ -135,7 +135,7 @@ graph TD
 
 ---
 
-## 1. 顶层模块 (tb_top)
+## 1. 椤跺眰妯″潡 (tb_top)
 
 ```verilog
 `timescale 1ns/1ps
@@ -144,28 +144,28 @@ module tb_top;
     import uvm_pkg::*;
     `include "uvm_macros.svh"
 
-    // 时钟和复位
+    // 鏃堕挓鍜屽浣?
     bit clk;
     bit rst_n;
 
-    // 时钟生成
+    // 鏃堕挓鐢熸垚
     initial begin
         clk = 0;
         forever #5 clk = ~clk;
     end
 
-    // 复位生成
+    // 澶嶄綅鐢熸垚
     initial begin
         rst_n = 0;
         #100;
         rst_n = 1;
     end
 
-    // 接口实例化
+    // 鎺ュ彛瀹炰緥鍖?
     axi_if axi_intf(clk, rst_n);
     apb_if apb_intf(clk, rst_n);
 
-    // DUT 实例化
+    // DUT 瀹炰緥鍖?
     dut dut_inst (
         .clk(clk),
         .rst_n(rst_n),
@@ -173,7 +173,7 @@ module tb_top;
         .apb_intf(apb_intf)
     );
 
-    // 配置数据库设置
+    // 閰嶇疆鏁版嵁搴撹缃?
     initial begin
         uvm_config_db#(virtual axi_if)::set(
             uvm_root::get(), "*", "axi_vif", axi_intf
@@ -182,7 +182,7 @@ module tb_top;
             uvm_root::get(), "*", "apb_vif", apb_intf
         );
 
-        // 设置默认测试
+        // 璁剧疆榛樿娴嬭瘯
         if ($value$plusargs("UVM_TESTNAME=%s", testname)) begin
             `uvm_info("TB", $sformatf("Running test: %s", testname), UVM_MEDIUM)
         end
@@ -190,7 +190,7 @@ module tb_top;
         run_test();
     end
 
-    // 波形 Dump
+    // 娉㈠舰 Dump
     initial begin
         `ifdef DUMP_WAVEFORM
             $dumpfile("wave.vcd");
@@ -203,7 +203,7 @@ endmodule
 
 ---
 
-## 2. 接口定义 (interface)
+## 2. 鎺ュ彛瀹氫箟 (interface)
 
 ```verilog
 // axi_if.sv
@@ -261,7 +261,7 @@ endinterface
 
 ---
 
-## 3. 环境组件 (base_env)
+## 3. 鐜缁勪欢 (base_env)
 
 ```verilog
 class base_env extends uvm_env;
@@ -288,11 +288,11 @@ class base_env extends uvm_env;
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
 
-        // 获取配置
+        // 鑾峰彇閰嶇疆
         if (!uvm_config_db#(env_config)::get(this, "", "cfg", m_cfg))
             `uvm_fatal("NOCFG", "env_config not set")
 
-        // 创建组件
+        // 鍒涘缓缁勪欢
         m_axi_agent = axi_agent::type_id::create("m_axi_agent", this);
         m_apb_agent = apb_agent::type_id::create("m_apb_agent", this);
         m_sb        = my_scoreboard::type_id::create("m_sb", this);
@@ -302,7 +302,7 @@ class base_env extends uvm_env;
     function void connect_phase(uvm_phase phase);
         super.connect_phase(phase);
 
-        // 连接 analysis ports
+        // 杩炴帴 analysis ports
         m_axi_agent.monitor.ap.connect(m_sb.expected_export);
         m_axi_agent.monitor.ap.connect(m_cov.axi_cg);
         m_apb_agent.monitor.ap.connect(m_sb.actual_export);
@@ -323,7 +323,7 @@ endclass
 
 ---
 
-## 4. Agent 组件 (base_agent)
+## 4. Agent 缁勪欢 (base_agent)
 
 ```verilog
 class axi_agent extends uvm_agent;
@@ -348,16 +348,16 @@ class axi_agent extends uvm_agent;
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
 
-        // 获取配置
+        // 鑾峰彇閰嶇疆
         is_active = uvm_active_passive_enum'(
             uvm_config_db#(int)::get(this, "", "is_active", UVM_ACTIVE)
         );
 
-        // 创建 monitor（始终创建）
+        // 鍒涘缓 monitor锛堝缁堝垱寤猴級
         m_monitor = axi_monitor::type_id::create("m_monitor", this);
         ap = new("ap", this);
 
-        // 根据 is_active 创建 driver/sequencer
+        // 鏍规嵁 is_active 鍒涘缓 driver/sequencer
         if (is_active == UVM_ACTIVE) begin
             m_driver    = axi_driver::type_id::create("m_driver", this);
             m_sequencer = axi_sequencer::type_id::create("m_sequencer", this);
@@ -367,12 +367,12 @@ class axi_agent extends uvm_agent;
     function void connect_phase(uvm_phase phase);
         super.connect_phase(phase);
 
-        // 连接 TLM ports
+        // 杩炴帴 TLM ports
         if (is_active == UVM_ACTIVE) begin
             m_driver.seq_item_port.connect(m_sequencer.seq_item_export);
         end
 
-        // 连接 monitor 到 agent port
+        // 杩炴帴 monitor 鍒?agent port
         m_monitor.ap.connect(this.ap);
     endfunction
 
@@ -381,7 +381,7 @@ endclass
 
 ---
 
-## 5. Driver 实现
+## 5. Driver 瀹炵幇
 
 ```verilog
 class axi_driver extends uvm_driver#(axi_transaction);
@@ -456,7 +456,7 @@ endclass
 
 ---
 
-## 6. Monitor 实现
+## 6. Monitor 瀹炵幇
 
 ```verilog
 class axi_monitor extends uvm_monitor;
@@ -524,7 +524,7 @@ endclass
 
 ---
 
-## 7. 测试用例 (base_test)
+## 7. 娴嬭瘯鐢ㄤ緥 (base_test)
 
 ```verilog
 class base_test extends uvm_test;
@@ -540,10 +540,10 @@ class base_test extends uvm_test;
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
 
-        // 创建环境
+        // 鍒涘缓鐜
         m_env = base_env::type_id::create("m_env", this);
 
-        // 配置 agent 模式
+        // 閰嶇疆 agent 妯″紡
         uvm_config_db#(uvm_active_passive_enum)::set(
             this, "m_env.m_axi_agent", "is_active", UVM_ACTIVE
         );
@@ -551,7 +551,7 @@ class base_test extends uvm_test;
             this, "m_env.m_apb_agent", "is_active", UVM_ACTIVE
         );
 
-        // 配置默认 sequence
+        // 閰嶇疆榛樿 sequence
         uvm_config_db#(uvm_object_wrapper)::set(
             this,
             "m_env.m_axi_agent.sequencer.main_phase",
@@ -644,7 +644,7 @@ cleanall: clean
 
 ---
 
-## 9. filelist.f 格式
+## 9. filelist.f 鏍煎紡
 
 ```bash
 # filelist.f
@@ -691,17 +691,18 @@ cleanall: clean
 
 ---
 
-## 相关链接
+## 鐩稿叧閾炬帴
 
-- [[02-UVM/00-入门|UVM 入门]] - UVM 入门
-- [[01-Phase机制]] - UVM Phase 机制
-- [[04-组件]] - UVM 组件
-- [[00-xrun]] - xrun 仿真器
-- [[00-imc]] - imc 覆盖率工具
-- [[00-Makefile]] - Makefile 模板
-- [[00-总索引]] - 返回总索引
+- [[02-UVM/00-鍏ラ棬|UVM 鍏ラ棬]] - UVM 鍏ラ棬
+- [[01-Phase鏈哄埗]] - UVM Phase 鏈哄埗
+- [[04-缁勪欢]] - UVM 缁勪欢
+- [[00-xrun]] - xrun 浠跨湡鍣?
+- [[00-imc]] - imc 瑕嗙洊鐜囧伐鍏?
+- [[00-Makefile]] - Makefile 妯℃澘
+- [[00-鎬荤储寮昡] - 杩斿洖鎬荤储寮?
 
 ---
 
-*创建时间: 2026-04-17*
-*更新时间: 2026-04-17*
+*鍒涘缓鏃堕棿: 2026-04-17*
+*鏇存柊鏃堕棿: 2026-04-17*
+

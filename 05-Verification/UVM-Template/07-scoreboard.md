@@ -1,13 +1,11 @@
----
-tags: [UVM, Verification, 模板, Scoreboard]
+﻿---
+tags: [UVM, Verification, 妯℃澘, Scoreboard]
 created: 2026-04-17
 updated: 2026-06-02
 ---
 
-# 07 - Scoreboard 记分板
-
-> 比对 monitor 的实际输出和 ref_model 的期望输出
-
+# 07 - Scoreboard 璁板垎鏉?
+> 姣斿 monitor 鐨勫疄闄呰緭鍑哄拰 ref_model 鐨勬湡鏈涜緭鍑?
 ```verilog
 `ifndef SPI_SCB_SV
 `define SPI_SCB_SV
@@ -16,10 +14,8 @@ class spi_scoreboard extends uvm_scoreboard;
 
     `uvm_component_utils(spi_scoreboard)
 
-    uvm_analysis_imp #(spi_trans, spi_scoreboard) rx_imp;   // 接收 monitor 的实际输出
-    uvm_analysis_imp #(spi_trans, spi_scoreboard) exp_imp;  // 接收 ref_model 的期望输出
-
-    spi_trans exp_queue[$];  // 期望 transaction 队列
+    uvm_analysis_imp #(spi_trans, spi_scoreboard) rx_imp;   // 鎺ユ敹 monitor 鐨勫疄闄呰緭鍑?    uvm_analysis_imp #(spi_trans, spi_scoreboard) exp_imp;  // 鎺ユ敹 ref_model 鐨勬湡鏈涜緭鍑?
+    spi_trans exp_queue[$];  // 鏈熸湜 transaction 闃熷垪
 
     int pass_count = 0;
     int fail_count = 0;
@@ -36,7 +32,7 @@ class spi_scoreboard extends uvm_scoreboard;
     endfunction
 
     // =========================================================================
-    // write (rx): 接收 monitor 的实际输出，进行比对
+    // write (rx): 鎺ユ敹 monitor 鐨勫疄闄呰緭鍑猴紝杩涜姣斿
     // =========================================================================
     function void write(spi_trans rx_trans);
         spi_trans exp_trans;
@@ -53,14 +49,14 @@ class spi_scoreboard extends uvm_scoreboard;
     endfunction
 
     // =========================================================================
-    // write_exp: 接收 ref_model 的期望输出，放入队列
+    // write_exp: 鎺ユ敹 ref_model 鐨勬湡鏈涜緭鍑猴紝鏀惧叆闃熷垪
     // =========================================================================
     function void write_exp(spi_trans exp_trans);
         exp_queue.push_back(exp_trans);
     endfunction
 
     // =========================================================================
-    // compare: 比对输出字段
+    // compare: 姣斿杈撳嚭瀛楁
     // =========================================================================
     function void compare(spi_trans rx, spi_trans exp);
         bit match = 1;
@@ -102,7 +98,7 @@ class spi_scoreboard extends uvm_scoreboard;
     endfunction
 
     // =========================================================================
-    // report_phase: 打印统计
+    // report_phase: 鎵撳嵃缁熻
     // =========================================================================
     function void report_phase(uvm_phase phase);
         super.report_phase(phase);
@@ -118,10 +114,10 @@ endclass
 `endif
 ```
 
-**scb 的职责：** 接收两个 transaction → 比对输出字段 (`status_o`, `data_o[]`, `error_o`)
+**scb 鐨勮亴璐ｏ細** 鎺ユ敹涓や釜 transaction 鈫?姣斿杈撳嚭瀛楁 (`status_o`, `data_o[]`, `error_o`)
 
-## 相关链接
+## 鐩稿叧閾炬帴
 
-- [[05-Verification/UVM-Template/00-总览|UVM 模板总览]] - UVM 验证环境模板
-- [[02-UVM/04-组件|UVM 组件]] - UVM 组件详解
-- [[00-总索引]] - 返回总索引
+- [[05-Verification/UVM-Template/00-鎬昏|UVM 妯℃澘鎬昏]] - UVM 楠岃瘉鐜妯℃澘
+- [[02-UVM/04-缁勪欢|UVM 缁勪欢]] - UVM 缁勪欢璇﹁В
+- [[00-鎬荤储寮昡] - 杩斿洖鎬荤储寮?

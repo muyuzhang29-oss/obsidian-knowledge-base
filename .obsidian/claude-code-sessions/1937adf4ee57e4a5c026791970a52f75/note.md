@@ -276,3 +276,4 @@ UART_STA, UART_TRIGGER, SPI_CTRL, SPI_MASK, TIM_CNT, TIM_ARR
 
 > [!note] 一般规则
 > 每个寄存器占据 4 字节，按 4 字节对齐。状态类寄存器通常在偏移最小的地址，便于快速轮询。
+

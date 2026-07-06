@@ -1,36 +1,32 @@
----
-tags: [Protocol, AXI, AMBA, 核心]
+﻿---
+tags: [Protocol, AXI, AMBA, 鏍稿績]
 created: 2026-04-17
 updated: 2026-04-17
 ---
 
-# AXI 协议
+# AXI 鍗忚
 
-> [!abstract] 概述
-> Advanced eXtensible Interface — AMBA 4.0 高性能总线，广泛应用于 SoC 中处理器、DMA、外设之间的高速数据传输。
-
+> [!abstract] 姒傝堪
+> Advanced eXtensible Interface 鈥?AMBA 4.0 楂樻€ц兘鎬荤嚎锛屽箍娉涘簲鐢ㄤ簬 SoC 涓鐞嗗櫒銆丏MA銆佸璁句箣闂寸殑楂橀€熸暟鎹紶杈撱€?
 ---
 
-## 协议概述
+## 鍗忚姒傝堪
 
-> [!tip] 核心特性
-> - 独立的地址/控制和数据通道
-> - 支持非对齐数据传输
-> - 支持突发传输
-> - 独立的读写数据通道
-> - 支持乱序传输
-> - 易于添加寄存器级流水线
-
-### AXI 通道架构
+> [!tip] 鏍稿績鐗规€?> - 鐙珛鐨勫湴鍧€/鎺у埗鍜屾暟鎹€氶亾
+> - 鏀寔闈炲榻愭暟鎹紶杈?> - 鏀寔绐佸彂浼犺緭
+> - 鐙珛鐨勮鍐欐暟鎹€氶亾
+> - 鏀寔涔卞簭浼犺緭
+> - 鏄撲簬娣诲姞瀵勫瓨鍣ㄧ骇娴佹按绾?
+### AXI 閫氶亾鏋舵瀯
 
 ```mermaid
 graph LR
     subgraph Master
-        AW[写地址通道<br/>AWADDR/AWVALID/AWREADY]
-        W[写数据通道<br/>WDATA/WVALID/WREADY]
-        B[写响应通道<br/>BRESP/BVALID/BREADY]
-        AR[读地址通道<br/>ARADDR/ARVALID/ARREADY]
-        R[读数据通道<br/>RDATA/RVALID/RREADY]
+        AW[鍐欏湴鍧€閫氶亾<br/>AWADDR/AWVALID/AWREADY]
+        W[鍐欐暟鎹€氶亾<br/>WDATA/WVALID/WREADY]
+        B[鍐欏搷搴旈€氶亾<br/>BRESP/BVALID/BREADY]
+        AR[璇诲湴鍧€閫氶亾<br/>ARADDR/ARVALID/ARREADY]
+        R[璇绘暟鎹€氶亾<br/>RDATA/RVALID/RREADY]
     end
 
     subgraph Interconnect
@@ -38,7 +34,7 @@ graph LR
     end
 
     subgraph Slave
-        MEM[存储器/外设]
+        MEM[瀛樺偍鍣?澶栬]
     end
 
     AW --> XBAR
@@ -52,88 +48,88 @@ graph LR
 
 ---
 
-## 信号定义
+## 淇″彿瀹氫箟
 
-### 全局信号
+### 鍏ㄥ眬淇″彿
 
-| 信号 | 方向 | 说明 |
+| 淇″彿 | 鏂瑰悜 | 璇存槑 |
 |------|------|------|
-| ACLK | Input | 时钟，所有信号在时钟上升沿采样 |
-| ARESETn | Input | 复位（低有效） |
+| ACLK | Input | 鏃堕挓锛屾墍鏈変俊鍙峰湪鏃堕挓涓婂崌娌块噰鏍?|
+| ARESETn | Input | 澶嶄綅锛堜綆鏈夋晥锛?|
 
-### 写地址通道 (Write Address Channel)
+### 鍐欏湴鍧€閫氶亾 (Write Address Channel)
 
-| 信号 | 位宽 | 说明 |
+| 淇″彿 | 浣嶅 | 璇存槑 |
 |------|------|------|
-| AWID | 4-12bit | 事务标识符，用于匹配响应 |
-| AWADDR | 32/64bit | 写起始地址 |
-| AWLEN | 8bit | 突发长度 (0-255) |
-| AWSIZE | 3bit | 突发大小 (字节数) |
-| AWBURST | 2bit | 突发类型 |
-| AWVALID | 1bit | 地址有效指示 |
-| AWREADY | 1bit | 从机就绪接收 |
-| AWQOS | 4bit | QoS 标识符 |
-| AWREGION | 4bit | 区域标识符 |
-| AWLOCK | 1bit | 锁信号 (AXI3) |
-| AWCACHE | 4bit | 缓存类型 |
-| AWPROT | 3bit | 保护类型 |
+| AWID | 4-12bit | 浜嬪姟鏍囪瘑绗︼紝鐢ㄤ簬鍖归厤鍝嶅簲 |
+| AWADDR | 32/64bit | 鍐欒捣濮嬪湴鍧€ |
+| AWLEN | 8bit | 绐佸彂闀垮害 (0-255) |
+| AWSIZE | 3bit | 绐佸彂澶у皬 (瀛楄妭鏁? |
+| AWBURST | 2bit | 绐佸彂绫诲瀷 |
+| AWVALID | 1bit | 鍦板潃鏈夋晥鎸囩ず |
+| AWREADY | 1bit | 浠庢満灏辩华鎺ユ敹 |
+| AWQOS | 4bit | QoS 鏍囪瘑绗?|
+| AWREGION | 4bit | 鍖哄煙鏍囪瘑绗?|
+| AWLOCK | 1bit | 閿佷俊鍙?(AXI3) |
+| AWCACHE | 4bit | 缂撳瓨绫诲瀷 |
+| AWPROT | 3bit | 淇濇姢绫诲瀷 |
 
-### 写数据通道 (Write Data Channel)
+### 鍐欐暟鎹€氶亾 (Write Data Channel)
 
-| 信号 | 位宽 | 说明 |
+| 淇″彿 | 浣嶅 | 璇存槑 |
 |------|------|------|
-| WID | 4-12bit | 数据标识符 (AXI3) |
-| WDATA | 32/64/128/256/512bit | 写数据 |
-| WSTRB | WDATA/8 bit | 字节使能 |
-| WLAST | 1bit | 突发最后一个数据 |
-| WVALID | 1bit | 数据有效指示 |
-| WREADY | 1bit | 从机就绪接收 |
+| WID | 4-12bit | 鏁版嵁鏍囪瘑绗?(AXI3) |
+| WDATA | 32/64/128/256/512bit | 鍐欐暟鎹?|
+| WSTRB | WDATA/8 bit | 瀛楄妭浣胯兘 |
+| WLAST | 1bit | 绐佸彂鏈€鍚庝竴涓暟鎹?|
+| WVALID | 1bit | 鏁版嵁鏈夋晥鎸囩ず |
+| WREADY | 1bit | 浠庢満灏辩华鎺ユ敹 |
 
-### 写响应通道 (Write Response Channel)
+### 鍐欏搷搴旈€氶亾 (Write Response Channel)
 
-| 信号 | 位宽 | 说明 |
+| 淇″彿 | 浣嶅 | 璇存槑 |
 |------|------|------|
-| BID | 4-12bit | 响应标识符 |
-| BRESP | 2bit | 写响应 |
-| BVALID | 1bit | 响应有效指示 |
-| BREADY | 1bit | 主机就绪接收 |
+| BID | 4-12bit | 鍝嶅簲鏍囪瘑绗?|
+| BRESP | 2bit | 鍐欏搷搴?|
+| BVALID | 1bit | 鍝嶅簲鏈夋晥鎸囩ず |
+| BREADY | 1bit | 涓绘満灏辩华鎺ユ敹 |
 
-### 读地址通道 (Read Address Channel)
+### 璇诲湴鍧€閫氶亾 (Read Address Channel)
 
-| 信号 | 位宽 | 说明 |
+| 淇″彿 | 浣嶅 | 璇存槑 |
 |------|------|------|
-| ARID | 4-12bit | 读事务标识符 |
-| ARADDR | 32/64bit | 读起始地址 |
-| ARLEN | 8bit | 突发长度 |
-| ARSIZE | 3bit | 突发大小 |
-| ARBURST | 2bit | 突发类型 |
-| ARVALID | 1bit | 地址有效指示 |
-| ARREADY | 1bit | 从机就绪 |
+| ARID | 4-12bit | 璇讳簨鍔℃爣璇嗙 |
+| ARADDR | 32/64bit | 璇昏捣濮嬪湴鍧€ |
+| ARLEN | 8bit | 绐佸彂闀垮害 |
+| ARSIZE | 3bit | 绐佸彂澶у皬 |
+| ARBURST | 2bit | 绐佸彂绫诲瀷 |
+| ARVALID | 1bit | 鍦板潃鏈夋晥鎸囩ず |
+| ARREADY | 1bit | 浠庢満灏辩华 |
 
-### 读数据通道 (Read Data Channel)
+### 璇绘暟鎹€氶亾 (Read Data Channel)
 
-| 信号 | 位宽 | 说明 |
+| 淇″彿 | 浣嶅 | 璇存槑 |
 |------|------|------|
-| RID | 4-12bit | 读数据标识符 |
-| RDATA | 32/64/128/256/512bit | 读数据 |
-| RRESP | 2bit | 读响应 |
-| RLAST | 1bit | 突发最后一个数据 |
-| RVALID | 1bit | 数据有效指示 |
-| RREADY | 1bit | 主机就绪接收 |
+| RID | 4-12bit | 璇绘暟鎹爣璇嗙 |
+| RDATA | 32/64/128/256/512bit | 璇绘暟鎹?|
+| RRESP | 2bit | 璇诲搷搴?|
+| RLAST | 1bit | 绐佸彂鏈€鍚庝竴涓暟鎹?|
+| RVALID | 1bit | 鏁版嵁鏈夋晥鎸囩ず |
+| RREADY | 1bit | 涓绘満灏辩华鎺ユ敹 |
 
 ---
 
-## 突发类型
+## 绐佸彂绫诲瀷
 
-| AWBURST | 类型 | 说明 | 地址计算 |
+| AWBURST | 绫诲瀷 | 璇存槑 | 鍦板潃璁＄畻 |
 |----------|------|------|----------|
-| 2'b00 | FIXED | 固定地址，所有传输使用同一地址 | addr = start_addr |
-| 2'b01 | INCR | 递增地址，每拍地址递增 | addr = start_addr + Burst_length × Size |
-| 2'b10 | WRAP | 回环突发，超界后回绕 | addr = start_addr + Burst_length × Size (回绕) |
+| 2'b00 | FIXED | 鍥哄畾鍦板潃锛屾墍鏈変紶杈撲娇鐢ㄥ悓涓€鍦板潃 | addr = start_addr |
+| 2'b01 | INCR | 閫掑鍦板潃锛屾瘡鎷嶅湴鍧€閫掑 | addr = start_addr + Burst_length 脳 Size |
+| 2'b10 | WRAP | 鍥炵幆绐佸彂锛岃秴鐣屽悗鍥炵粫 | addr = start_addr + Burst_length 脳 Size (鍥炵粫) |
 
-### 突发长度约束
+### 绐佸彂闀垮害绾︽潫
 
-| 突发类型 | 长度范围 | AXI3 | AXI4 |
+| 绐佸彂绫诲瀷 | 闀垮害鑼冨洿 | AXI3 | AXI4 |
 |----------|----------|------|------|
 | INCR | 1-256 | 1-16 | 1-256 |
 | WRAP | 2/4/8/16 | 2-16 | 2-16 |
@@ -141,10 +137,8 @@ graph LR
 
 ---
 
-## 时序图
-
-### 写操作时序
-
+## 鏃跺簭鍥?
+### 鍐欐搷浣滄椂搴?
 ```mermaid
 sequenceDiagram
     participant M as Master
@@ -171,8 +165,7 @@ sequenceDiagram
     Note over M,S: Response Handshake Complete
 ```
 
-### 读操作时序
-
+### 璇绘搷浣滄椂搴?
 ```mermaid
 sequenceDiagram
     participant M as Master
@@ -193,7 +186,7 @@ sequenceDiagram
     Note over M,S: Read Complete
 ```
 
-### OUTSTANDING 读操作 (3 Outstanding)
+### OUTSTANDING 璇绘搷浣?(3 Outstanding)
 
 ```mermaid
 sequenceDiagram
@@ -224,7 +217,7 @@ sequenceDiagram
     M->>S: RREADY=1
 ```
 
-### 突发边界 (4KB Boundary)
+### 绐佸彂杈圭晫 (4KB Boundary)
 
 ```mermaid
 sequenceDiagram
@@ -247,20 +240,19 @@ sequenceDiagram
 
 ---
 
-## 响应码
-
-| BRESP/RRESP | 值 | 说明 |
+## 鍝嶅簲鐮?
+| BRESP/RRESP | 鍊?| 璇存槑 |
 |-------------|-----|------|
-| OKAY | 2'b00 | 正常访问成功 |
-| EXOKAY | 2'b01 | 独占访问成功 |
-| SLVERR | 2'b10 | 从机错误 |
-| DECERR | 2'b11 | 解码错误 |
+| OKAY | 2'b00 | 姝ｅ父璁块棶鎴愬姛 |
+| EXOKAY | 2'b01 | 鐙崰璁块棶鎴愬姛 |
+| SLVERR | 2'b10 | 浠庢満閿欒 |
+| DECERR | 2'b11 | 瑙ｇ爜閿欒 |
 
 ---
 
-## 常用代码
+## 甯哥敤浠ｇ爜
 
-### UVM Transaction 定义
+### UVM Transaction 瀹氫箟
 
 ```verilog
 class axi_transaction extends uvm_sequence_item;
@@ -305,7 +297,7 @@ class axi_transaction extends uvm_sequence_item;
 endclass
 ```
 
-### Driver 驱动模板
+### Driver 椹卞姩妯℃澘
 
 ```verilog
 class axi_driver extends uvm_driver#(axi_transaction);
@@ -364,7 +356,7 @@ class axi_driver extends uvm_driver#(axi_transaction);
 endclass
 ```
 
-### Monitor 监测模板
+### Monitor 鐩戞祴妯℃澘
 
 ```verilog
 class axi_monitor extends uvm_monitor;
@@ -413,22 +405,20 @@ endclass
 
 ---
 
-## 常见问题
+## 甯歌闂
 
-> [!warning] 设计陷阱
-> AXI 多通道并行特性容易导致设计问题，以下是常见坑点和解决方案。
-
-### 1. 死锁问题
+> [!warning] 璁捐闄烽槺
+> AXI 澶氶€氶亾骞惰鐗规€у鏄撳鑷磋璁￠棶棰橈紝浠ヤ笅鏄父瑙佸潙鐐瑰拰瑙ｅ喅鏂规銆?
+### 1. 姝婚攣闂
 
 ```verilog
-// ❌ 错误：同时依赖多个通道就绪
+// 鉂?閿欒锛氬悓鏃朵緷璧栧涓€氶亾灏辩华
 always @(posedge clk) begin
     if (awvalid && awready && wvalid && wready)
         state <= next_state;
 end
 
-// ✅ 正确：分步握手
-always @(posedge clk) begin
+// 鉁?姝ｇ‘锛氬垎姝ユ彙鎵?always @(posedge clk) begin
     if (awvalid && awready)
         addr_phase_done <= 1'b1;
     if (wvalid && wready && wlast)
@@ -436,22 +426,18 @@ always @(posedge clk) begin
 end
 ```
 
-### 2. 带宽利用率优化
-
+### 2. 甯﹀鍒╃敤鐜囦紭鍖?
 ```verilog
-// 提高带宽的方法
-constraint burst_len {
-    len inside {[8:16]};  // 较大的突发长度
-}
+// 鎻愰珮甯﹀鐨勬柟娉?constraint burst_len {
+    len inside {[8:16]};  // 杈冨ぇ鐨勭獊鍙戦暱搴?}
 
-// 使用 OUTSTANDING
+// 浣跨敤 OUTSTANDING
 class axi_sequencer extends uvm_sequencer#(axi_transaction);
-    // 配置 outstanding 数量
+    // 閰嶇疆 outstanding 鏁伴噺
 endclass
 ```
 
-### 3. 4KB 边界检查
-
+### 3. 4KB 杈圭晫妫€鏌?
 ```verilog
 function bit check_4kb_boundary(bit [31:0] addr, bit [7:0] len, bit [2:0] size);
     int bytes_per_beat = 1 << size;
@@ -463,17 +449,16 @@ endfunction
 
 ---
 
-## 相关链接
+## 鐩稿叧閾炬帴
 
-- [[03-Protocol/00-协议索引|协议索引]] - 返回协议索引
-- [[03-Protocol/APB/00-APB|APB]] - APB 协议
-- [[03-Protocol/I2C/00-I2C|I2C]] - I2C 协议
-- [[03-Protocol/SPI/00-SPI|SPI]] - SPI 协议
-- [[08-Projects/02-AXI验证/00-项目概述|AXI 验证项目]] - AXI 验证实战项目
-- [[02-UVM/00-入门|UVM 入门]] - UVM 验证方法学
-- [[00-总索引]] - 返回总索引
-
+- [[03-Protocol/00-鍗忚绱㈠紩|鍗忚绱㈠紩]] - 杩斿洖鍗忚绱㈠紩
+- [[03-Protocol/APB/00-APB|APB]] - APB 鍗忚
+- [[03-Protocol/I2C/00-I2C|I2C]] - I2C 鍗忚
+- [[03-Protocol/SPI/00-SPI|SPI]] - SPI 鍗忚
+- [[07-Projects/02-AXI楠岃瘉/00-椤圭洰姒傝堪|AXI 楠岃瘉椤圭洰]] - AXI 楠岃瘉瀹炴垬椤圭洰
+- [[02-UVM/00-鍏ラ棬|UVM 鍏ラ棬]] - UVM 楠岃瘉鏂规硶瀛?- [[00-鎬荤储寮昡] - 杩斿洖鎬荤储寮?
 ---
 
-*创建时间: 2026-04-17*
-*更新时间: 2026-04-17*
+*鍒涘缓鏃堕棿: 2026-04-17*
+*鏇存柊鏃堕棿: 2026-04-17*
+
