@@ -30,5 +30,6 @@
   "obsidian-shellcommands",
   "realclaudian",
   "obsidian-annotator",
-  "obsidian-git"
+  "obsidian-git",
+  "vscode-editor"
 ]
