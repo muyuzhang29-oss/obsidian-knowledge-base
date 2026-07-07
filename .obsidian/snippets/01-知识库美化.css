@@ -33,14 +33,14 @@
    ============================================================ */
 :root {
   /* --- 颜色 --- */
-  --kb-accent-color: #7c3aed;           /* 主题强调色 (紫色) */
-  --kb-accent-light: #a78bfa;           /* 强调色浅色变体 */
-  --kb-accent-bg: rgba(124, 58, 237, 0.08); /* 强调色背景 */
+  --kb-accent-color: #2563eb;           /* 主题强调色 (专业蓝) */
+  --kb-accent-light: #60a5fa;           /* 强调色浅色变体 */
+  --kb-accent-bg: rgba(37, 99, 235, 0.08); /* 强调色背景 */
 
   --kb-heading-color: #1e293b;          /* 标题颜色 */
-  --kb-heading-h1-border: #7c3aed;     /* H1 底部边框色 */
-  --kb-heading-h2-border: #6366f1;     /* H2 底部边框色 */
-  --kb-heading-h3-border: #8b5cf6;     /* H3 左侧边框色 */
+  --kb-heading-h1-border: #2563eb;     /* H1 底部边框色 */
+  --kb-heading-h2-border: #3b82f6;     /* H2 底部边框色 */
+  --kb-heading-h3-border: #1d4ed8;     /* H3 左侧边框色 */
 
   --kb-text-primary: #334155;           /* 主要文本颜色 */
   --kb-text-secondary: #64748b;         /* 次要文本颜色 */
@@ -57,7 +57,7 @@
   --kb-callout-warning: #f59e0b;
   --kb-callout-danger: #ef4444;
   --kb-callout-success: #22c55e;
-  --kb-callout-example: #8b5cf6;
+  --kb-callout-example: #3b82f6;
   --kb-callout-note: #6b7280;
 
   /* --- 字体 --- */
@@ -93,14 +93,14 @@
 
 /* 暗色模式变量覆盖 */
 .theme-dark {
-  --kb-accent-color: #a78bfa;
-  --kb-accent-light: #c4b5fd;
-  --kb-accent-bg: rgba(167, 139, 250, 0.12);
+  --kb-accent-color: #60a5fa;
+  --kb-accent-light: #93c5fd;
+  --kb-accent-bg: rgba(96, 165, 250, 0.12);
 
   --kb-heading-color: #e2e8f0;
-  --kb-heading-h1-border: #a78bfa;
-  --kb-heading-h2-border: #818cf8;
-  --kb-heading-h3-border: #a78bfa;
+  --kb-heading-h1-border: #60a5fa;
+  --kb-heading-h2-border: #3b82f6;
+  --kb-heading-h3-border: #2563eb;
 
   --kb-text-primary: #e2e8f0;
   --kb-text-secondary: #94a3b8;
@@ -1021,13 +1021,13 @@
 .tag[href^="#AXI"],
 .tag[href^="#Protocol"],
 .tag[href^="#协议"] {
-  background: rgba(139, 92, 246, 0.1) !important;
-  color: #7c3aed !important;
+  background: rgba(37, 99, 235, 0.1) !important;
+  color: #2563eb !important;
 }
 .tag[href^="#AXI"]:hover,
 .tag[href^="#Protocol"]:hover,
 .tag[href^="#协议"]:hover {
-  background: #7c3aed !important;
+  background: #2563eb !important;
   color: #fff !important;
 }
 
@@ -1751,10 +1751,10 @@ a.external-link {
 
   --kb-domain-index: #2563eb;
   --kb-domain-sv: #0891b2;
-  --kb-domain-uvm: #7c3aed;
+  --kb-domain-uvm: #6366f1;
   --kb-domain-protocol: #059669;
   --kb-domain-tools: #d97706;
-  --kb-domain-verification: #db2777;
+  --kb-domain-verification: #0ea5e9;
   --kb-domain-projects: #0f766e;
 }
 
