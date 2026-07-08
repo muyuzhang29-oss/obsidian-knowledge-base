@@ -86,8 +86,25 @@ blocks/i2c_it/
 
 ---
 
+## 实测结论：DUT 的 I2C Slave = 普通 I2C (非 PMBus)
+
+检查 DUT (`i2cs` / `i2cs_sla_wrp`) 接口后确认：
+
+| 特征 | PMBus 特征 | DUT i2cs | 结论 |
+|------|-----------|----------|------|
+| PEC 信号 | 有 `pec` / `pec_calc` | ❌ 无 | 非 PMBus |
+| 命令码 | 有 `cmd_code` | ❌ 无 | 非 PMBus |
+| 字节流 | 地址→命令码→块长→数据→PEC | ✅ 地址→16bit寄存器地址→数据 | 普通 I2C |
+| 寄存器地址 | — | `o_reg_adr_std[15:0]` | **16-bit 地址** |
+
+**因此 SPI_IT 的 I2C master 不需要 PMBus 栈**，仅需支持：
+- 标准 I2C 写: `START + ADDR+W + REG_HI + REG_LO + DATA + STOP`
+- 标准 I2C 读: `START + ADDR+W + REG_HI + REG_LO + RESTART + ADDR+R + DATA + NACK + STOP`
+
+I2C_IT 中只需拿 `i2c_master_model.v` 即可，pmb_* 全部不需要。
+
 ## SPI_IT 下一步可补充项
 
 1. **`run_cmd`** — 参考 I2C_IT 的 run_cmd，写 SPI 的仿真启动脚本
-2. **`filelist_ss12` 风格** — 多项目 filelist，后续 DUT RTL 到位后配套
+2. **`filelist_ss12` 风格** — 多项目 filelist
 3. **`top/` 占位** — 与 I2C_IT 保持一致，预留空目录
