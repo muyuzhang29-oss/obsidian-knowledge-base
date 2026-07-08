@@ -1,6 +1,8 @@
 // 1. 模型
 ../model/memory/main_mem_model.v
 ../model/spi_sensor_model.sv
+../model/i2c_master_model.sv
+../model/i2c_slv_model.sv
 ../model/cpu_model.sv
 ../model/soc_model.sv
 

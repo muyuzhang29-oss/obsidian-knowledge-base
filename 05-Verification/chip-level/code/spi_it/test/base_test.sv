@@ -7,7 +7,7 @@ module base_test;
     // ==========================================
     $display("[TEST] SPI Master Write (CRC-8): SOC -> SENSOR");
     spi_init(.cpol(0), .cpha(0), .sck_low(5), .sck_high(5), .ss_dly(2));
-    spi_set_crc_mode(0);  // CRC-8 (default)
+    spi_set_crc_mode(0);
 
     reg [7:0] wdata[]; wdata = new[4];
     wdata[0] = 8'hA5; wdata[1] = 8'h5A; wdata[2] = 8'hFF; wdata[3] = 8'h00;
@@ -15,7 +15,7 @@ module base_test;
     #1000;
 
     // ==========================================
-    // Test 2: CRC-8 (default) — SPI Master Read
+    // Test 2: CRC-8 — SPI Master Read
     // ==========================================
     $display("[TEST] SPI Master Read (CRC-8): SOC <- SENSOR");
     reg [7:0] rdata[];
@@ -36,7 +36,7 @@ module base_test;
     // Test 3: CRC-16 — SPI Master Write
     // ==========================================
     $display("[TEST] SPI Master Write (CRC-16): SOC -> SENSOR");
-    spi_set_crc_mode(1);  // CRC-16
+    spi_set_crc_mode(1);
 
     wdata = new[4];
     wdata[0] = 8'hA5; wdata[1] = 8'h5A; wdata[2] = 8'hFF; wdata[3] = 8'h00;
