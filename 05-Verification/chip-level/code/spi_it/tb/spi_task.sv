@@ -28,3 +28,8 @@ task spi_check_timeout_err(output [7:0] spis_cnt, output [7:0] spim_cnt);
   cpu_rd_reg(6'h08, spis_cnt); // SPIS_MNT2
   cpu_rd_reg(6'h19, spim_cnt); // SPIM_MNT2
 endtask
+
+// CRC 模式配置（模拟 I2C 写 top 层级寄存器）
+task spi_set_crc_mode(input bit use_crc16);
+  u_soc.set_crc_mode(use_crc16);
+endtask
