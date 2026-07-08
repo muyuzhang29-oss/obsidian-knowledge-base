@@ -12,15 +12,18 @@ module spi_sensor_model (
   input  [16:0]     reg_wr_addr
 );
 
-  reg [7:0] mem[0:131071];
-  integer i;
-  initial begin
-    for (i = 0; i < 131072; i++) mem[i] = 8'h00;
-  end
+  wire [16:0] mem_rd_addr;
+  wire [7:0]  mem_rd_data;
 
-  always @(posedge clk) begin
-    if (reg_wr_en) mem[reg_wr_addr] <= reg_wr_data;
-  end
+  main_mem_model u_mem (
+    .clk     (clk),
+    .rst_n   (rst_n),
+    .wr_en   (reg_wr_en),
+    .wr_addr (reg_wr_addr),
+    .wr_data (reg_wr_data),
+    .rd_addr (mem_rd_addr),
+    .rd_data (mem_rd_data)
+  );
 
   reg sclk_d1, sclk_d2, cs_n_d1, cs_n_d2;
   wire sclk_pos = sclk_d1 & ~sclk_d2;
@@ -35,6 +38,8 @@ module spi_sensor_model (
 
   wire sample_edge = (cpha == 0) ? sclk_pos : sclk_neg;
   wire drive_edge  = (cpha == 0) ? sclk_neg : sclk_pos;
+
+  assign mem_rd_addr = {bit_cnt, 3'b0};
 
   reg [3:0] bit_cnt;
   reg [7:0] shift_reg;
@@ -55,7 +60,7 @@ module spi_sensor_model (
         bit_cnt   <= bit_cnt + 1;
       end
       if (drive_edge) begin
-        miso <= mem[{bit_cnt, 3'b0}][0];
+        miso <= mem_rd_data[0];
       end
     end
   end
