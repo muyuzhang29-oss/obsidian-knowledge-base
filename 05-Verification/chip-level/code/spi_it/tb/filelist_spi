@@ -1,12 +1,24 @@
-// 1. 模型
+// 1. I2C_IT Master Model（从 I2C_IT 复制，work machine 上操作）
+//    i2c_master_model.v 内 `include "apb_master_model.v"
+//    需同时复制 pmb_*.v（pmb_top 及其子模块）+ std_*.v（标准单元）
+//../model/i2c_master_model.v
+//../model/apb_master_model.v
+//../model/pmb_top.v
+//../model/pmb_fifo.v
+//../model/pmb_reg.v
+//../model/pmb_master_fsm.v
+//../model/pmb_slave_fsm.v
+//../model/pmb_clock_gen.v
+//../model/std_icg_test.v
+//../model/std_an2.v
+//../model/std_mux2.v
+
+// 2. 模型
 ../model/memory/main_mem_model.v
 ../model/spi_sensor_model.sv
-../model/i2c_master_model.sv
-../model/i2c_slv_model.sv
-../model/cpu_model.sv
 ../model/soc_model.sv
 
-// 2. DUT RTL（DE 提供，路径按实际替换）
+// 3. DUT RTL（DE 提供，路径按实际替换）
 // ../rtl/spi_wrp.v
 // ../rtl/SPIS_PSR.v
 // ../rtl/SPIM_PSR.v
@@ -14,11 +26,11 @@
 // ../rtl/PAL.v
 // 以及所有子模块
 
-// 3. TB
+// 4. TB
 tb_define.v
 tb_include.sv
 tb_spi.sv
 spi_task.sv
 
-// 4. 测试用例
+// 5. 测试用例
 ../test/base_test.sv

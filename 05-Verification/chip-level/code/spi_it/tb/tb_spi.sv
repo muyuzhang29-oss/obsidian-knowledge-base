@@ -10,15 +10,18 @@ module tb_spi;
   initial begin rst_n = 0; #100 rst_n = 1; end
 
   // ========================================
-  // I2C bus (top-level, shared by all chips)
+  // I2C 总线（外部 MCU 通过 I2C 配 SS12 寄存器）
+  // 使用 I2C_IT 的 i2c_master_model（含 PMBus 协议栈）
+  // 文件依赖: i2c_master_model.v + apb_master_model.v + pmb_* + std cells
   // ========================================
   wire i2c_scl, i2c_sda;
 
-  // I2C Master: 模拟外部 MCU，通过 I2C 配 SS12 + SS11
-  i2c_master_model #(.SCL_HALF(50)) u_i2c_mst (
-    .scl (i2c_scl),
-    .sda (i2c_sda)
+  i2c_master_model u_ext_i2c_mst (
+    .SDA (i2c_sda),
+    .SCL (i2c_scl)
   );
+  // u_ext_i2c_mst 内部产生独立 clk/rst_n
+  // u_ext_i2c_mst 的 APB 接口通过 spi_task.sv 中的 ext_apb_wr 驱动
 
   // ========================================
   // SOC FIFO interface
@@ -38,7 +41,7 @@ module tb_spi;
   );
 
   // ========================================
-  // SPI sensor
+  // SPI sensor model
   // ========================================
   wire sclk, mosi, miso, cs_n;
 
@@ -61,7 +64,7 @@ module tb_spi;
   // 按实际顶层 module 名和 port 名替换
   // ========================================
   SS12_CHP u_ss12 (
-    // I2C 引脚 (接 master)
+    // I2C 引脚 (接外部 master)
     .i2c_scl      (i2c_scl),
     .i2c_sda      (i2c_sda),
     // SOC FIFO
@@ -76,7 +79,7 @@ module tb_spi;
     .mosi         (mosi),
     .miso         (miso),
     .cs_n         (cs_n),
-    // 其他 (时钟、复位、4×SS11 coax 等)
+    // 其他
     .clk_sys      (clk_reg),
     .clk_ica_lf   (clk_lf),
     .rst_sys_n    (rst_n)
