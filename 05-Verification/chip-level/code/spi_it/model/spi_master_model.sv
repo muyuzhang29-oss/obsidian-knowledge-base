@@ -12,11 +12,16 @@ module spi_master_model (
   reg cpol = 0;
   reg cpha = 0;
   reg crc_mode = 0;  // 0=CRC-8, 1=CRC-16
+  reg [7:0] rd_dummy = 4;  // RD_DATA 命令段后 dummy 字节数（等 slave 准备数据）
 
   task set_mode(input cpol_i, input cpha_i, input crc_mode_i);
     cpol = cpol_i;
     cpha = cpha_i;
     crc_mode = crc_mode_i;
+  endtask
+
+  task set_rd_dummy(input [7:0] n);
+    rd_dummy = n;
   endtask
 
   initial begin sclk = cpol; mosi = 0; cs_n = 1; end
@@ -139,7 +144,7 @@ module spi_master_model (
     input [7:0] a, input [6:0] rl, input [7:0] dlen,
     output [7:0] rdata[]
   );
-    reg [7:0] fifo[$];
+    reg [7:0] fifo[$], tmp;
     integer i, rcnt;
     fifo = {};
     fifo.push_back(cmd(l,da,2'b10,dp));
@@ -149,6 +154,9 @@ module spi_master_model (
     append_crc(fifo);
     spi_cs_low;
     for (i=0; i<fifo.size(); i++) spi_out_byte(fifo[i]);
+    // dummy bytes: MISO 尚未有效，只发 0x00，不读 MISO
+    for (i=0; i<rd_dummy; i++) spi_out_byte(8'h00);
+    // 正式读回数据 + CRC
     rcnt = dlen + crc_len;
     rdata = new[rcnt];
     for (i=0; i<rcnt; i++) begin

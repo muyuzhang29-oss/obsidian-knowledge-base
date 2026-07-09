@@ -11,11 +11,16 @@ module spi_slave_model (
   reg cpol = 0;
   reg cpha = 0;
   reg crc_mode = 0;
+  reg [7:0] rd_dummy = 4;  // RD_DATA 命令段后等待的 dummy 字节数
 
   task set_mode(input cpol_i, input cpha_i, input crc_mode_i);
     cpol = cpol_i;
     cpha = cpha_i;
     crc_mode = crc_mode_i;
+  endtask
+
+  task set_rd_dummy(input [7:0] n);
+    rd_dummy = n;
   endtask
 
   function integer crc_len;
@@ -49,6 +54,7 @@ module spi_slave_model (
   reg [7:0] crc8_val;
   reg [15:0] crc16_val;
   reg [1:0] crc_byte_cnt;
+  reg [7:0] dummy_rem;
 
   function [7:0] crc8_upd(input [7:0] ci, input [7:0] d);
     reg [7:0] t;
@@ -74,7 +80,7 @@ module spi_slave_model (
 
   always @(posedge clk) begin
     if (cs_fal) begin
-      st <= CMD; bn <= 0; dcnt <= 0;
+      st <= CMD; bn <= 0; dcnt <= 0; dummy_rem <= 0;
       crc8_val <= 0; crc16_val <= 0; crc_byte_cnt <= 0;
       bne <= 0;
     end else if (cs_ris) begin
@@ -108,7 +114,7 @@ module spi_slave_model (
                 st <= WAIT;
               end else               if (cmd_b[4:3] == 2'b10) begin
                 st <= RSP_D; dcnt <= 0; crc_byte_cnt <= 0;
-                crc8_val <= 0; crc16_val <= 0;
+                crc8_val <= 0; crc16_val <= 0; dummy_rem <= rd_dummy;
               end else begin
                 st <= IDLE;
               end
@@ -117,7 +123,12 @@ module spi_slave_model (
         endcase
       end
     end else if (drive) begin
-      if (st == RSP_D && dcnt < dlen) begin
+      if (st == RSP_D && dummy_rem > 0) begin
+        // dummy stage: MISO high-Z, 等 slave 准备数据
+        miso <= 1'bz;
+        if (bn == 4'd8) begin dummy_rem <= dummy_rem - 1; bn <= 0; end
+        else bn <= bn + 1;
+      end else if (st == RSP_D && dcnt < dlen) begin
         miso <= rbuf[dcnt][7 - bn[2:0]];
         if (bn == 4'd0 && dcnt > 0) begin
           if (crc_mode == 0) crc8_val  <= crc8_upd(crc8_val, rbuf[dcnt-1]);
