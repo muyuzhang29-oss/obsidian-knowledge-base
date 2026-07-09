@@ -13,7 +13,9 @@
 //../model/std_an2.v
 //../model/std_mux2.v
 
-// 2. 模型
+// 2. SPI 模型
+../model/spi_master_model.sv
+../model/spi_slave_model.sv
 ../model/memory/main_mem_model.v
 ../model/spi_sensor_model.sv
 ../model/soc_model.sv
