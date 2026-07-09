@@ -6,36 +6,44 @@ module spi_master_model (
   input             bne
 );
 
-  parameter CPOL     = 0;
-  parameter CPHA     = 0;
-  parameter CRC_MODE = 0;  // 0=CRC-8, 1=CRC-16
   parameter SCLK_HALF = 50;
 
-  initial begin sclk = CPOL; mosi = 0; cs_n = 1; end
+  // ── runtime-configurable mode registers ──
+  reg cpol = 0;
+  reg cpha = 0;
+  reg crc_mode = 0;  // 0=CRC-8, 1=CRC-16
+
+  task set_mode(input cpol_i, input cpha_i, input crc_mode_i);
+    cpol = cpol_i;
+    cpha = cpha_i;
+    crc_mode = crc_mode_i;
+  endtask
+
+  initial begin sclk = cpol; mosi = 0; cs_n = 1; end
 
   // ── byte I/O ──
   task spi_out_byte(input [7:0] d);
     integer i;
     for (i = 7; i >= 0; i--) begin
       mosi = d[i];
-      #(SCLK_HALF); sclk = ~CPOL;
-      #(SCLK_HALF); sclk = CPOL;
+      #(SCLK_HALF); sclk = ~cpol;
+      #(SCLK_HALF); sclk = cpol;
     end
   endtask
 
   task spi_in_byte(output [7:0] d);
     integer i;
     for (i = 7; i >= 0; i--) begin
-      #(SCLK_HALF); sclk = ~CPOL;
+      #(SCLK_HALF); sclk = ~cpol;
       d[i] = miso;
-      #(SCLK_HALF); sclk = CPOL;
+      #(SCLK_HALF); sclk = cpol;
     end
   endtask
 
   task spi_cs_low;  #(SCLK_HALF); cs_n = 0; #(SCLK_HALF); endtask
   task spi_cs_high; #(SCLK_HALF); cs_n = 1; #(SCLK_HALF); endtask
 
-  // ── CRC functions ──
+  // ── CRC functions (combinational, usable in tasks) ──
   function [7:0] crc8_f(input [7:0] ci, input [7:0] d);
     reg [7:0] t;
     t = ci ^ d;
@@ -56,9 +64,8 @@ module spi_master_model (
     return t;
   endfunction
 
-  // CRC-8 append = 1 byte, CRC-16 append = 2 bytes
-  function integer crc_bytes;
-    return (CRC_MODE == 0) ? 1 : 2;
+  function integer crc_len;
+    crc_len = (crc_mode == 0) ? 1 : 2;
   endfunction
 
   // ── CMD builder ──
@@ -66,33 +73,38 @@ module spi_master_model (
     cmd = {l, da, rw, dp};
   endfunction
 
+  // ── internal: append CRC to a fifo (uses current crc_mode) ──
+  task append_crc(inout reg [7:0] fifo[$]);
+    reg [7:0] c8;
+    reg [15:0] c16;
+    integer i;
+    if (crc_mode == 0) begin
+      c8 = 0;
+      foreach (fifo[i]) c8 = crc8_f(c8, fifo[i]);
+      fifo.push_back(c8);
+    end else begin
+      c16 = 0;
+      foreach (fifo[i]) c16 = crc16_f(c16, fifo[i]);
+      fifo.push_back(c16[15:8]);
+      fifo.push_back(c16[7:0]);
+    end
+  endtask
+
   // ── Write frame ──
   task spi_write(
     input       l, input [1:0] da, input [2:0] dp,
     input [7:0] a, input [7:0] dlen, input [7:0] d[]
   );
     reg [7:0] fifo[$];
-    reg [7:0] crc8_val;
-    reg [15:0] crc16_val;
     integer i;
     fifo = {cmd(l,da,2'b00,dp), a, 8'h00, dlen};
     for (i=0; i<dlen; i++) fifo.push_back(d[i]);
-    // CRC
-    if (CRC_MODE == 0) begin
-      crc8_val = 0;
-      foreach (fifo[i]) crc8_val = crc8_f(crc8_val, fifo[i]);
-      fifo.push_back(crc8_val);
-    end else begin
-      crc16_val = 0;
-      foreach (fifo[i]) crc16_val = crc16_f(crc16_val, fifo[i]);
-      fifo.push_back(crc16_val[15:8]);
-      fifo.push_back(crc16_val[7:0]);
-    end
+    append_crc(fifo);
     spi_cs_low;
     for (i=0; i<fifo.size(); i++) spi_out_byte(fifo[i]);
     spi_cs_high;
-    $display("%10t: SPI_MST write [%02h] len=%0d crc=%s",
-             $time, a, dlen, CRC_MODE ? "CRC-16" : "CRC-8");
+    $display("%10t: SPI_MST write [%02h] len=%0d cpol=%0d cpha=%0d %s",
+             $time, a, dlen, cpol, cpha, crc_mode ? "CRC-16" : "CRC-8");
   endtask
 
   // ── Read-cmd → wait BNE → read-data ──
@@ -103,16 +115,13 @@ module spi_master_model (
   );
     reg [7:0] fifo[$];
     integer i;
-    // RD_CMD frame
     fifo = {cmd(l,da,2'b01,dp), a, {1'b1,rl}, dlen};
     append_crc(fifo);
     spi_cs_low;
     for (i=0; i<fifo.size(); i++) spi_out_byte(fifo[i]);
     spi_cs_high;
-    // wait BNE
     while (!bne) #(SCLK_HALF);
     #(SCLK_HALF);
-    // RD_DATA frame
     spi_read_data(l, da, dp, a, rl, dlen, rdata);
   endtask
 
@@ -125,36 +134,18 @@ module spi_master_model (
     reg [7:0] fifo[$];
     integer i, rcnt;
     fifo = {cmd(l,da,2'b10,dp), a, {1'b1,rl}, dlen};
-    append_crc(fifo);  // CRC_cmd
+    append_crc(fifo);
     spi_cs_low;
     for (i=0; i<fifo.size(); i++) spi_out_byte(fifo[i]);
-    // dummy → read back data + CRC_data
-    rcnt = dlen + crc_bytes;
+    rcnt = dlen + crc_len;
     rdata = new[rcnt];
     for (i=0; i<rcnt; i++) begin
       spi_out_byte(8'h00);
       spi_in_byte(rdata[i]);
     end
     spi_cs_high;
-    $display("%10t: SPI_MST read  [%02h] len=%0d crc=%s",
-             $time, a, dlen, CRC_MODE ? "CRC-16" : "CRC-8");
-  endtask
-
-  // ── internal: append CRC to a fifo ──
-  task append_crc(inout reg [7:0] fifo[$]);
-    reg [7:0] c8;
-    reg [15:0] c16;
-    integer i;
-    if (CRC_MODE == 0) begin
-      c8 = 0;
-      foreach (fifo[i]) c8 = crc8_f(c8, fifo[i]);
-      fifo.push_back(c8);
-    end else begin
-      c16 = 0;
-      foreach (fifo[i]) c16 = crc16_f(c16, fifo[i]);
-      fifo.push_back(c16[15:8]);
-      fifo.push_back(c16[7:0]);
-    end
+    $display("%10t: SPI_MST read  [%02h] len=%0d cpol=%0d cpha=%0d %s",
+             $time, a, dlen, cpol, cpha, crc_mode ? "CRC-16" : "CRC-8");
   endtask
 
 endmodule
