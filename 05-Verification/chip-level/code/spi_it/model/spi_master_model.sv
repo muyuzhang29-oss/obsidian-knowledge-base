@@ -116,11 +116,10 @@ module spi_master_model (
              $time, a, dlen, cpol, cpha, crc_mode ? "CRC-16" : "CRC-8");
   endtask
 
-  // ── Read-cmd → wait BNE → read-data ──
-  task spi_read(
+  // ── Read-cmd frame (不含数据回复，发完等 BNE) ──
+  task spi_rd_cmd(
     input       l, input [1:0] da, input [2:0] dp,
-    input [7:0] a, input [6:0] rl, input [7:0] dlen,
-    output [7:0] rdata[]
+    input [7:0] a, input [6:0] rl, input [7:0] dlen
   );
     reg [7:0] fifo[$];
     integer i;
@@ -133,13 +132,11 @@ module spi_master_model (
     spi_cs_low;
     for (i=0; i<fifo.size(); i++) spi_out_byte(fifo[i]);
     spi_cs_high;
-    while (!bne) #(SCLK_HALF);
-    #(SCLK_HALF);
-    spi_read_data(l, da, dp, a, rl, dlen, rdata);
+    $display("%10t: SPI_MST rd_cmd [%02h] len=%0d", $time, a, dlen);
   endtask
 
-  // ── Read-data sub-frame ──
-  task spi_read_data(
+  // ── Read-data frame (发命令 + dummy + 读回 MISO) ──
+  task spi_rd_data(
     input       l, input [1:0] da, input [2:0] dp,
     input [7:0] a, input [6:0] rl, input [7:0] dlen,
     output [7:0] rdata[]
@@ -154,9 +151,7 @@ module spi_master_model (
     append_crc(fifo);
     spi_cs_low;
     for (i=0; i<fifo.size(); i++) spi_out_byte(fifo[i]);
-    // dummy bytes: MISO 尚未有效，只发 0x00，不读 MISO
-    for (i=0; i<rd_dummy; i++) spi_out_byte(8'h00);
-    // 正式读回数据 + CRC
+    for (i=0; i<rd_dummy; i++) spi_out_byte(8'h00);  // 等 slave 准备
     rcnt = dlen + crc_len;
     rdata = new[rcnt];
     for (i=0; i<rcnt; i++) begin
@@ -164,8 +159,7 @@ module spi_master_model (
       spi_in_byte(rdata[i]);
     end
     spi_cs_high;
-    $display("%10t: SPI_MST read  [%02h] len=%0d cpol=%0d cpha=%0d %s",
-             $time, a, dlen, cpol, cpha, crc_mode ? "CRC-16" : "CRC-8");
+    $display("%10t: SPI_MST rd_data [%02h] len=%0d", $time, a, dlen);
   endtask
 
 endmodule
