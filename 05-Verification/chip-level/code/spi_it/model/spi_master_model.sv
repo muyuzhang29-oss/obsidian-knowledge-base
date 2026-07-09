@@ -97,7 +97,11 @@ module spi_master_model (
   );
     reg [7:0] fifo[$];
     integer i;
-    fifo = {cmd(l,da,2'b00,dp), a, 8'h00, dlen};
+    fifo = {};
+    fifo.push_back(cmd(l,da,2'b00,dp));
+    fifo.push_back(a);
+    fifo.push_back(8'h00);  // Control high: rd_en=0, rd_len=0
+    fifo.push_back(dlen);   // Control low: data_len
     for (i=0; i<dlen; i++) fifo.push_back(d[i]);
     append_crc(fifo);
     spi_cs_low;
@@ -115,7 +119,11 @@ module spi_master_model (
   );
     reg [7:0] fifo[$];
     integer i;
-    fifo = {cmd(l,da,2'b01,dp), a, {1'b1,rl}, dlen};
+    fifo = {};
+    fifo.push_back(cmd(l,da,2'b01,dp));
+    fifo.push_back(a);
+    fifo.push_back({1'b1,rl});  // Control high: rd_en=1, rd_len
+    fifo.push_back(dlen);       // Control low: data_len
     append_crc(fifo);
     spi_cs_low;
     for (i=0; i<fifo.size(); i++) spi_out_byte(fifo[i]);
@@ -133,7 +141,11 @@ module spi_master_model (
   );
     reg [7:0] fifo[$];
     integer i, rcnt;
-    fifo = {cmd(l,da,2'b10,dp), a, {1'b1,rl}, dlen};
+    fifo = {};
+    fifo.push_back(cmd(l,da,2'b10,dp));
+    fifo.push_back(a);
+    fifo.push_back({1'b1,rl});
+    fifo.push_back(dlen);
     append_crc(fifo);
     spi_cs_low;
     for (i=0; i<fifo.size(); i++) spi_out_byte(fifo[i]);
