@@ -1,62 +1,41 @@
-module base_test;
-  initial begin
-    #200; @(posedge u_tb.rst_n); #100;
+// UVM base test for SPI_IT
+// Launched via run_test() from the I2C tb (which has SPI integrated)
 
-    // ==========================================
-    // Test 1: CRC-8 (default) — SPI Master Write
-    // ==========================================
-    $display("[TEST] SPI Master Write (CRC-8): SOC -> SENSOR");
+class base_test extends uvm_test;
+  `uvm_component_utils(base_test)
+
+  function new(string name = "base_test", uvm_component parent = null);
+    super.new(name, parent);
+  endfunction
+
+  function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    `uvm_info("BASE_TEST", "build_phase started", UVM_LOW)
+  endfunction
+
+  function void end_of_elaboration_phase(uvm_phase phase);
+    super.end_of_elaboration_phase(phase);
+    `uvm_info("BASE_TEST", $sformatf("end_of_elaboration_phase : %s", get_full_name()), UVM_LOW)
+  endfunction
+
+  task run_phase(uvm_phase phase);
+    phase.raise_objection(this);
+    `uvm_info("BASE_TEST", "run_phase started", UVM_LOW)
+
+    // SPI init with default settings
     spi_init(.cpol(0), .cpha(0), .sck_low(5), .sck_high(5), .ss_dly(2));
     spi_set_crc_mode(0);
 
-    reg [7:0] wdata[]; wdata = new[4];
-    wdata[0] = 8'hA5; wdata[1] = 8'h5A; wdata[2] = 8'hFF; wdata[3] = 8'h00;
-    spi_master_write(5'b00010, 17'h1A2B3, wdata, 8'd4);
-    #1000;
+    // Override in derived tests
+    run_test_scenario();
 
-    // ==========================================
-    // Test 2: CRC-8 — SPI Master Read
-    // ==========================================
-    $display("[TEST] SPI Master Read (CRC-8): SOC <- SENSOR");
-    reg [7:0] rdata[];
-    spi_master_read(5'b00010, 17'h1A2B3, 7'd4, 8'd4, rdata);
-    for (int i = 0; i < 4; i++)
-      $display("  rdata[%0d] = 0x%02h", i, rdata[i]);
+    `uvm_info("BASE_TEST", "run_phase finished", UVM_LOW)
+    phase.drop_objection(this);
+  endtask
 
-    reg [7:0] spis_err, spim_err;
-    spi_check_timeout_err(spis_err, spim_err);
-    if (spis_err || spim_err)
-      $display("[FAIL] Timeout err SPIS=%0d SPIM=%0d", spis_err, spim_err);
-    else
-      $display("[PASS] No timeout error (CRC-8)");
+  // Virtual method — override in derived tests
+  virtual task run_test_scenario();
+    `uvm_info("BASE_TEST", "Empty run_test_scenario — override in derived test", UVM_MEDIUM)
+  endtask
 
-    #500;
-
-    // ==========================================
-    // Test 3: CRC-16 — SPI Master Write
-    // ==========================================
-    $display("[TEST] SPI Master Write (CRC-16): SOC -> SENSOR");
-    spi_set_crc_mode(1);
-
-    wdata = new[4];
-    wdata[0] = 8'hA5; wdata[1] = 8'h5A; wdata[2] = 8'hFF; wdata[3] = 8'h00;
-    spi_master_write(5'b00010, 17'h1A2B3, wdata, 8'd4);
-    #1000;
-
-    // ==========================================
-    // Test 4: CRC-16 — SPI Master Read
-    // ==========================================
-    $display("[TEST] SPI Master Read (CRC-16): SOC <- SENSOR");
-    spi_master_read(5'b00010, 17'h1A2B3, 7'd4, 8'd4, rdata);
-    for (int i = 0; i < 4; i++)
-      $display("  rdata[%0d] = 0x%02h", i, rdata[i]);
-
-    spi_check_timeout_err(spis_err, spim_err);
-    if (spis_err || spim_err)
-      $display("[FAIL] Timeout err SPIS=%0d SPIM=%0d", spis_err, spim_err);
-    else
-      $display("[PASS] No timeout error (CRC-16)");
-
-    #500; $finish;
-  end
-endmodule
+endclass

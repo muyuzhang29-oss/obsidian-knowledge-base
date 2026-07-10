@@ -1,67 +1,102 @@
-module spi_sensor_model (
-  input  wire        clk,
-  input  wire        rst_n,
-  input  wire        sclk,
-  input  wire        mosi,
-  input  wire        cs_n,
-  output reg         miso,
-  input  wire        cpol,
-  input  wire        cpha,
-  input  [7:0]      reg_wr_data,
-  input             reg_wr_en,
-  input  [16:0]     reg_wr_addr
+// SPI sensor model — follows i2c_sensor_model pattern
+//
+// SPI(B) interface (to wrp internal master):
+//   Write:  CS↓ DATA0..N  ───→ regfile       CS↑
+//   Read:   CS↓ 先收 rd_len_plus1 字节→regfile, 再发 MISO→regfile 直到 CS↑
+//          CS↓ rd_len_plus1=0 时, 直接发 MISO 直到 CS↑
+//
+// Architecture:
+//   spi_slv_reg  ←SPI pins→  decodes protocol, outputs reg bus
+//        ↓ o_addr/o_wdata/o_wr/o_rd / i_rdata
+//   slv_mem[16383:0]  ←寄存器文件
+
+module spi_sensor_model #(parameter DEV_ID1 = 7'h0A)(
+  input  wire    SCLK,
+  input  wire    MOSI,
+  output wire    MISO,
+  input  wire    CS_N
 );
 
-  wire [16:0] mem_rd_addr;
-  wire [7:0]  mem_rd_data;
+  // ── internal clock & reset ──
+  reg clk_osc;
+  reg rst_n;
 
-  main_mem_model u_mem (
-    .clk     (clk),
-    .rst_n   (rst_n),
-    .wr_en   (reg_wr_en),
-    .wr_addr (reg_wr_addr),
-    .wr_data (reg_wr_data),
-    .rd_addr (mem_rd_addr),
-    .rd_data (mem_rd_data)
-  );
-
-  reg sclk_d1, sclk_d2, cs_n_d1, cs_n_d2;
-  wire sclk_pos = sclk_d1 & ~sclk_d2;
-  wire sclk_neg = ~sclk_d1 & sclk_d2;
-  wire cs_start = cs_n_d1 & ~cs_n_d2;
-  wire cs_end   = ~cs_n_d1 & cs_n_d2;
-
-  always @(posedge clk) begin
-    sclk_d1 <= sclk; sclk_d2 <= sclk_d1;
-    cs_n_d1 <= cs_n; cs_n_d2 <= cs_n_d1;
+  initial begin
+    clk_osc = 0;
+    #50000;
+    forever #20 clk_osc = ~clk_osc;
   end
 
-  wire sample_edge = (cpha == 0) ? sclk_pos : sclk_neg;
-  wire drive_edge  = (cpha == 0) ? sclk_neg : sclk_pos;
+  initial begin
+    rst_n = 0;
+    #51000;
+    rst_n = 1;
+  end
 
-  assign mem_rd_addr = {bit_cnt, 3'b0};
+  // ── register bus (to/from spi_slv_reg) ──
+  wire [15:0] reg_addr;
+  wire [7:0]  reg_wdata;
+  reg  [7:0]  reg_rdata;
+  wire        reg_wr;
+  wire        reg_rd;
 
-  reg [3:0] bit_cnt;
-  reg [7:0] shift_reg;
+  // ── protocol decoder ──
+  wire miso_from_slv;
 
-  always @(posedge clk) begin
-    if (!rst_n) begin
-      bit_cnt  <= 0;
-      shift_reg <= 0;
-      miso     <= 0;
-    end else if (cs_start) begin
-      bit_cnt  <= 0;
-      shift_reg <= 0;
-    end else if (cs_end) begin
-      bit_cnt  <= 0;
-    end else if (!cs_n) begin
-      if (sample_edge) begin
-        shift_reg <= {shift_reg[6:0], mosi};
-        bit_cnt   <= bit_cnt + 1;
-      end
-      if (drive_edge) begin
-        miso <= mem_rd_data[0];
-      end
+  spi_slv_reg u_spi_slv(
+    .i_clk      (clk_osc       ),
+    .i_rstn     (rst_n         ),
+    .sclk       (SCLK          ),
+    .mosi       (MOSI          ),
+    .cs_n       (CS_N          ),
+    .miso       (miso_from_slv ),
+    .o_addr     (reg_addr      ),
+    .o_wdata    (reg_wdata     ),
+    .i_rdata    (reg_rdata     ),
+    .o_wr       (reg_wr        ),
+    .o_rd       (reg_rd        )
+  );
+
+  buf BUFF_MISO(MISO, miso_from_slv);
+
+  // ── register file (16K bytes) ──
+  reg [7:0] slv_mem[16383:0];
+
+  integer i;
+  initial begin
+    for(i=0; i<16384; i=i+1) slv_mem[i] = 8'h0;
+  end
+
+  // ── read path ──
+  reg [7:0] reg_rd_d;
+
+  always @(posedge clk_osc or negedge rst_n) begin
+    if(!rst_n)
+      reg_rdata <= 8'b0;
+    else if(reg_rd)
+      reg_rdata <= slv_mem[reg_addr];
+  end
+
+  always @(posedge clk_osc or negedge rst_n) begin
+    if(!rst_n)
+      reg_rd_d <= 8'b0;
+    else
+      reg_rd_d <= reg_rd;
+  end
+
+  always @(posedge clk_osc or negedge rst_n) begin
+    if(!rst_n) ;
+    else if(reg_rd_d)
+      $display("%10t: %m-(8'h%02x) register(8'h%04x) Tx_Data:8'h%02x",
+               $time, DEV_ID1, reg_addr, reg_rdata);
+  end
+
+  // ── write path ──
+  always @(posedge clk_osc) begin
+    if(reg_wr) begin
+      slv_mem[reg_addr] <= reg_wdata;
+      $display("%10t: %m-(8'h%02x) register(8'h%04x) Rx_Data:8'h%02x",
+               $time, DEV_ID1, reg_addr, reg_wdata);
     end
   end
 
