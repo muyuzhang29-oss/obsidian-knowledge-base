@@ -100,4 +100,17 @@ module spi_sensor_model #(parameter DEV_ID1 = 7'h0A)(
     end
   end
 
+  // ── wrapper tasks (delegate to spi_slv_reg) ──
+  task set_write_mode(input [15:0] addr);
+    u_spi_slv.set_write_mode(addr);
+  endtask
+
+  task set_read_mode(input [15:0] addr, input [15:0] rd_len_plus1);
+    u_spi_slv.set_read_mode(addr, rd_len_plus1);
+  endtask
+
+  task set_mode(input ci, input cpha_i);
+    u_spi_slv.set_mode(ci, cpha_i);
+  endtask
+
 endmodule

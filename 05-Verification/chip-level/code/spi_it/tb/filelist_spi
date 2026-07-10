@@ -17,6 +17,7 @@
 ../model/spi_master_model.sv
 ../model/spi_slave_model.sv
 ../model/memory/main_mem_model.v
+../model/spi_slv_reg.sv
 ../model/spi_sensor_model.sv
 ../model/soc_model.sv
 
@@ -36,3 +37,4 @@ spi_task.sv
 
 // 5. 测试用例
 ../test/base_test.sv
+../test/spi_write_test.sv

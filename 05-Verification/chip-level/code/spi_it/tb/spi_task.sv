@@ -72,14 +72,14 @@ endtask
 
 task spi_master_write(input [4:0] dst_port, input [16:0] dev_addr,
                       input [7:0] wr_data[], input [7:0] len);
-  spi_frame_write(dst_port, dev_addr, wr_data, len);
+  u_soc.spi_frame_write(dst_port, dev_addr, wr_data, len);
 endtask
 
 task spi_master_read(input [4:0] dst_port, input [16:0] dev_addr,
                      input [6:0] rd_len, input [7:0] data_len,
                      output [7:0] rd_data[]);
-  spi_frame_read_with_data(dst_port, dev_addr, rd_len, data_len, {});
-  spi_frame_recv(rd_data, data_len);
+  u_soc.spi_frame_read_with_data(dst_port, dev_addr, rd_len, data_len, {});
+  u_soc.spi_frame_recv(rd_data, data_len);
 endtask
 
 task spi_check_timeout_err(output [7:0] spis_cnt, output [7:0] spim_cnt);
@@ -90,4 +90,41 @@ endtask
 // CRC 模式配置 (TB 侧 soc_model 的 CRC 生成)
 task spi_set_crc_mode(input bit use_crc16);
   u_soc.set_crc_mode(use_crc16);
+endtask
+
+// ============================================================
+// SPI(B) 传感器写 — 配置 sensor + 驱动 wrp 发送数据
+// ============================================================
+// 1. 通过 task 设置 sensor 为写模式（起始地址 addr）
+// 2. 通过 SPI(A) 发帧 → wrp 内部 master 在 SPI(B) 上转发 data
+task spi_sensor_write(
+  input [15:0] addr,         // sensor 寄存器起始地址
+  input [7:0]  data[],       // 待写入数据
+  input [7:0]  len           // 数据长度（字节数）
+);
+  // 配置 sensor model 为写模式
+  u_sensor.set_write_mode(addr);
+  // 通过 SPI(A) 发写帧 → wrp → SPI(B) → sensor
+  spi_master_write(.dst_port(5'b00010), .dev_addr(17'h1A2B3),
+                   .wr_data(data), .len(len));
+  $display("%10t: SPI_SENSOR write addr[%04h] len[%0d]", $time, addr, len);
+endtask
+
+// ============================================================
+// SPI(B) 传感器读 — 配置 sensor + 驱动 wrp 读取数据
+// ============================================================
+// rd_len_plus1 = 0: 无预数据，直接发 MISO
+// rd_len_plus1 = N: 先发 N 字节 MOSI 再收 MISO
+task spi_sensor_read(
+  input  [15:0] addr,          // sensor 寄存器起始地址
+  input  [15:0] rd_len_plus1,  // 预发数据字节数 (0 = 无预数据)
+  output  [7:0] rdata[]        // 读取数据
+);
+  u_sensor.set_read_mode(addr, rd_len_plus1);
+  // SPI(A) 读帧 → wrp → SPI(B) → sensor 回 MISO
+  // 注: 这里 data_len 固定为 0（由 SPI(B) 侧的 SCLK 有效长度决定回复量）
+  // rdata 长度由调用方决定
+  spi_master_read(.dst_port(5'b00010), .dev_addr(17'h1A2B3),
+                  .rd_len(7'd0), .data_len(8'd0), .rd_data(rdata));
+  $display("%10t: SPI_SENSOR read  addr[%04h] rd_len_plus1[%0d]", $time, addr, rd_len_plus1);
 endtask

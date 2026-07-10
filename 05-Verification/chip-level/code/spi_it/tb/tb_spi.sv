@@ -41,22 +41,15 @@ module tb_spi;
   );
 
   // ========================================
-  // SPI sensor model
+  // SPI(B) sensor model — 新接口只剩 SCLK/MOSI/MISO/CS_N
   // ========================================
   wire sclk, mosi, miso, cs_n;
 
   spi_sensor_model u_sensor (
-    .clk         (clk_spi),
-    .rst_n       (rst_n),
-    .sclk        (sclk),
-    .mosi        (mosi),
-    .cs_n        (cs_n),
-    .miso        (miso),
-    .cpol        (1'b0),
-    .cpha        (1'b0),
-    .reg_wr_data (8'h00),
-    .reg_wr_en   (1'b0),
-    .reg_wr_addr (17'h0)
+    .SCLK (sclk),
+    .MOSI (mosi),
+    .MISO (miso),
+    .CS_N (cs_n)
   );
 
   // ========================================
@@ -87,6 +80,7 @@ module tb_spi;
 
   initial begin
     #200; @(posedge rst_n); #100;
+    run_test("spi_write_test");
   end
 
 endmodule
