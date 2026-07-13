@@ -10,7 +10,7 @@ module spi_slave_model (
   input           sclk,
   input           mosi,
   input           cs_n,
-  output  reg     miso,
+  output  reg     miso = 1'bz,
   output  reg     bne
 );
 
