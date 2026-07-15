@@ -107,7 +107,11 @@ task spi_sensor_write(
   // 通过 SPI(A) 发写帧 → wrp → SPI(B) → sensor
   spi_master_write(.dst_port(5'b00010), .dev_addr(17'h1A2B3),
                    .wr_data(data), .len(len));
-  $display("%10t: SPI_SENSOR write addr[%04h] len[%0d]", $time, addr, len);
+  // 等 SPI(B) 交易结束（CS 完成一个完整周期）
+  if (cs_n === 1'b1) @(negedge cs_n);
+  @(posedge cs_n);
+  #200;
+  $display("%10t: SPI_SENSOR write addr[%04h] len[%0d] done", $time, addr, len);
 endtask
 
 // ============================================================
@@ -126,5 +130,9 @@ task spi_sensor_read(
   // rdata 长度由调用方决定
   spi_master_read(.dst_port(5'b00010), .dev_addr(17'h1A2B3),
                   .rd_len(7'd0), .data_len(8'd0), .rd_data(rdata));
-  $display("%10t: SPI_SENSOR read  addr[%04h] rd_len_plus1[%0d]", $time, addr, rd_len_plus1);
+  // 等 SPI(B) 交易结束
+  if (cs_n === 1'b1) @(negedge cs_n);
+  @(posedge cs_n);
+  #200;
+  $display("%10t: SPI_SENSOR read  addr[%04h] rd_len_plus1[%0d] done", $time, addr, rd_len_plus1);
 endtask

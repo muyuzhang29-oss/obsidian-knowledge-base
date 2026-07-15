@@ -35,6 +35,12 @@ tb_include.sv
 tb_spi.sv
 spi_task.sv
 
+// 4.5. Checker
+../checker/spi_data_checker.sv
+../checker/spi_a_monitor.sv
+../checker/spi_b_monitor.sv
+../checker/spi_err_monitor.sv
+
 // 5. 测试用例
 ../test/base_test.sv
 ../test/spi_write_test.sv
