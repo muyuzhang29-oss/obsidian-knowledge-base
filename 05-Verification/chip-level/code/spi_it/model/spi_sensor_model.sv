@@ -24,7 +24,7 @@ module spi_sensor_model #(parameter DEV_ID1 = 7'h0A)(
   initial begin
     clk_osc = 0;
     #50000;
-    forever #20 clk_osc = ~clk_osc;
+    forever #2.5 clk_osc = ~clk_osc;
   end
 
   initial begin
@@ -64,7 +64,7 @@ module spi_sensor_model #(parameter DEV_ID1 = 7'h0A)(
 
   integer i;
   initial begin
-    for(i=0; i<16384; i=i+1) slv_mem[i] = 8'h0;
+    for(i=0; i<16384; i=i+1) slv_mem[i] = i[7:0];
   end
 
   // ── read path ──

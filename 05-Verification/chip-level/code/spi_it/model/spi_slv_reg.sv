@@ -53,19 +53,16 @@ module spi_slv_reg (
   wire w_drive  = (r_cpha == r_cpol) ? r_scl_fal : r_scl_ris;
 
   // ── bit counter ──
-  reg [3:0] r_bcnt, r_bcnt_d;
-  wire w_end_byte = (r_bcnt_d==4'h8) && w_sample;
+  reg [3:0] r_bcnt;
+  wire w_end_byte = (r_bcnt==4'h7) && w_sample;
 
   always @(posedge i_clk or negedge i_rstn) begin
     if (!i_rstn) begin
-      r_bcnt   <= #1 4'h0;
-      r_bcnt_d <= #1 4'h0;
+      r_bcnt <= #1 4'h0;
     end else if (r_cs_fal) begin
-      r_bcnt   <= #1 4'h0;
-      r_bcnt_d <= #1 4'h0;
+      r_bcnt <= #1 4'h0;
     end else if (w_sample) begin
-      r_bcnt   <= #1 (r_bcnt==4'h8) ? 4'h1 : r_bcnt + 4'h1;
-      r_bcnt_d <= #1 r_bcnt;
+      r_bcnt <= #1 (r_bcnt==4'h7) ? 4'h0 : r_bcnt + 4'h1;
     end
   end
 
@@ -122,13 +119,15 @@ module spi_slv_reg (
       // ── sample edge: capture MOSI ──
       if (w_sample) begin
         r_sr <= #1 {r_sr[6:0], mosi};
-        if (w_end_byte) begin
-          if (r_st == ST_WDATA || r_st == ST_RECV) begin
-            o_wr    <= #1 1'b1;
-            o_wdata <= #1 r_sr;
-            o_addr  <= #1 r_saddr + r_dcnt;
-            r_dcnt  <= #1 r_dcnt + 16'h1;
-          end
+      end
+
+      // ── byte boundary: capture full byte (use {r_sr[6:0],mosi} = 8 bits before shift) ──
+      if (w_end_byte) begin
+        if (r_st == ST_WDATA || r_st == ST_RECV) begin
+          o_wr    <= #1 1'b1;
+          o_wdata <= #1 {r_sr[6:0], mosi};
+          o_addr  <= #1 r_saddr + r_dcnt;
+          r_dcnt  <= #1 r_dcnt + 16'h1;
         end
       end
 
@@ -142,7 +141,7 @@ module spi_slv_reg (
           end else begin
             r_txsr <= #1 {r_txsr[6:0], 1'b0};
           end
-          if (r_bcnt == 4'h8) r_dcnt <= #1 r_dcnt + 16'h1;
+          if (r_bcnt == 4'h7) r_dcnt <= #1 r_dcnt + 16'h1;
         end
       end
     end
