@@ -108,8 +108,17 @@ task spi_sensor_write(
   spi_master_write(.dst_port(5'b00010), .dev_addr(17'h1A2B3),
                    .wr_data(data), .len(len));
   // 等 SPI(B) 交易结束（CS 完成一个完整周期）
-  if (cs_n === 1'b1) @(negedge cs_n);
-  @(posedge cs_n);
+  fork
+    begin
+      if (cs_n === 1'b1) @(negedge cs_n);
+      @(posedge cs_n);
+    end
+    begin
+      #50_000;
+      $warning("%10t: SPI_SENSOR write CS wait timeout — DUT not driving SPI(B)", $time);
+    end
+  join_any
+  disable fork;
   #200;
   $display("%10t: SPI_SENSOR write addr[%04h] len[%0d] done", $time, addr, len);
 endtask
@@ -131,8 +140,17 @@ task spi_sensor_read(
   spi_master_read(.dst_port(5'b00010), .dev_addr(17'h1A2B3),
                   .rd_len(7'd0), .data_len(8'd0), .rd_data(rdata));
   // 等 SPI(B) 交易结束
-  if (cs_n === 1'b1) @(negedge cs_n);
-  @(posedge cs_n);
+  fork
+    begin
+      if (cs_n === 1'b1) @(negedge cs_n);
+      @(posedge cs_n);
+    end
+    begin
+      #50_000;
+      $warning("%10t: SPI_SENSOR read CS wait timeout — DUT not driving SPI(B)", $time);
+    end
+  join_any
+  disable fork;
   #200;
   $display("%10t: SPI_SENSOR read  addr[%04h] rd_len_plus1[%0d] done", $time, addr, rd_len_plus1);
 endtask

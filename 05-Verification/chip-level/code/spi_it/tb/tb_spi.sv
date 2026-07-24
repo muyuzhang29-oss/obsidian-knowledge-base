@@ -44,6 +44,7 @@ module tb_spi;
   // SPI(B) sensor model — 新接口只剩 SCLK/MOSI/MISO/CS_N
   // ========================================
   wire sclk, mosi, miso, cs_n;
+  pullup (weak1) pull_miso (miso);
 
   spi_sensor_model u_sensor (
     .SCLK (sclk),

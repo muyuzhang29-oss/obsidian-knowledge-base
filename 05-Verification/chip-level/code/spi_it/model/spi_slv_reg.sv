@@ -48,9 +48,30 @@ module spi_slv_reg (
     end
   end
 
+  // ── MOSI sync (3级，与 SCLK 对齐) ──
+  reg r_mos_s1, r_mos_s2, r_mos_in;
+  always @(posedge i_clk or negedge i_rstn) begin
+    if (!i_rstn) begin
+      r_mos_s1 <= #1 1'b0;
+      r_mos_s2 <= #1 1'b0;
+      r_mos_in <= #1 1'b0;
+    end else begin
+      r_mos_s1 <= #1 mosi;
+      r_mos_s2 <= #1 r_mos_s1;
+      r_mos_in <= #1 r_mos_s2;
+    end
+  end
+
   // ── sample/drive edge ──
   wire w_sample = (r_cpha == r_cpol) ? r_scl_ris : r_scl_fal;
   wire w_drive  = (r_cpha == r_cpol) ? r_scl_fal : r_scl_ris;
+
+  // DEBUG: 看 SPI(B) 线上有没有信号
+  always @(posedge i_clk) begin
+    if (r_scl_ris || r_scl_fal || r_cs_ris || r_cs_fal)
+      $display("%0t: SPI_SLV sclk=%b mosi=%b cs_n=%b w_sample=%b w_drive=%b",
+               $time, sclk, mosi, cs_n, w_sample, w_drive);
+  end
 
   // ── bit counter ──
   reg [3:0] r_bcnt;
@@ -118,14 +139,14 @@ module spi_slv_reg (
 
       // ── sample edge: capture MOSI ──
       if (w_sample) begin
-        r_sr <= #1 {r_sr[6:0], mosi};
+        r_sr <= #1 {r_sr[6:0], r_mos_in};
       end
 
-      // ── byte boundary: capture full byte (use {r_sr[6:0],mosi} = 8 bits before shift) ──
+      // ── byte boundary: capture full byte ──
       if (w_end_byte) begin
         if (r_st == ST_WDATA || r_st == ST_RECV) begin
           o_wr    <= #1 1'b1;
-          o_wdata <= #1 {r_sr[6:0], mosi};
+          o_wdata <= #1 {r_sr[6:0], r_mos_in};
           o_addr  <= #1 r_saddr + r_dcnt;
           r_dcnt  <= #1 r_dcnt + 16'h1;
         end
