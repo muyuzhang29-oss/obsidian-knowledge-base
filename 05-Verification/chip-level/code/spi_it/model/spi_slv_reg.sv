@@ -137,6 +137,12 @@ module spi_slv_reg (
 
       if (r_cs_fal) r_dcnt <= #1 16'h0000;
 
+      // ── CS↓ 读模式: 预取第一个字节到 txsr ──
+      if (r_cs_fal && r_mode) begin
+        o_rd   <= #1 1'b1;
+        o_addr <= #1 r_saddr;
+      end
+
       // ── sample edge: capture MOSI ──
       if (w_sample) begin
         r_sr <= #1 {r_sr[6:0], r_mos_in};
@@ -174,7 +180,7 @@ module spi_slv_reg (
       miso <= #1 1'bz;
     end else if (r_cs_in) begin
       miso <= #1 1'bz;
-    end else if (r_st == ST_SENDM) begin
+    end else if (r_mode) begin
       miso <= #1 r_txsr[7];
     end else begin
       miso <= #1 1'bz;

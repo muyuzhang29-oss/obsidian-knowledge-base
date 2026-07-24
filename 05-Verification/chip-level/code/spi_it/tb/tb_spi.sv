@@ -43,15 +43,20 @@ module tb_spi;
   // ========================================
   // SPI(B) sensor model — 新接口只剩 SCLK/MOSI/MISO/CS_N
   // ========================================
-  wire sclk, mosi, miso, cs_n;
-  pullup (weak1) pull_miso (miso);
+  wire sclk, mosi, cs_n;
+  wire sensor_miso;  // sensor 驱动的 MISO
+  wire miso_to_dut;  // 给 DUT 读的 MISO（单向）
 
   spi_sensor_model u_sensor (
     .SCLK (sclk),
     .MOSI (mosi),
-    .MISO (miso),
+    .MISO (sensor_miso),
     .CS_N (cs_n)
   );
+
+  // sensor_miso → miso_to_dut 单向缓冲，避免与 DUT 双重驱动
+  buf (weak1) buf_miso (miso_to_dut, sensor_miso);
+  pullup (weak1) pull_miso (miso_to_dut);
 
   // ========================================
   // DUT: SS12 (含 I2C Slave) + 4×SS11
@@ -71,7 +76,7 @@ module tb_spi;
     // SPI 引脚
     .sclk         (sclk),
     .mosi         (mosi),
-    .miso         (miso),
+    .miso         (miso_to_dut),
     .cs_n         (cs_n),
     // 其他
     .clk_sys      (clk_reg),
