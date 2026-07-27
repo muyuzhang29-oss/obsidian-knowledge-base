@@ -24,47 +24,44 @@ module spi_slv_reg (
   reg [15:0] r_saddr;          // start address
   reg [15:0] r_rd_len_plus1;   // bytes to receive before MISO (0 = no pre-data)
 
-  // ── SCLK/CS sync + edge detect ──
-  reg r_scl_s1, r_scl_s2, r_scl_in, r_scl_d, r_scl_ris, r_scl_fal;
+  // ── SCLK edge detect (from raw sclk, zero sync delay) ──
+  reg r_scl_d;
+  always @(posedge i_clk or negedge i_rstn) begin
+    if (!i_rstn) r_scl_d <= #1 1'b0;
+    else         r_scl_d <= #1 sclk;
+  end
+  wire w_scl_ris = ~r_scl_d & sclk;
+  wire w_scl_fal =  r_scl_d & ~sclk;
   reg r_cs_s1,  r_cs_s2,  r_cs_in,  r_cs_d,  r_cs_ris,  r_cs_fal;
 
   always @(posedge i_clk or negedge i_rstn) begin
     if (!i_rstn) begin
-      r_scl_s1 <= #1 1'b0; r_scl_s2 <= #1 1'b0;
-      r_scl_in <= #1 1'b0; r_scl_d  <= #1 1'b0;
-      r_scl_ris <= #1 1'b0; r_scl_fal <= #1 1'b0;
       r_cs_s1 <= #1 1'b1; r_cs_s2 <= #1 1'b1;
       r_cs_in <= #1 1'b1; r_cs_d  <= #1 1'b1;
       r_cs_ris <= #1 1'b0; r_cs_fal <= #1 1'b0;
     end else begin
-      r_scl_s1 <= #1 sclk;      r_cs_s1 <= #1 cs_n;
-      r_scl_s2 <= #1 r_scl_s1;  r_cs_s2 <= #1 r_cs_s1;
-      r_scl_in <= #1 r_scl_s2;  r_cs_in <= #1 r_cs_s2;
-      r_scl_d  <= #1 r_scl_in;  r_cs_d  <= #1 r_cs_in;
-      r_scl_ris <= #1 ~r_scl_d &  r_scl_in;
-      r_scl_fal <= #1  r_scl_d & ~r_scl_in;
+      r_cs_s1 <= #1 cs_n;
+      r_cs_s2 <= #1 r_cs_s1;
+      r_cs_in <= #1 r_cs_s2;
+      r_cs_d  <= #1 r_cs_in;
       r_cs_ris  <= #1 ~r_cs_d  &  r_cs_in;
       r_cs_fal  <= #1  r_cs_d  & ~r_cs_in;
     end
   end
 
-  // ── MOSI sync (3级，与 SCLK 对齐) ──
-  reg r_mos_s1, r_mos_s2, r_mos_in;
+  // ── MOSI sync ──
+  reg r_mos_in;
   always @(posedge i_clk or negedge i_rstn) begin
     if (!i_rstn) begin
-      r_mos_s1 <= #1 1'b0;
-      r_mos_s2 <= #1 1'b0;
       r_mos_in <= #1 1'b0;
     end else begin
-      r_mos_s1 <= #1 mosi;
-      r_mos_s2 <= #1 r_mos_s1;
-      r_mos_in <= #1 r_mos_s2;
+      r_mos_in <= #1 mosi;
     end
   end
 
   // ── sample/drive edge ──
-  wire w_sample = (r_cpha == r_cpol) ? r_scl_ris : r_scl_fal;
-  wire w_drive  = (r_cpha == r_cpol) ? r_scl_fal : r_scl_ris;
+  wire w_sample = (r_cpha == r_cpol) ? w_scl_ris : w_scl_fal;
+  wire w_drive  = (r_cpha == r_cpol) ? w_scl_fal : w_scl_ris;
 
   // ── bit counter ──
   reg [3:0] r_bcnt;
@@ -120,6 +117,11 @@ module spi_slv_reg (
       r_sr    <= #1 8'h00;
       r_dcnt  <= #1 16'h0000;
       r_txsr  <= #1 8'h00;
+      r_mode  <= #1 1'b0;
+      r_saddr <= #1 16'h0000;
+      r_rd_len_plus1 <= #1 16'h0000;
+      r_cpol  <= #1 1'b0;
+      r_cpha  <= #1 1'b0;
       o_wr    <= #1 1'b0;
       o_wdata <= #1 8'h00;
       o_addr  <= #1 16'h0000;
@@ -166,14 +168,14 @@ module spi_slv_reg (
         if (r_st == ST_SENDM) begin
           if (r_bcnt == 4'h0) begin
             r_txsr <= #1 i_rdata;
-          end else if (r_bcnt == 4'h1) begin
-            o_rd   <= #1 1'b1;
-            o_addr <= #1 r_saddr + r_dcnt + 16'h1;
-            r_txsr <= #1 {r_txsr[6:0], 1'b0};
           end else begin
             r_txsr <= #1 {r_txsr[6:0], 1'b0};
           end
-          if (r_bcnt == 4'h7) r_dcnt <= #1 r_dcnt + 16'h1;
+          if (r_bcnt == 4'h7) begin
+            o_rd   <= #1 1'b1;
+            o_addr <= #1 r_saddr + r_dcnt + 16'h1;
+            r_dcnt <= #1 r_dcnt + 16'h1;
+          end
         end
       end
     end

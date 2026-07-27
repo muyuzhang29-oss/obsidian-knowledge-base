@@ -64,7 +64,8 @@ module spi_sensor_model #(parameter DEV_ID1 = 7'h0A)(
   end
 
   // ── read path ──
-  reg [7:0] reg_rd_d;
+  reg [7:0]  reg_rd_d;
+  reg [15:0] reg_rd_addr;
 
   always @(posedge clk_osc or negedge rst_n) begin
     if(!rst_n)
@@ -74,17 +75,20 @@ module spi_sensor_model #(parameter DEV_ID1 = 7'h0A)(
   end
 
   always @(posedge clk_osc or negedge rst_n) begin
-    if(!rst_n)
-      reg_rd_d <= 8'b0;
-    else
-      reg_rd_d <= reg_rd;
+    if(!rst_n) begin
+      reg_rd_d    <= 1'b0;
+      reg_rd_addr <= 16'b0;
+    end else begin
+      reg_rd_d    <= reg_rd;
+      if(reg_rd) reg_rd_addr <= reg_addr;
+    end
   end
 
   always @(posedge clk_osc or negedge rst_n) begin
     if(!rst_n) ;
     else if(reg_rd_d)
       $display("%10t: %m-(8'h%02x) register(8'h%04x) Tx_Data:8'h%02x",
-               $time, DEV_ID1, reg_addr, reg_rdata);
+               $time, DEV_ID1, reg_rd_addr, reg_rdata);
   end
 
   // ── write path ──

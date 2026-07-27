@@ -1,3 +1,6 @@
 `include "spi_task.sv"
+`include "../checker/spi_data_checker.sv"
+`include "../checker/spi_a_monitor.sv"
+`include "../checker/spi_b_monitor.sv"
 `include "../test/base_test.sv"
 `include "../test/spi_write_test.sv"

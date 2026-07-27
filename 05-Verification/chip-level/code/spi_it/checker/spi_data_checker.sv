@@ -1,9 +1,9 @@
-// Chip-level data integrity checker
+// Chip-level data integrity checker (class-based)
 //   SPI-A monitor → tx_q[$]
 //   SPI-B monitor → rx_q[$]
 //   Compare: for each tx, verify matching rx appears at sensor
 
-module spi_data_checker;
+class spi_data_checker;
 
   // Transaction type
   typedef struct {
@@ -76,9 +76,9 @@ module spi_data_checker;
   // ── flush unmatched at end of test ──
   task flush();
     foreach (tx_q[i])
-      $error("[CK] %0t UNMATCHED tx addr=%04h data=%p", tx_q[i].t, tx_q[i].addr, tx_q[i].data);
+      $error("[CK] %0t UNMATCHED tx addr=%04h", tx_q[i].t, tx_q[i].addr);
     foreach (rx_q[i])
       $display("[CK] %0t LEAKED rx addr=%04h", rx_q[i].t, rx_q[i].addr);
   endtask
 
-endmodule
+endclass

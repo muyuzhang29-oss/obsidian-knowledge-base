@@ -29,6 +29,9 @@ class base_test extends uvm_test;
     // Override in derived tests
     run_test_scenario();
 
+    // Flush checker — report unmatched transactions
+    tb.u_checker.flush();
+
     // Dump error registers after case finishes
     dump_err_regs();
 

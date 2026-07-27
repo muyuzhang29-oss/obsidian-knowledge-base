@@ -38,10 +38,20 @@ module spi_master_model (
 
   task spi_in_byte(output [7:0] d);
     integer i;
-    for (i = 7; i >= 0; i--) begin
-      #(SCLK_HALF); sclk = ~cpol;
-      d[i] = miso;
-      #(SCLK_HALF); sclk = cpol;
+    if (cpha == 0) begin
+      // CPHA=0: sample on first edge
+      for (i = 7; i >= 0; i--) begin
+        #(SCLK_HALF); sclk = ~cpol;
+        d[i] = miso;
+        #(SCLK_HALF); sclk = cpol;
+      end
+    end else begin
+      // CPHA=1: sample on second edge (drive happened before first edge)
+      for (i = 7; i >= 0; i--) begin
+        #(SCLK_HALF); sclk = ~cpol;
+        #(SCLK_HALF); sclk = cpol;
+        d[i] = miso;
+      end
     end
   endtask
 
@@ -152,14 +162,16 @@ module spi_master_model (
     spi_cs_low;
     for (i=0; i<fifo.size(); i++) spi_out_byte(fifo[i]);
     for (i=0; i<rd_dummy; i++) spi_out_byte(8'h00);  // 等 slave 准备
-    rcnt = dlen + crc_len;
+    rcnt = dlen + crc_len();
     rdata = new[rcnt];
     for (i=0; i<rcnt; i++) begin
       spi_out_byte(8'h00);
       spi_in_byte(rdata[i]);
     end
     spi_cs_high;
-    $display("%10t: SPI_MST rd_data [%02h] len=%0d", $time, a, dlen);
+    $display("%10t: SPI_MST rd_data [%02h] len=%0d rcnt=%0d", $time, a, dlen, rcnt);
+    for (i = 0; i < rcnt; i++)
+      $display("%10t: SPI_MST   rdata[%0d] = 0x%02h", $time, i, rdata[i]);
   endtask
 
 endmodule

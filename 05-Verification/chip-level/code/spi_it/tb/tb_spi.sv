@@ -58,6 +58,29 @@ module tb_spi;
   buf (weak1) buf_miso (miso_to_dut, sensor_miso);
 
   // ========================================
+  // Data checker + monitors
+  // ========================================
+  spi_data_checker  u_checker;
+  spi_a_monitor     u_spi_a_mon (
+    .clk        (clk_spi),
+    .soc_tx_dat (soc_tx_dat),
+    .soc_tx_vld (soc_tx_vld),
+    .soc_tx_rdy (soc_tx_rdy)
+  );
+  spi_b_monitor     u_spi_b_mon (
+    .sclk (sclk),
+    .mosi (mosi),
+    .miso (sensor_miso),
+    .cs_n (cs_n)
+  );
+
+  initial begin
+    u_checker     = new();
+    u_spi_a_mon.connect(u_checker);
+    u_spi_b_mon.connect(u_checker);
+  end
+
+  // ========================================
   // DUT: SS12 (含 I2C Slave) + 4×SS11
   // 按实际顶层 module 名和 port 名替换
   // ========================================
