@@ -10,7 +10,7 @@ module spi_slv_reg (
   input               sclk,
   input               mosi,
   input               cs_n,
-  output  reg         miso,
+  output  wire        miso,
   output  reg [15:0]  o_addr,
   output  reg [7:0]   o_wdata,
   input       [7:0]   i_rdata,
@@ -26,7 +26,7 @@ module spi_slv_reg (
 
   // ── SCLK/CS sync + edge detect ──
   reg r_scl_s1, r_scl_s2, r_scl_in, r_scl_d, r_scl_ris, r_scl_fal;
-  reg r_cs_s1,  r_cs_s2,  r_cs_in,  r_cs_d,  r_cs_ris, r_cs_fal;
+  reg r_cs_s1,  r_cs_s2,  r_cs_in,  r_cs_d,  r_cs_ris,  r_cs_fal;
 
   always @(posedge i_clk or negedge i_rstn) begin
     if (!i_rstn) begin
@@ -65,13 +65,6 @@ module spi_slv_reg (
   // ── sample/drive edge ──
   wire w_sample = (r_cpha == r_cpol) ? r_scl_ris : r_scl_fal;
   wire w_drive  = (r_cpha == r_cpol) ? r_scl_fal : r_scl_ris;
-
-  // DEBUG: 看 SPI(B) 线上有没有信号
-  always @(posedge i_clk) begin
-    if (r_scl_ris || r_scl_fal || r_cs_ris || r_cs_fal)
-      $display("%0t: SPI_SLV sclk=%b mosi=%b cs_n=%b w_sample=%b w_drive=%b",
-               $time, sclk, mosi, cs_n, w_sample, w_drive);
-  end
 
   // ── bit counter ──
   reg [3:0] r_bcnt;
@@ -135,11 +128,8 @@ module spi_slv_reg (
       o_wr <= #1 1'b0;
       o_rd <= #1 1'b0;
 
+      // ── CS↓: reset counters ──
       if (r_cs_fal) r_dcnt <= #1 16'h0000;
-
-      // ── 进入 ST_SENDM 时清零 r_dcnt（MISO 从 r_saddr 开始）──
-      if (r_st != ST_SENDM && r_nx_st == ST_SENDM)
-        r_dcnt <= #1 16'h0000;
 
       // ── CS↓ 读模式: 预取第一个字节 ──
       if (r_cs_fal && r_mode) begin
@@ -152,28 +142,31 @@ module spi_slv_reg (
         r_sr <= #1 {r_sr[6:0], r_mos_in};
       end
 
-      // ── byte boundary: capture full byte ──
+      // ── byte boundary ──
       if (w_end_byte) begin
+        // ── write mode: capture byte to regfile ──
         if (r_st == ST_WDATA) begin
           o_wr    <= #1 1'b1;
           o_wdata <= #1 {r_sr[6:0], r_mos_in};
           o_addr  <= #1 r_saddr + r_dcnt;
           r_dcnt  <= #1 r_dcnt + 16'h1;
         end
-        // ST_RECV: 只计数，不写寄存器，不动 o_addr
+        // ── recv mode: dummy byte, only count ──
         if (r_st == ST_RECV) begin
           r_dcnt  <= #1 r_dcnt + 16'h1;
         end
       end
 
-      // ── drive edge: load/shift tx shift register ──
+      // ── 进入 ST_SENDM: 清零 r_dcnt（必须在 w_end_byte 之后，优先级最高）──
+      if (r_st != ST_SENDM && r_nx_st == ST_SENDM)
+        r_dcnt <= #1 16'h0000;
+
+      // ── drive edge: MISO shift register ──
       if (w_drive) begin
         if (r_st == ST_SENDM) begin
           if (r_bcnt == 4'h0) begin
-            // 第一个 bit: 加载预取数据，MISO 立即有效
             r_txsr <= #1 i_rdata;
           end else if (r_bcnt == 4'h1) begin
-            // 第二个 byte 的预取
             o_rd   <= #1 1'b1;
             o_addr <= #1 r_saddr + r_dcnt + 16'h1;
             r_txsr <= #1 {r_txsr[6:0], 1'b0};
@@ -186,18 +179,9 @@ module spi_slv_reg (
     end
   end
 
-  // ── MISO output ──
-  always @(posedge i_clk or negedge i_rstn) begin
-    if (!i_rstn) begin
-      miso <= #1 1'bz;
-    end else if (r_cs_in !== 1'b0) begin
-      miso <= #1 1'bz;
-    end else if (r_st == ST_SENDM) begin
-      miso <= #1 r_txsr[7];
-    end else begin
-      miso <= #1 1'bz;
-    end
-  end
+  // ── MISO output (purely combinational from raw cs_n, no sync delay) ──
+  // cs_n=1 → z (tri-state), cs_n=0 + read → r_txsr[7], cs_n=0 + write → z
+  assign miso = cs_n ? 1'bz : (r_mode ? r_txsr[7] : 1'bz);
 
   // ── test tasks ──
   task set_cpol(input v);     r_cpol <= #1 v; endtask

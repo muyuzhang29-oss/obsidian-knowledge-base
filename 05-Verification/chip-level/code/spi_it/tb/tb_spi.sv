@@ -56,7 +56,6 @@ module tb_spi;
 
   // sensor_miso → miso_to_dut 单向缓冲，避免与 DUT 双重驱动
   buf (weak1) buf_miso (miso_to_dut, sensor_miso);
-  pullup (weak1) pull_miso (miso_to_dut);
 
   // ========================================
   // DUT: SS12 (含 I2C Slave) + 4×SS11

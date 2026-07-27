@@ -41,23 +41,19 @@ module spi_sensor_model #(parameter DEV_ID1 = 7'h0A)(
   wire        reg_rd;
 
   // ── protocol decoder ──
-  wire miso_from_slv;
-
   spi_slv_reg u_spi_slv(
     .i_clk      (clk_osc       ),
     .i_rstn     (rst_n         ),
     .sclk       (SCLK          ),
     .mosi       (MOSI          ),
     .cs_n       (CS_N          ),
-    .miso       (miso_from_slv ),
+    .miso       (MISO          ),
     .o_addr     (reg_addr      ),
     .o_wdata    (reg_wdata     ),
     .i_rdata    (reg_rdata     ),
     .o_wr       (reg_wr        ),
     .o_rd       (reg_rd        )
   );
-
-  assign MISO = miso_from_slv;
 
   // ── register file (16K bytes) ──
   reg [7:0] slv_mem[16383:0];
