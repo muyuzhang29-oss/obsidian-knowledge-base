@@ -111,7 +111,7 @@ module spi_slv_reg (
       end
       ST_WDATA: r_nx_st = (r_cs_ris && r_bcnt==4'h0) ? ST_IDLE  : ST_WDATA;
       ST_RECV:  r_nx_st = (r_cs_ris && r_bcnt==4'h0) ? ST_IDLE  :
-                          (r_dcnt>=r_rd_len_plus1)    ? ST_SENDM : ST_RECV;
+                          (w_end_byte && r_dcnt+16'h1>=r_rd_len_plus1) ? ST_SENDM : ST_RECV;
       ST_SENDM: r_nx_st = (r_cs_ris && r_bcnt==4'h0) ? ST_IDLE  : ST_SENDM;
       default:  r_nx_st = ST_IDLE;
     endcase
@@ -137,7 +137,11 @@ module spi_slv_reg (
 
       if (r_cs_fal) r_dcnt <= #1 16'h0000;
 
-      // ── CS↓ 读模式: 预取第一个字节到 txsr ──
+      // ── 进入 ST_SENDM 时清零 r_dcnt（MISO 从 r_saddr 开始）──
+      if (r_st != ST_SENDM && r_nx_st == ST_SENDM)
+        r_dcnt <= #1 16'h0000;
+
+      // ── CS↓ 读模式: 预取第一个字节 ──
       if (r_cs_fal && r_mode) begin
         o_rd   <= #1 1'b1;
         o_addr <= #1 r_saddr;
@@ -150,10 +154,14 @@ module spi_slv_reg (
 
       // ── byte boundary: capture full byte ──
       if (w_end_byte) begin
-        if (r_st == ST_WDATA || r_st == ST_RECV) begin
+        if (r_st == ST_WDATA) begin
           o_wr    <= #1 1'b1;
           o_wdata <= #1 {r_sr[6:0], r_mos_in};
           o_addr  <= #1 r_saddr + r_dcnt;
+          r_dcnt  <= #1 r_dcnt + 16'h1;
+        end
+        // ST_RECV: 只计数，不写寄存器，不动 o_addr
+        if (r_st == ST_RECV) begin
           r_dcnt  <= #1 r_dcnt + 16'h1;
         end
       end
@@ -161,10 +169,14 @@ module spi_slv_reg (
       // ── drive edge: load/shift tx shift register ──
       if (w_drive) begin
         if (r_st == ST_SENDM) begin
-          if (r_bcnt == 4'h1) begin
-            o_rd   <= #1 1'b1;
-            o_addr <= #1 r_saddr + r_dcnt;
+          if (r_bcnt == 4'h0) begin
+            // 第一个 bit: 加载预取数据，MISO 立即有效
             r_txsr <= #1 i_rdata;
+          end else if (r_bcnt == 4'h1) begin
+            // 第二个 byte 的预取
+            o_rd   <= #1 1'b1;
+            o_addr <= #1 r_saddr + r_dcnt + 16'h1;
+            r_txsr <= #1 {r_txsr[6:0], 1'b0};
           end else begin
             r_txsr <= #1 {r_txsr[6:0], 1'b0};
           end
@@ -178,9 +190,9 @@ module spi_slv_reg (
   always @(posedge i_clk or negedge i_rstn) begin
     if (!i_rstn) begin
       miso <= #1 1'bz;
-    end else if (r_cs_in) begin
+    end else if (r_cs_in !== 1'b0) begin
       miso <= #1 1'bz;
-    end else if (r_mode) begin
+    end else if (r_st == ST_SENDM) begin
       miso <= #1 r_txsr[7];
     end else begin
       miso <= #1 1'bz;

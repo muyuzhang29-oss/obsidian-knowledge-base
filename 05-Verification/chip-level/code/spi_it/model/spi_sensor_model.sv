@@ -57,7 +57,7 @@ module spi_sensor_model #(parameter DEV_ID1 = 7'h0A)(
     .o_rd       (reg_rd        )
   );
 
-  buf BUFF_MISO(MISO, miso_from_slv);
+  assign MISO = miso_from_slv;
 
   // ── register file (16K bytes) ──
   reg [7:0] slv_mem[16383:0];
