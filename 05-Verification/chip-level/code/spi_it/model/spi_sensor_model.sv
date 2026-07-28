@@ -112,6 +112,10 @@ module spi_sensor_model #(parameter DEV_ID1 = 7'h0A)(
     u_spi_slv.set_mode(ci, cpha_i);
   endtask
 
+  task set_cs_active(input v);
+    u_spi_slv.set_cs_active(v);
+  endtask
+
   // ── 暴露数据给 test 层做断言 ──
   task read_reg(input [15:0] addr, output [7:0] data);
     data = slv_mem[addr];

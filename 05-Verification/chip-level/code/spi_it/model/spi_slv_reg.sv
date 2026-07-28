@@ -20,9 +20,13 @@ module spi_slv_reg (
 
   // ── mode registers ──
   reg r_cpol, r_cpha;
+  reg r_cs_active = 1'b0;      // 0=CS低有效(默认), 1=CS高有效(反转)
   reg r_mode;                  // 0=write, 1=read
   reg [15:0] r_saddr;          // start address
   reg [15:0] r_rd_len_plus1;   // bytes to receive before MISO (0 = no pre-data)
+
+  // ── CS polarity inversion ──
+  wire w_cs_n = cs_n ^ r_cs_active;
 
   // ── SCLK edge detect (from raw sclk, zero sync delay) ──
   reg r_scl_d;
@@ -40,7 +44,7 @@ module spi_slv_reg (
       r_cs_in <= #1 1'b1; r_cs_d  <= #1 1'b1;
       r_cs_ris <= #1 1'b0; r_cs_fal <= #1 1'b0;
     end else begin
-      r_cs_s1 <= #1 cs_n;
+      r_cs_s1 <= #1 w_cs_n;
       r_cs_s2 <= #1 r_cs_s1;
       r_cs_in <= #1 r_cs_s2;
       r_cs_d  <= #1 r_cs_in;
@@ -122,6 +126,7 @@ module spi_slv_reg (
       r_rd_len_plus1 <= #1 16'h0000;
       r_cpol  <= #1 1'b0;
       r_cpha  <= #1 1'b0;
+      r_cs_active <= #1 1'b0;
       o_wr    <= #1 1'b0;
       o_wdata <= #1 8'h00;
       o_addr  <= #1 16'h0000;
@@ -181,14 +186,18 @@ module spi_slv_reg (
     end
   end
 
-  // ── MISO output (purely combinational from raw cs_n, no sync delay) ──
-  // cs_n=1 → z (tri-state), cs_n=0 + read → r_txsr[7], cs_n=0 + write → z
-  assign miso = cs_n ? 1'bz : (r_mode ? r_txsr[7] : 1'bz);
+  // ── MISO output (combinational "next" value to avoid NB shift delay) ──
+  wire [7:0] w_txsr_next = (r_st == ST_SENDM && r_bcnt == 4'h0) ? i_rdata :
+                           (r_st == ST_SENDM)                    ? {r_txsr[6:0], 1'b0} :
+                           r_txsr;
+  assign miso = w_cs_n ? 1'bz : (r_mode ? w_txsr_next[7] : 1'bz);
 
   // ── test tasks ──
   task set_cpol(input v);     r_cpol <= #1 v; endtask
   task set_cpha(input v);     r_cpha <= #1 v; endtask
   task set_mode(input ci, input cpha_i);  r_cpol <= #1 ci;  r_cpha <= #1 cpha_i; endtask
+
+  task set_cs_active(input v);  r_cs_active <= #1 v; endtask
 
   task set_write_mode(input [15:0] addr);
     r_mode  <= #1 1'b0;
