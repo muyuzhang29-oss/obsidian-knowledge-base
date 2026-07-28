@@ -29,9 +29,7 @@ class base_test extends uvm_test;
     // Override in derived tests
     run_test_scenario();
 
-    // Flush checker — report unmatched transactions
-    tb.u_checker.flush();
-
+    // Sensor 自检报告（由子类 test 调用 u_sensor.report()）
     // Dump error registers after case finishes
     dump_err_regs();
 

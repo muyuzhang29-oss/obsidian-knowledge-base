@@ -1,9 +1,8 @@
-// SPI sensor model — follows i2c_sensor_model pattern
+// SPI sensor model (Verilog-2001 compatible)
 //
 // SPI(B) interface (to wrp internal master):
 //   Write:  CS↓ DATA0..N  ───→ regfile       CS↑
 //   Read:   CS↓ 先收 rd_len_plus1 字节→regfile, 再发 MISO→regfile 直到 CS↑
-//          CS↓ rd_len_plus1=0 时, 直接发 MISO 直到 CS↑
 //
 // Architecture:
 //   spi_slv_reg  ←SPI pins→  decodes protocol, outputs reg bus
@@ -111,6 +110,17 @@ module spi_sensor_model #(parameter DEV_ID1 = 7'h0A)(
 
   task set_mode(input ci, input cpha_i);
     u_spi_slv.set_mode(ci, cpha_i);
+  endtask
+
+  // ── 暴露数据给 test 层做断言 ──
+  task read_reg(input [15:0] addr, output [7:0] data);
+    data = slv_mem[addr];
+  endtask
+
+  task read_burst(input [15:0] addr, output [7:0] data[], input int len);
+    data = new[len];
+    for (int j = 0; j < len; j = j + 1)
+      data[j] = slv_mem[addr + j];
   endtask
 
 endmodule

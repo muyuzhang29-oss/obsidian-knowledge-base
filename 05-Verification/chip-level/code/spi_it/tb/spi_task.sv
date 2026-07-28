@@ -1,3 +1,5 @@
+import uvm_pkg::*;
+
 // I2C Slave 地址（与 DUT i2cs 的 i_native_dev 一致）
 `define I2C_SLV_ADDR 7'h30
 
@@ -41,14 +43,14 @@ task ext_i2c_wr_reg16(input [6:0] slv_addr, input [15:0] reg_addr, input [7:0] d
   ext_i2c_wr_sub(1'b0, 1'b0, reg_addr[7:0]);       // 寄存器地址低字节
   ext_i2c_wr_sub(1'b1, 1'b0, data);                 // 数据 + STOP
   ext_i2c_finish;
-  $display("%10t: EXT_I2C write reg[%04h] = %02h", $time, reg_addr, data);
+  `uvm_info("SPI_TASK", $sformatf("EXT_I2C write reg[%04h] = %02h", reg_addr, data), UVM_LOW)
 endtask
 
 // I2C single read (16-bit 寄存器地址)  — 需参考 I2C_IT 的 rx_host 任务定义
 // TODO: 从 I2C_IT 复制 `rx_host`/`hostx_rd_reg` 等读任务，补充 RX FIFO 读取流程
 task ext_i2c_rd_reg16(input [6:0] slv_addr, input [15:0] reg_addr, output [7:0] data);
   data = 8'h00;
-  $error("%10t: EXT_I2C rd_reg16 not implemented — need read task from I2C_IT", $time);
+  `uvm_error("SPI_TASK", $sformatf("EXT_I2C rd_reg16 not implemented — need read task from I2C_IT"))
 endtask
 
 // ============================================================
@@ -68,6 +70,8 @@ task spi_init(
   ext_i2c_wr_reg16(`I2C_SLV_ADDR, `SPI_REG_BASE + 16'h0011, sck_low); // SPIM_CFG1
   ext_i2c_wr_reg16(`I2C_SLV_ADDR, `SPI_REG_BASE + 16'h0012, sck_high); // SPIM_CFG2
   ext_i2c_wr_reg16(`I2C_SLV_ADDR, `SPI_REG_BASE + 16'h0013, ss_dly); // SPIM_CFG3
+  // SPI(B) monitor 同步配置 CPOL/CPHA
+  tb.u_spi_b_mon.set_mode(cpol, cpha);
 endtask
 
 task spi_master_write(input [4:0] dst_port, input [16:0] dev_addr,
