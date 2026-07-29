@@ -74,6 +74,7 @@ end
 
 wire w_sample = (cpha == cpol) ? w_scl_ris:w_scl_fal;
 wire w_drive  = (cpha == cpol) ? w_scl_fal:w_scl_ris;
+reg  r_drive; always @(posedge i_clk) r_drive <= #1 w_drive; // [fix] 寄存一拍, 避开与 w_rd_set 同沿的竞争
 
 //------bit_counter-------
 reg [3:0] r_bcnt;
@@ -137,38 +138,55 @@ always@(*)begin
     endcase
 end
 
-//------MISO 位计数器: 在 w_drive 上递增, 进入读相位时复位------
+//------读相位标记: w_rd_set进入读相位, 一直有效到CS↑------
+wire w_rd_set = (w_end_byte && r_st == ST_RECV && r_dcnt + 16'h1 >= r_rd_len_plus1) ||
+                (r_cs_fal && r_mode && r_rd_len_plus1 == 0);
+wire w_rd_clr = r_cs_ris && r_bcnt == 4'h0;
+
+reg  r_rd_flag;
 always@(posedge i_clk or negedge i_rst_n)begin
     if(!i_rst_n)
-        r_txbcnt <= #1 4'h0;
-    else if(w_rd_set)
-        r_txbcnt <= #1 4'h0;
-    else if(w_drive && w_rd_phase)
-        r_txbcnt <= #1 (r_txbcnt == 4'h7) ? 4'h0 : r_txbcnt + 4'h1;
-end
-// 组合覆写: w_rd_set 拍强制 txbcnt=0 (提前于寄存器更新)
-wire [3:0] w_txbcnt = w_rd_set ? 4'h0 : r_txbcnt;
-
-//------读相位标记: 从决定进入ST_RDATA开始一直有效到CS↑------
-// w_rd_set 是 w_end_byte 处的一个脉冲; 用 r_rd_set_d1 延长一拍,
-// 避免 w_rd_set 变0后 r_rd_flag 尚未更新导致的组合逻辑毛刺
-wire w_rd_set = w_end_byte && r_st == ST_RECV && r_dcnt + 16'h1 >= r_rd_len_plus1;
-wire w_rd_clr = r_cs_ris && r_bcnt == 4'h0;
-reg  r_rd_flag;
-reg  r_rd_set_d1;
-always@(posedge i_clk or negedge i_rst_n)begin
-    if(!i_rst_n)begin
         r_rd_flag   <= #1 1'b0;
-        r_rd_set_d1 <= #1 1'b0;
-    end else begin
-        r_rd_set_d1 <= #1 w_rd_set;
+    else begin
         if(w_rd_clr)
             r_rd_flag <= #1 1'b0;
         else if(w_rd_set)
             r_rd_flag <= #1 1'b1;
     end
 end
-wire w_rd_phase = r_rd_flag || w_rd_set || r_rd_set_d1;
+wire w_rd_phase = r_rd_flag;
+
+//------MISO 位计数器: 在 r_drive 上递增, w_rd_set时复位------
+always@(posedge i_clk or negedge i_rst_n)begin
+    if(!i_rst_n)
+        r_txbcnt <= #1 4'h0;
+    else if(w_rd_set)
+        r_txbcnt <= #1 4'h0;
+    else if(r_drive && w_rd_phase)
+        r_txbcnt <= #1 (r_txbcnt == 4'h7) ? 4'h0 : r_txbcnt + 4'h1;
+end
+wire [3:0] w_txbcnt = w_rd_set ? 4'h0 : r_txbcnt;
+
+//------第一字节预加载: w_rd_set后延时2 i_clk捕获i_rdata, 跳过txbcnt=0的load------
+reg [1:0] r_init_shift;
+reg       r_first; // 0=第一字节尚未加载, 跳过txbcnt=0 load
+always@(posedge i_clk or negedge i_rst_n)begin
+    if(!i_rst_n)begin
+        r_init_shift <= 2'b00;
+        r_first      <= 1'b0;
+    end else begin
+        if(w_rd_set) begin
+            r_init_shift <= 2'b10; // 启动2拍延时
+            r_first      <= 1'b0;  // 第一字节标记
+        end else if(w_rd_phase && r_drive && w_txbcnt == 4'h7) begin
+            r_first      <= 1'b1;  // 第一字节结束, 后续允许正常load
+            r_init_shift <= 2'b00;
+        end else if(|r_init_shift) begin
+            r_init_shift <= {1'b0, r_init_shift[1]};
+        end
+    end
+end
+wire w_init_load = r_init_shift[0]; // 在w_rd_set后第 2个i_clk边沿有效
 
 //------datapath------
 always@(posedge i_clk or negedge i_rst_n)begin
@@ -198,6 +216,11 @@ always@(posedge i_clk or negedge i_rst_n)begin
             o_rd    <= #1 1'b1;
             o_addr  <= #1 r_saddr;
         end
+        // MISO 相位开始: 重新发起读, 确保 i_rdata 新鲜
+        if(w_rd_set)begin
+            o_rd   <= #1 1'b1;
+            o_addr <= #1 r_saddr;
+        end
 
         //------sample edge :capture MOSI------
         if(w_sample)begin
@@ -214,14 +237,10 @@ always@(posedge i_clk or negedge i_rst_n)begin
             if(r_st == ST_RECV)begin
                 r_dcnt      <= #1 r_dcnt +16'h1;
             end
-            //进入读相位: 预加载第一个MISO字节
-            if(w_rd_set)begin
-                r_txsr <= #1 i_rdata;
-            end
         end
 
         //------drive edge:advance counters,drive MISO------
-        if(w_drive)begin
+        if(r_drive)begin
             if(w_rd_phase)begin
                 if(w_txbcnt == 4'h0)begin
                     r_txsr <= #1 i_rdata;
@@ -244,8 +263,20 @@ wire [7:0] r_txsr_next = (w_rd_phase && w_txbcnt == 4'h0) ? i_rdata :
 assign miso = w_cs_n ? 1'bz : (r_mode ? r_txsr_next[7] : 1'b0);
 
 // DEBUG
-always@(posedge i_clk) if(w_drive && w_rd_phase)
-$display("SLV_DRV %0t : txbcnt = %0d dcnt = %0d txsr = %02h i_rdata = %02h miso = %b",$time,w_txbcnt,r_dcnt,r_txsr,i_rdata,miso);
+always@(posedge i_clk) begin
+    if(r_drive) $display("DRIVE %0t : w_rd_phase=%b r_txbcnt=%0d w_txbcnt=%0d r_st=%d r_bcnt=%0d",
+                         $time,w_rd_phase,r_txbcnt,w_txbcnt,r_st,r_bcnt);
+    if(w_sample) $display("SAMPLE %0t : w_rd_phase=%b w_txbcnt=%0d r_bcnt=%0d r_st=%d miso=%b",
+                          $time,w_rd_phase,w_txbcnt,r_bcnt,r_st,miso);
+    if(w_rd_set) $display("RDSET %0t : i_rdata=%02h r_st=%d r_dcnt=%0d r_rd_len_plus1=%0d",
+                          $time,i_rdata,r_st,r_dcnt,r_rd_len_plus1);
+    if(r_cs_fal) $display("CSFAL %0t : r_mode=%b r_saddr=%04h o_rd fired",$time,r_mode,r_saddr);
+    if(r_cs_ris) $display("CSRIS %0t",$time);
+    if(w_rd_phase && r_drive && w_txbcnt==0)
+        $display("LOAD %0t : r_txsr <= i_rdata=%02h",$time,i_rdata);
+    if(w_rd_phase && r_drive && w_txbcnt==7)
+        $display("PREFETCH %0t : o_rd fired, addr increment",$time);
+end
 
 //TEST
 task set_mode(input cpol_i,input cpha_i,input cs_active_i);
