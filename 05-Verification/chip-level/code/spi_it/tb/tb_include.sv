@@ -4,3 +4,4 @@
 `include "../checker/spi_b_monitor.sv"
 `include "../test/base_test.sv"
 `include "../test/spi_write_test.sv"
+`include "../test/ss12_spi_write_random_test.sv"
