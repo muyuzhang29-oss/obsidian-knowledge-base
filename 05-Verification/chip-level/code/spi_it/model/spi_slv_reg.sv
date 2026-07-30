@@ -6,6 +6,7 @@ module spi_slv_reg(
     input               sclk,
     input               mosi,
     input               cs_n,
+    input               cs_active,      // 极性控制: 0=CS低有效, 1=CS高有效
     output  wire        miso,
     output  reg [15:0]  o_addr,
     output  reg [7:0]   o_wdata,
@@ -19,7 +20,7 @@ reg     [15:0]      r_saddr;        //statr addr
 reg     [15:0]      r_rd_len_plus1; // bytes before to receive MISO
 reg                 cpol;
 reg                 cpha;
-reg                 cs_active = 1'b0;
+
 
 reg                 r_scl_d1;
 
@@ -279,10 +280,9 @@ always@(posedge i_clk) begin
 end
 
 //TEST
-task set_mode(input cpol_i,input cpha_i,input cs_active_i);
+task set_mode(input cpol_i,input cpha_i);
     cpol <= #1 cpol_i;
     cpha <= #1 cpha_i;
-    cs_active <= #1 cs_active_i;
 endtask
 
 task set_write_mode(input [15:0] addr);
