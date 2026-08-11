@@ -74,7 +74,28 @@ begin
 end
 
 wire w_sample = (cpha == cpol) ? w_scl_ris:w_scl_fal;
-wire w_drive  = (cpha == cpol) ? w_scl_fal:w_scl_ris;
+
+//------0->3直跳(rd_len_plus1==0)且cpha=1: w_drive 延后一整拍, 保证 MISO 保持到采样沿------
+// 仅针对 ST_IDLE 直接跳 ST_RDATA 的路径, 2->3 正常路径不受影响
+wire w_scl_any = w_scl_ris || w_scl_fal;
+reg  r_edge;        // 0=每bit第一个沿, 1=第二个沿
+reg  r_skip_first;  // MISO相位开始后的第一个SCLK沿跳过, 避免提前移位
+always @(posedge i_clk or negedge i_rst_n) begin
+    if (!i_rst_n) begin
+        r_edge       <= #1 1'b0;
+        r_skip_first <= #1 1'b1;
+    end else begin
+        if (r_cs_fal && r_mode && r_rd_len_plus1 == 16'h0) begin
+            r_edge       <= #1 1'b0;
+            r_skip_first <= #1 1'b1;
+        end else if (w_scl_any) begin
+            r_edge       <= #1 ~r_edge;
+            r_skip_first <= #1 1'b0;
+        end
+    end
+end
+wire w_drive = (cpha == 1'b1 && r_rd_len_plus1 == 16'h0) ? (w_scl_any && ~r_edge && ~r_skip_first)
+                                                         : ((cpha == cpol) ? w_scl_fal : w_scl_ris);
 reg  r_drive; always @(posedge i_clk) r_drive <= #1 w_drive; // [fix] 寄存一拍, 避开与 w_rd_set 同沿的竞争
 
 //------bit_counter-------
