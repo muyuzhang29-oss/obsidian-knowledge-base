@@ -14,6 +14,13 @@ CPU 发出虚拟地址 → MMU 转换成物理地址 → 读取数据。cache �
 Index 和 Tag 均取自虚拟地址。
 
 ```mermaid
+%%{init: {'theme':'neutral','themeVariables':{
+  'primaryColor':'#fffaf3','primaryTextColor':'#4a2c22','primaryBorderColor':'#ead7c6',
+  'lineColor':'#8a6a58','secondaryColor':'#f3e2d4','tertiaryColor':'#fffaf3',
+  'background':'#fffdf9','mainBkg':'#fffaf3','nodeBorder':'#ead7c6',
+  'clusterBkg':'#fff7ed','clusterBorder':'#e2cbb8','edgeLabelBackground':'#f3e2d4',
+  'fontFamily':'-apple-system,PingFang SC,Microsoft YaHei,sans-serif'
+}}}%%
 flowchart LR
     CPU[CPU] --> VA[虚拟地址]
     VA --> CACHE[CACHE<br/>Index + Tag 都用 VA]
@@ -27,6 +34,13 @@ flowchart LR
 **问题 1：歧义** — 相同 VA 映射不同 PA
 
 ```mermaid
+%%{init: {'theme':'neutral','themeVariables':{
+  'primaryColor':'#fffaf3','primaryTextColor':'#4a2c22','primaryBorderColor':'#ead7c6',
+  'lineColor':'#8a6a58','secondaryColor':'#f3e2d4','tertiaryColor':'#fffaf3',
+  'background':'#fffdf9','mainBkg':'#fffaf3','nodeBorder':'#ead7c6',
+  'clusterBkg':'#fff7ed','clusterBorder':'#e2cbb8','edgeLabelBackground':'#f3e2d4',
+  'fontFamily':'-apple-system,PingFang SC,Microsoft YaHei,sans-serif'
+}}}%%
 flowchart LR
     T1["线程 A<br/>VA=0x1000 → PA=0xA000<br/>数据: 1234"] --> CL["Cache Line<br/>Tag=0x1000"]
     T2["线程 B<br/>VA=0x1000 → PA=0xB000<br/>数据: 5678"] --> CL
@@ -39,6 +53,13 @@ flowchart LR
 **问题 2：别名** — 不同 VA 映射相同 PA，且 index 不同
 
 ```mermaid
+%%{init: {'theme':'neutral','themeVariables':{
+  'primaryColor':'#fffaf3','primaryTextColor':'#4a2c22','primaryBorderColor':'#ead7c6',
+  'lineColor':'#8a6a58','secondaryColor':'#f3e2d4','tertiaryColor':'#fffaf3',
+  'background':'#fffdf9','mainBkg':'#fffaf3','nodeBorder':'#ead7c6',
+  'clusterBkg':'#fff7ed','clusterBorder':'#e2cbb8','edgeLabelBackground':'#f3e2d4',
+  'fontFamily':'-apple-system,PingFang SC,Microsoft YaHei,sans-serif'
+}}}%%
 flowchart LR
     VA1["VA=0x2000<br/>Index=0x200"] --> CL1["Cache Line 0x200<br/>数据: 1234"]
     VA2["VA=0x4000<br/>Index=0x400"] --> CL2["Cache Line 0x400<br/>数据: 1234"]
@@ -59,6 +80,13 @@ flowchart LR
 Index 和 Tag 均取自物理地址。
 
 ```mermaid
+%%{init: {'theme':'neutral','themeVariables':{
+  'primaryColor':'#fffaf3','primaryTextColor':'#4a2c22','primaryBorderColor':'#ead7c6',
+  'lineColor':'#8a6a58','secondaryColor':'#f3e2d4','tertiaryColor':'#fffaf3',
+  'background':'#fffdf9','mainBkg':'#fffaf3','nodeBorder':'#ead7c6',
+  'clusterBkg':'#fff7ed','clusterBorder':'#e2cbb8','edgeLabelBackground':'#f3e2d4',
+  'fontFamily':'-apple-system,PingFang SC,Microsoft YaHei,sans-serif'
+}}}%%
 flowchart LR
     CPU[CPU] --> VA[虚拟地址]
     VA --> MMU[MMU 转换]
@@ -85,6 +113,13 @@ flowchart LR
 Index 取自虚拟地址，Tag 取自物理地址。查 cache 与 MMU 转换**同时进行**。
 
 ```mermaid
+%%{init: {'theme':'neutral','themeVariables':{
+  'primaryColor':'#fffaf3','primaryTextColor':'#4a2c22','primaryBorderColor':'#ead7c6',
+  'lineColor':'#8a6a58','secondaryColor':'#f3e2d4','tertiaryColor':'#fffaf3',
+  'background':'#fffdf9','mainBkg':'#fffaf3','nodeBorder':'#ead7c6',
+  'clusterBkg':'#fff7ed','clusterBorder':'#e2cbb8','edgeLabelBackground':'#f3e2d4',
+  'fontFamily':'-apple-system,PingFang SC,Microsoft YaHei,sans-serif'
+}}}%%
 flowchart LR
     CPU[CPU] --> VA[虚拟地址]
     VA --> PATH1["提取 Index<br/>(来自 VA)"]
@@ -101,6 +136,13 @@ flowchart LR
 **优点**：性能好（并行），无歧义（tag 是物理的）。
 
 ```mermaid
+%%{init: {'theme':'neutral','themeVariables':{
+  'primaryColor':'#fffaf3','primaryTextColor':'#4a2c22','primaryBorderColor':'#ead7c6',
+  'lineColor':'#8a6a58','secondaryColor':'#f3e2d4','tertiaryColor':'#fffaf3',
+  'background':'#fffdf9','mainBkg':'#fffaf3','nodeBorder':'#ead7c6',
+  'clusterBkg':'#fff7ed','clusterBorder':'#e2cbb8','edgeLabelBackground':'#f3e2d4',
+  'fontFamily':'-apple-system,PingFang SC,Microsoft YaHei,sans-serif'
+}}}%%
 flowchart TD
     subgraph NoAlias[一路 ≤ 4KB: 无异名]
         N1["VA 和 PA 的 [11:0] 相同<br/>(页内偏移)"] --> N2["Index 取自 [11:x]<br/>不超出页边界"]
@@ -119,6 +161,13 @@ flowchart TD
 ## 4. 三种方式对比
 
 ```mermaid
+%%{init: {'theme':'neutral','themeVariables':{
+  'primaryColor':'#fffaf3','primaryTextColor':'#4a2c22','primaryBorderColor':'#ead7c6',
+  'lineColor':'#8a6a58','secondaryColor':'#f3e2d4','tertiaryColor':'#fffaf3',
+  'background':'#fffdf9','mainBkg':'#fffaf3','nodeBorder':'#ead7c6',
+  'clusterBkg':'#fff7ed','clusterBorder':'#e2cbb8','edgeLabelBackground':'#f3e2d4',
+  'fontFamily':'-apple-system,PingFang SC,Microsoft YaHei,sans-serif'
+}}}%%
 flowchart TB
     subgraph VIVT_C[VIVT]
         V1["VA → Tag(VA) + Index(VA)"]
@@ -144,6 +193,13 @@ flowchart TB
 ## 5. 补充：TLB
 
 ```mermaid
+%%{init: {'theme':'neutral','themeVariables':{
+  'primaryColor':'#fffaf3','primaryTextColor':'#4a2c22','primaryBorderColor':'#ead7c6',
+  'lineColor':'#8a6a58','secondaryColor':'#f3e2d4','tertiaryColor':'#fffaf3',
+  'background':'#fffdf9','mainBkg':'#fffaf3','nodeBorder':'#ead7c6',
+  'clusterBkg':'#fff7ed','clusterBorder':'#e2cbb8','edgeLabelBackground':'#f3e2d4',
+  'fontFamily':'-apple-system,PingFang SC,Microsoft YaHei,sans-serif'
+}}}%%
 flowchart LR
     CPU[CPU] --> VA[虚拟地址]
     VA --> TLB{"TLB<br/>(VA→PA 缓存)"}

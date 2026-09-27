@@ -25,6 +25,13 @@ Power Domain
 ```
 
 ```mermaid
+%%{init: {'theme':'neutral','themeVariables':{
+  'primaryColor':'#fffaf3','primaryTextColor':'#4a2c22','primaryBorderColor':'#ead7c6',
+  'lineColor':'#8a6a58','secondaryColor':'#f3e2d4','tertiaryColor':'#fffaf3',
+  'background':'#fffdf9','mainBkg':'#fffaf3','nodeBorder':'#ead7c6',
+  'clusterBkg':'#fff7ed','clusterBorder':'#e2cbb8','edgeLabelBackground':'#f3e2d4',
+  'fontFamily':'-apple-system,PingFang SC,Microsoft YaHei,sans-serif'
+}}}%%
 graph LR
   PD_A[PD_A 常开] --> ISO[Isolation]
   ISO --> PD_B[PD_B 可关断]

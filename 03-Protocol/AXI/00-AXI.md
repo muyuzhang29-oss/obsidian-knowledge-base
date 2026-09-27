@@ -24,6 +24,13 @@ updated: 2026-04-17
 ### AXI 通道架构
 
 ```mermaid
+%%{init: {'theme':'neutral','themeVariables':{
+  'primaryColor':'#fffaf3','primaryTextColor':'#4a2c22','primaryBorderColor':'#ead7c6',
+  'lineColor':'#8a6a58','secondaryColor':'#f3e2d4','tertiaryColor':'#fffaf3',
+  'background':'#fffdf9','mainBkg':'#fffaf3','nodeBorder':'#ead7c6',
+  'clusterBkg':'#fff7ed','clusterBorder':'#e2cbb8','edgeLabelBackground':'#f3e2d4',
+  'fontFamily':'-apple-system,PingFang SC,Microsoft YaHei,sans-serif'
+}}}%%
 graph LR
     subgraph Master
         AW[写地址通道<br/>AWADDR/AWVALID/AWREADY]
@@ -146,6 +153,13 @@ graph LR
 ### 写操作时序
 
 ```mermaid
+%%{init: {'theme':'neutral','themeVariables':{
+  'primaryColor':'#fffaf3','primaryTextColor':'#4a2c22','primaryBorderColor':'#ead7c6',
+  'lineColor':'#8a6a58','secondaryColor':'#f3e2d4','tertiaryColor':'#fffaf3',
+  'background':'#fffdf9','mainBkg':'#fffaf3','nodeBorder':'#ead7c6',
+  'clusterBkg':'#fff7ed','clusterBorder':'#e2cbb8','edgeLabelBackground':'#f3e2d4',
+  'fontFamily':'-apple-system,PingFang SC,Microsoft YaHei,sans-serif'
+}}}%%
 sequenceDiagram
     participant M as Master
     participant S as Slave
@@ -174,6 +188,13 @@ sequenceDiagram
 ### 读操作时序
 
 ```mermaid
+%%{init: {'theme':'neutral','themeVariables':{
+  'primaryColor':'#fffaf3','primaryTextColor':'#4a2c22','primaryBorderColor':'#ead7c6',
+  'lineColor':'#8a6a58','secondaryColor':'#f3e2d4','tertiaryColor':'#fffaf3',
+  'background':'#fffdf9','mainBkg':'#fffaf3','nodeBorder':'#ead7c6',
+  'clusterBkg':'#fff7ed','clusterBorder':'#e2cbb8','edgeLabelBackground':'#f3e2d4',
+  'fontFamily':'-apple-system,PingFang SC,Microsoft YaHei,sans-serif'
+}}}%%
 sequenceDiagram
     participant M as Master
     participant S as Slave
@@ -196,6 +217,13 @@ sequenceDiagram
 ### OUTSTANDING 读操作 (3 Outstanding)
 
 ```mermaid
+%%{init: {'theme':'neutral','themeVariables':{
+  'primaryColor':'#fffaf3','primaryTextColor':'#4a2c22','primaryBorderColor':'#ead7c6',
+  'lineColor':'#8a6a58','secondaryColor':'#f3e2d4','tertiaryColor':'#fffaf3',
+  'background':'#fffdf9','mainBkg':'#fffaf3','nodeBorder':'#ead7c6',
+  'clusterBkg':'#fff7ed','clusterBorder':'#e2cbb8','edgeLabelBackground':'#f3e2d4',
+  'fontFamily':'-apple-system,PingFang SC,Microsoft YaHei,sans-serif'
+}}}%%
 sequenceDiagram
     participant M as Master
     participant S as Slave
@@ -227,6 +255,13 @@ sequenceDiagram
 ### 突发边界 (4KB Boundary)
 
 ```mermaid
+%%{init: {'theme':'neutral','themeVariables':{
+  'primaryColor':'#fffaf3','primaryTextColor':'#4a2c22','primaryBorderColor':'#ead7c6',
+  'lineColor':'#8a6a58','secondaryColor':'#f3e2d4','tertiaryColor':'#fffaf3',
+  'background':'#fffdf9','mainBkg':'#fffaf3','nodeBorder':'#ead7c6',
+  'clusterBkg':'#fff7ed','clusterBorder':'#e2cbb8','edgeLabelBackground':'#f3e2d4',
+  'fontFamily':'-apple-system,PingFang SC,Microsoft YaHei,sans-serif'
+}}}%%
 sequenceDiagram
     participant M as Master
     participant S as Slave

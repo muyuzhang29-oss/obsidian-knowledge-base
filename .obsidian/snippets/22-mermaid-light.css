@@ -1,0 +1,20 @@
+/* Mermaid 浅色（电脑 + iPad） */
+.mermaid, svg[id^="mermaid"], .markdown-preview-view svg {
+  background: #fffdf9 !important;
+}
+.mermaid .node rect, .mermaid .node circle, .mermaid .node polygon,
+.mermaid .cluster rect {
+  fill: #fffaf3 !important;
+  stroke: #ead7c6 !important;
+}
+.mermaid .nodeLabel, .mermaid .nodeLabel *, .mermaid .edgeLabel,
+.mermaid .cluster-label, .mermaid .label * {
+  color: #4a2c22 !important;
+  fill: #4a2c22 !important;
+}
+.mermaid .edgePath .path, .mermaid .flowchart-link {
+  stroke: #8a6a58 !important;
+}
+.mermaid .edgeLabel {
+  background: #f3e2d4 !important;
+}

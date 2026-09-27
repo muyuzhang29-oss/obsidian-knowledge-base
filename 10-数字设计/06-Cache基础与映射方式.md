@@ -18,6 +18,13 @@ created: 2026-07-06
 **示例**：64 Bytes cache, line size 8 Bytes → 8 行
 
 ```mermaid
+%%{init: {'theme':'neutral','themeVariables':{
+  'primaryColor':'#fffaf3','primaryTextColor':'#4a2c22','primaryBorderColor':'#ead7c6',
+  'lineColor':'#8a6a58','secondaryColor':'#f3e2d4','tertiaryColor':'#fffaf3',
+  'background':'#fffdf9','mainBkg':'#fffaf3','nodeBorder':'#ead7c6',
+  'clusterBkg':'#fff7ed','clusterBorder':'#e2cbb8','edgeLabelBackground':'#f3e2d4',
+  'fontFamily':'-apple-system,PingFang SC,Microsoft YaHei,sans-serif'
+}}}%%
 flowchart LR
     A["地址 [47:0]"] --> B["Tag [47:6]<br/>42 bits"]
     A --> C["Index [5:3]<br/>3 bits (8 行)"]
@@ -32,6 +39,13 @@ flowchart LR
 每个主存地址映射到**唯一**一个 cache line。
 
 ```mermaid
+%%{init: {'theme':'neutral','themeVariables':{
+  'primaryColor':'#fffaf3','primaryTextColor':'#4a2c22','primaryBorderColor':'#ead7c6',
+  'lineColor':'#8a6a58','secondaryColor':'#f3e2d4','tertiaryColor':'#fffaf3',
+  'background':'#fffdf9','mainBkg':'#fffaf3','nodeBorder':'#ead7c6',
+  'clusterBkg':'#fff7ed','clusterBorder':'#e2cbb8','edgeLabelBackground':'#f3e2d4',
+  'fontFamily':'-apple-system,PingFang SC,Microsoft YaHei,sans-serif'
+}}}%%
 flowchart TD
     ADDR[CPU 地址] --> IDX[提取 Index]
     IDX --> LINE[找到对应 Cache Line]
@@ -47,6 +61,13 @@ flowchart TD
 **颠簸问题**：地址 0x00、0x40、0x80 映射到同一 cache line：
 
 ```mermaid
+%%{init: {'theme':'neutral','themeVariables':{
+  'primaryColor':'#fffaf3','primaryTextColor':'#4a2c22','primaryBorderColor':'#ead7c6',
+  'lineColor':'#8a6a58','secondaryColor':'#f3e2d4','tertiaryColor':'#fffaf3',
+  'background':'#fffdf9','mainBkg':'#fffaf3','nodeBorder':'#ead7c6',
+  'clusterBkg':'#fff7ed','clusterBorder':'#e2cbb8','edgeLabelBackground':'#f3e2d4',
+  'fontFamily':'-apple-system,PingFang SC,Microsoft YaHei,sans-serif'
+}}}%%
 flowchart LR
     subgraph Mem[主存地址]
         M0[0x00]
@@ -73,6 +94,13 @@ flowchart LR
 - offset = 3 bits, index = 2 bits, tag = 43 bits
 
 ```mermaid
+%%{init: {'theme':'neutral','themeVariables':{
+  'primaryColor':'#fffaf3','primaryTextColor':'#4a2c22','primaryBorderColor':'#ead7c6',
+  'lineColor':'#8a6a58','secondaryColor':'#f3e2d4','tertiaryColor':'#fffaf3',
+  'background':'#fffdf9','mainBkg':'#fffaf3','nodeBorder':'#ead7c6',
+  'clusterBkg':'#fff7ed','clusterBorder':'#e2cbb8','edgeLabelBackground':'#f3e2d4',
+  'fontFamily':'-apple-system,PingFang SC,Microsoft YaHei,sans-serif'
+}}}%%
 flowchart TB
     subgraph Way0[Way 0 - 32 Bytes]
         W0S0["Set 0<br/>Line 0"]
@@ -94,6 +122,13 @@ flowchart TB
 ```
 
 ```mermaid
+%%{init: {'theme':'neutral','themeVariables':{
+  'primaryColor':'#fffaf3','primaryTextColor':'#4a2c22','primaryBorderColor':'#ead7c6',
+  'lineColor':'#8a6a58','secondaryColor':'#f3e2d4','tertiaryColor':'#fffaf3',
+  'background':'#fffdf9','mainBkg':'#fffaf3','nodeBorder':'#ead7c6',
+  'clusterBkg':'#fff7ed','clusterBorder':'#e2cbb8','edgeLabelBackground':'#f3e2d4',
+  'fontFamily':'-apple-system,PingFang SC,Microsoft YaHei,sans-serif'
+}}}%%
 flowchart LR
     ADDR[Address] --> EX[Extract Index<br/>2 bits] --> SETS["选 Set (共 4 组)"]
     SETS --> CMP["对比组内所有 Tag<br/>(Way 0 & Way 1)"]
@@ -109,6 +144,13 @@ flowchart LR
 ## 4. 全相连缓存
 
 ```mermaid
+%%{init: {'theme':'neutral','themeVariables':{
+  'primaryColor':'#fffaf3','primaryTextColor':'#4a2c22','primaryBorderColor':'#ead7c6',
+  'lineColor':'#8a6a58','secondaryColor':'#f3e2d4','tertiaryColor':'#fffaf3',
+  'background':'#fffdf9','mainBkg':'#fffaf3','nodeBorder':'#ead7c6',
+  'clusterBkg':'#fff7ed','clusterBorder':'#e2cbb8','edgeLabelBackground':'#f3e2d4',
+  'fontFamily':'-apple-system,PingFang SC,Microsoft YaHei,sans-serif'
+}}}%%
 flowchart LR
     ADDR[Address] --> TAG["Tag (无 Index)"]
     TAG --> CMP["与所有 Cache Line Tag 并行比较"]
@@ -136,6 +178,13 @@ flowchart LR
 | Tag (48-bit) | 48 - 5 - 8 | 35 bits |
 
 ```mermaid
+%%{init: {'theme':'neutral','themeVariables':{
+  'primaryColor':'#fffaf3','primaryTextColor':'#4a2c22','primaryBorderColor':'#ead7c6',
+  'lineColor':'#8a6a58','secondaryColor':'#f3e2d4','tertiaryColor':'#fffaf3',
+  'background':'#fffdf9','mainBkg':'#fffaf3','nodeBorder':'#ead7c6',
+  'clusterBkg':'#fff7ed','clusterBorder':'#e2cbb8','edgeLabelBackground':'#f3e2d4',
+  'fontFamily':'-apple-system,PingFang SC,Microsoft YaHei,sans-serif'
+}}}%%
 flowchart TB
     subgraph W0[Way 0 - 8KB]
         W0S["256 行<br/>每行 32 Bytes<br/>+ Tag + V"]
@@ -168,6 +217,13 @@ flowchart TB
 | 非写分配 | — | 只更新主存，不分配 cache line |
 
 ```mermaid
+%%{init: {'theme':'neutral','themeVariables':{
+  'primaryColor':'#fffaf3','primaryTextColor':'#4a2c22','primaryBorderColor':'#ead7c6',
+  'lineColor':'#8a6a58','secondaryColor':'#f3e2d4','tertiaryColor':'#fffaf3',
+  'background':'#fffdf9','mainBkg':'#fffaf3','nodeBorder':'#ead7c6',
+  'clusterBkg':'#fff7ed','clusterBorder':'#e2cbb8','edgeLabelBackground':'#f3e2d4',
+  'fontFamily':'-apple-system,PingFang SC,Microsoft YaHei,sans-serif'
+}}}%%
 flowchart LR
     subgraph ReadMiss[读缺失]
         RM[CPU 读<br/>Cache Miss] --> RA[分配 Cache Line<br/>从主存加载]
@@ -187,6 +243,13 @@ flowchart LR
 | 写回 (WB) | 只更新 cache | 可能不一致 | Dirty bit |
 
 ```mermaid
+%%{init: {'theme':'neutral','themeVariables':{
+  'primaryColor':'#fffaf3','primaryTextColor':'#4a2c22','primaryBorderColor':'#ead7c6',
+  'lineColor':'#8a6a58','secondaryColor':'#f3e2d4','tertiaryColor':'#fffaf3',
+  'background':'#fffdf9','mainBkg':'#fffaf3','nodeBorder':'#ead7c6',
+  'clusterBkg':'#fff7ed','clusterBorder':'#e2cbb8','edgeLabelBackground':'#f3e2d4',
+  'fontFamily':'-apple-system,PingFang SC,Microsoft YaHei,sans-serif'
+}}}%%
 flowchart LR
     subgraph WT[Write Through]
         W1[CPU 写 Cache 命中] --> W2[更新 Cache Line] --> W3[立即更新主存]
@@ -204,6 +267,13 @@ flowchart LR
 64 Bytes cache, 8 Bytes line, 读地址 0x2a：
 
 ```mermaid
+%%{init: {'theme':'neutral','themeVariables':{
+  'primaryColor':'#fffaf3','primaryTextColor':'#4a2c22','primaryBorderColor':'#ead7c6',
+  'lineColor':'#8a6a58','secondaryColor':'#f3e2d4','tertiaryColor':'#fffaf3',
+  'background':'#fffdf9','mainBkg':'#fffaf3','nodeBorder':'#ead7c6',
+  'clusterBkg':'#fff7ed','clusterBorder':'#e2cbb8','edgeLabelBackground':'#f3e2d4',
+  'fontFamily':'-apple-system,PingFang SC,Microsoft YaHei,sans-serif'
+}}}%%
 flowchart TD
     S1["读 0x2a<br/>Index → 找行"] --> S2{Valid?}
     S2 -->|Yes| S3{Tag 匹配?}
