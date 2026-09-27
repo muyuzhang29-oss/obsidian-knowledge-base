@@ -362,8 +362,8 @@ imc -merge -input "test*.ucdb" -out merged.ucdb -part 1000
 
 - [[00-xrun]] - xrun 仿真器
 - [[01-覆盖率]] - 覆盖率知识
-- [[00-Makefile]] - Makefile 模板
-- [[00-总索引]] - 返回总索引
+- [[07-Scripts/01-Makefile]] - Makefile 模板
+- [[00-工作台/03-总索引]] - 返回总索引
 
 ---
 

@@ -823,5 +823,5 @@ end
 - [[02-UVM/00-入门|UVM入门]]
 - [[02-UVM/03-Sequence机制|Sequence机制]]
 - [[02-UVM/04-组件|UVM组件]]
-- [[05-Verification/UVM-Template/UVM-Analysis-Port数据流|UVM Analysis Port数据流]]
-- [[05-Verification/UVM-Template/uvm_analysis_imp多端口陷阱|uvm_analysis_imp多端口陷阱]]
+- [[06-UVM-Template/13-Analysis-Port数据流|UVM Analysis Port数据流]]
+- [[06-UVM-Template/14-analysis_imp多端口陷阱|uvm_analysis_imp多端口陷阱]]

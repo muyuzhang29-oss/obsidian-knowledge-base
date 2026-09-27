@@ -429,9 +429,9 @@ def save_to_excel(data, filename):
 
 ## 相关链接
 
-- [[01-Log解析]] - 日志解析
-- [[00-Makefile]] - 构建工具
-- [[00-总索引]] - 返回总索引
+- [[07-Scripts/03-Log解析]] - 日志解析
+- [[07-Scripts/01-Makefile]] - 构建工具
+- [[00-工作台/03-总索引]] - 返回总索引
 
 ---
 

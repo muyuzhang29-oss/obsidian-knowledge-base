@@ -117,7 +117,7 @@ tags: [Protocol, HSMT, PDF阅读, 快速访问]
 
 ## 相关笔记
 
-- [[SPI-Control-Channel]] - SPI 控制通道
+- [[01-SPI-Control-Channel]] - SPI 控制通道
 - [[QC-T-1217-2024/QC-T-1217-2024]] - 完整协议文档
 
 ---

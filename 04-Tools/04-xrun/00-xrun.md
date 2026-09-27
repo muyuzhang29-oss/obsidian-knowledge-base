@@ -293,8 +293,8 @@ xrun -R +UVM_TESTNAME=long_test +timeout=10000
 
 - [[00-imc]] - 覆盖率分析工具
 - [[00-常用命令]] - Linux 命令
-- [[00-Makefile]] - Makefile 模板
-- [[00-总索引]] - 返回总索引
+- [[07-Scripts/01-Makefile]] - Makefile 模板
+- [[00-工作台/03-总索引]] - 返回总索引
 
 ---
 

@@ -1,4 +1,4 @@
-﻿---
+---
 tags: [UVM, 源码, 核心]
 created: 2026-04-27
 updated: 2026-06-02
@@ -60,7 +60,7 @@ uvm_void
 
 - [[11-run_test与TestBench启动]]
 - [[09-factory机制]]
-- [[01-Log解析]]
+- [[07-Scripts/03-Log解析]]
 
 ---
 

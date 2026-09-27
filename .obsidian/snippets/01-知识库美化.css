@@ -62,7 +62,7 @@
 
   /* --- 字体 --- */
   --kb-font-sans: "Inter", "Noto Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --kb-font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", "Consolas", monospace;
+  --kb-font-mono: "Sarasa NF", Consolas, "Noto Sans SC", "Microsoft YaHei", monospace;
   --kb-font-heading: "Inter", "Noto Sans SC", -apple-system, BlinkMacSystemFont, sans-serif;
 
   /* --- 间距 --- */
@@ -359,7 +359,7 @@
   --cb-type: #f9e2af;             /* 数据类型: int/void/logic/bit/string */
   --cb-string: #a6e3a1;           /* 字符串 */
   --cb-number: #fab387;           /* 数字 */
-  --cb-comment: #6c7086;          /* 注释 */
+  --cb-comment: #6e7381;          /* 注释 */
   --cb-function: #89b4fa;         /* 函数名 */
   --cb-variable: #89dceb;         /* 变量名 */
   --cb-operator: #cdd6f4;         /* 操作符 */
@@ -2007,39 +2007,19 @@ a.external-link {
   color: inherit;
 }
 
-/* Top-level domain colors for this vault */
-.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(1) > .nav-folder-title {
-  color: var(--kb-domain-index);
-}
-
-.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(2) > .nav-folder-title,
-.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(3) > .nav-folder-title {
-  color: var(--kb-domain-index);
-}
-
-.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(4) > .nav-folder-title {
-  color: var(--kb-domain-sv);
-}
-
-.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(5) > .nav-folder-title {
-  color: var(--kb-domain-uvm);
-}
-
-.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(6) > .nav-folder-title {
-  color: var(--kb-domain-protocol);
-}
-
-.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(7) > .nav-folder-title {
-  color: var(--kb-domain-tools);
-}
-
-.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(8) > .nav-folder-title {
-  color: var(--kb-domain-verification);
-}
-
-.nav-folder.mod-root > .nav-folder-children > .nav-folder:nth-child(11) > .nav-folder-title {
-  color: var(--kb-domain-projects);
-}
+/* Top-level domain colors — path-bound (stable when folders reorder) */
+.nav-folder.mod-root .nav-folder-title-content[data-path="00-工作台"] { color: var(--kb-domain-index); }
+.nav-folder.mod-root .nav-folder-title-content[data-path="01-SV语法"] { color: var(--kb-domain-sv); }
+.nav-folder.mod-root .nav-folder-title-content[data-path="02-UVM"] { color: var(--kb-domain-uvm); }
+.nav-folder.mod-root .nav-folder-title-content[data-path="03-Protocol"] { color: var(--kb-domain-protocol); }
+.nav-folder.mod-root .nav-folder-title-content[data-path="04-Tools"] { color: var(--kb-domain-tools); }
+.nav-folder.mod-root .nav-folder-title-content[data-path="05-Verification"] { color: var(--kb-domain-verification); }
+.nav-folder.mod-root .nav-folder-title-content[data-path="06-UVM-Template"] { color: var(--kb-domain-uvm); }
+.nav-folder.mod-root .nav-folder-title-content[data-path="07-Scripts"] { color: var(--kb-domain-tools); }
+.nav-folder.mod-root .nav-folder-title-content[data-path="08-Projects"] { color: var(--kb-domain-projects); }
+.nav-folder.mod-root .nav-folder-title-content[data-path="09-Issues"] { color: var(--kb-domain-verification); }
+.nav-folder.mod-root .nav-folder-title-content[data-path="10-数字设计"] { color: var(--kb-domain-sv); }
+.nav-folder.mod-root .nav-folder-title-content[data-path="11-Vault维护"] { color: var(--kb-domain-index); }
 
 /* Domain labels: subtle left rail on top-level folders */
 .nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title {
@@ -3550,7 +3530,7 @@ a.external-link {
   --cb-type: #b86b13;
   --cb-string: #257a52;
   --cb-number: #b95f1d;
-  --cb-comment: #8c776c;
+  --cb-comment: #6e7381;
   --cb-function: #7a4fb3;
   --cb-variable: #9b3f4d;
   --cb-operator: #8e5332;
@@ -4889,4 +4869,14 @@ body,
   visibility: visible !important;
   filter: none !important;
   mix-blend-mode: normal !important;
+}
+
+
+/* ── 一级目录统一：同高同字重，只区分颜色 ── */
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title {
+  min-height: 28px;
+}
+.nav-folder.mod-root > .nav-folder-children > .nav-folder > .nav-folder-title .nav-folder-title-content {
+  font-weight: 600 !important;
+  font-size: var(--font-ui-small) !important;
 }

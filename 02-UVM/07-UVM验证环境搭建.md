@@ -698,8 +698,8 @@ cleanall: clean
 - [[04-组件]] - UVM 组件
 - [[00-xrun]] - xrun 仿真器
 - [[00-imc]] - imc 覆盖率工具
-- [[00-Makefile]] - Makefile 模板
-- [[00-总索引]] - 返回总索引
+- [[07-Scripts/01-Makefile]] - Makefile 模板
+- [[00-工作台/03-总索引]] - 返回总索引
 
 ---
 

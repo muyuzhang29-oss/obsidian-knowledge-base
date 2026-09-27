@@ -1,0 +1,92 @@
+/* ============================================================
+   阅读模式代码块修复
+   背景：Warm Vivid 段用 !important 把整页颜色刷成 --wv-text，
+   语法高亮被冲淡、注释发虚、==== 看起来像横线。
+   这里按 token 重新给足对比度，并禁止任何半透明/装饰线。
+   ============================================================ */
+
+.markdown-preview-view pre,
+.markdown-preview-view pre code,
+.markdown-preview-view pre code *,
+.markdown-reading-view pre,
+.markdown-reading-view pre code,
+.markdown-reading-view pre code * {
+  opacity: 1 !important;
+  text-shadow: none !important;
+  filter: none !important;
+  transform: none !important;
+  text-decoration: none !important;
+  border: none !important;
+  background-image: none !important;
+  font-variant-ligatures: none !important;
+  font-feature-settings: "liga" 0, "calt" 0, "dlig" 0 !important;
+  letter-spacing: 0 !important;
+  white-space: pre-wrap;
+  word-break: normal;
+}
+
+.markdown-preview-view pre code,
+.markdown-preview-view pre code *,
+.markdown-reading-view pre code,
+.markdown-reading-view pre code * {
+  font-family: "Sarasa NF", Consolas, "Noto Sans SC", "Microsoft YaHei", monospace !important;
+  font-size: 0.92em !important;
+  line-height: 1.55 !important;
+  font-style: normal !important;
+  background: transparent !important;
+}
+
+/* 强制可读的 token 颜色（暖色浅底） */
+.markdown-preview-view pre code,
+.markdown-reading-view pre code,
+.markdown-preview-view pre .token,
+.markdown-reading-view .token,
+.markdown-preview-view pre span,
+.markdown-reading-view pre span {
+  color: #3c312b !important;
+}
+
+.markdown-preview-view pre .token.comment,
+.markdown-preview-view pre .token.block-comment,
+.markdown-reading-view .token.comment,
+.markdown-reading-view .token.block-comment,
+.markdown-preview-view pre .comment,
+.markdown-reading-view .comment {
+  color: #6a7280 !important;
+  opacity: 1 !important;
+  font-style: italic !important;
+  text-decoration: none !important;
+  border: none !important;
+  background: none !important;
+}
+
+.markdown-preview-view pre .token.keyword,
+.markdown-preview-view pre .token.atrule,
+.markdown-reading-view .token.keyword,
+.markdown-reading-view .token.atrule { color: #b13f73 !important; }
+
+.markdown-preview-view pre .token.string,
+.markdown-preview-view pre .token.char,
+.markdown-reading-view .token.string { color: #257a52 !important; }
+
+.markdown-preview-view pre .token.number,
+.markdown-preview-view pre .token.boolean,
+.markdown-preview-view pre .token.constant,
+.markdown-reading-view .token.number { color: #b95f1d !important; }
+
+.markdown-preview-view pre .token.function,
+.markdown-preview-view pre .token.class-name,
+.markdown-reading-view .token.function,
+.markdown-reading-view .token.class-name { color: #7a4fb3 !important; }
+
+.markdown-preview-view pre .token.operator,
+.markdown-preview-view pre .token.punctuation,
+.markdown-reading-view .token.operator,
+.markdown-reading-view .token.punctuation { color: #665247 !important; }
+
+/* 预览区标题不要把颜色刷到代码里 */
+.markdown-preview-view pre p,
+.markdown-preview-view pre li,
+.markdown-preview-view pre td {
+  color: inherit !important;
+}

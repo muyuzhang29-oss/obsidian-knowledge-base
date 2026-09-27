@@ -6,35 +6,48 @@ updated: 2026-06-02
 
 # UVM Phase 机制
 
-> UVM的12个phase及其执行顺序
+> UVM 的 12 个 phase 及其执行顺序
 
 ## Phase 执行顺序图
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    Build Phases (Top-Down)                   │
-│  ┌──────────┐    ┌──────────┐    ┌──────────┐              │
-│  │build_phase│←──│connect_  │←──│env._phase│              │
-│  │ (Top→Bot)│   │ phase    │   │           │              │
-│  └──────────┘    └──────────┘    └──────────┘              │
-└─────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+  subgraph build["Build / Elaboration（Top-Down 创建）"]
+    direction LR
+    B1["build_phase<br/>Top→Bot"]
+    B2["connect_phase<br/>Bot→Top"]
+    B3["end_of_elaboration"]
+    B4["start_of_simulation"]
+    B1 --> B2 --> B3 --> B4
+  end
 
-┌─────────────────────────────────────────────────────────────┐
-│                    Run Phases (Bottom-Up)                     │
-│  ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌───────┐ │
-│  │reset_phase│──→│configure_│──→│main_phase│──→│shutdown│ │
-│  │          │   │  phase    │   │          │   │_phase │ │
-│  └──────────┘    └──────────┘    └──────────┘    └───────┘ │
-└─────────────────────────────────────────────────────────────┘
+  subgraph run["Run（Runtime，objection 驱动）"]
+    direction LR
+    R1["reset"]
+    R2["configure"]
+    R3["main"]
+    R4["shutdown"]
+    R1 --> R2 --> R3 --> R4
+  end
 
-┌─────────────────────────────────────────────────────────────┐
-│                    Cleanup Phases (Bottom-Up)                 │
-│  ┌──────────┐    ┌──────────┐    ┌──────────┐              │
-│  │extract_   │←──│check_    │←──│report_   │              │
-│  │phase      │   │phase     │   │phase     │              │
-│  └──────────┘    └──────────┘    └──────────┘              │
-└─────────────────────────────────────────────────────────────┘
+  subgraph clean["Cleanup（Bot→Top）"]
+    direction LR
+    C1["extract"]
+    C2["check"]
+    C3["report"]
+    C4["final"]
+    C1 --> C2 --> C3 --> C4
+  end
+
+  build --> run --> clean
 ```
+
+
+> [!tip] 记忆
+> - **build**：自上而下建组件
+> - **connect**：自下而上连端口
+> - **run**：`raise/drop_objection` 才会前进
+> - **report**：统计与打印
 
 ---
 
@@ -121,4 +134,4 @@ tags: #UVM #Phase #核心
 - [[02-config_db]] - config_db 配置机制
 - [[03-Sequence机制]] - Sequence 激励生成
 - [[04-组件]] - UVM 组件结构
-- [[06-Environment/00-环境搭建|环境搭建]] - UVM 环境搭建实践
+- [[02-UVM/07-UVM验证环境搭建|环境搭建]] - UVM 环境搭建实践

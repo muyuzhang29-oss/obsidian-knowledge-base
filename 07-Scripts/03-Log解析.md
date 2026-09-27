@@ -1,4 +1,4 @@
-﻿---
+---
 tags: [Script, Python, UVM, 日志, 工具]
 created: 2026-04-17
 updated: 2026-06-02
@@ -536,9 +536,9 @@ COVERAGE = r'([\w\s]+)Coverage:\s+(\d+\.?\d*)%'
 
 ## 相关链接
 
-- [[00-Python脚本]] - Python 基础
-- [[00-Makefile]] - 构建工具
-- [[00-总索引]] - 返回总索引
+- [[07-Scripts/02-Python脚本]] - Python 基础
+- [[07-Scripts/01-Makefile]] - 构建工具
+- [[00-工作台/03-总索引]] - 返回总索引
 
 ---
 

@@ -652,8 +652,8 @@ export LM_LICENSE_FILE=1717@license_server
 
 ### 本笔记相关
 
-- [[04-Tools/05-VCS/00-VCS|VCS 编译仿真]]
-- [[04-Tools/07-QuestaSim/00-QuestaSim|QuestaSim 使用]]
+- [[04-Tools/01-VCS/00-VCS|VCS 编译仿真]]
+- [[04-Tools/03-QuestaSim/00-QuestaSim|QuestaSim 使用]]
 - [[03-Protocol/00-协议索引|协议验证]]
 
 ---

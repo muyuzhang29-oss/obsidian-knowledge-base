@@ -1,4 +1,4 @@
-﻿---
+---
 tags: [UVM, 源码, 仿真, 核心]
 created: 2026-04-27
 updated: 2026-06-02
@@ -182,7 +182,7 @@ UVM平台中所有component的各个phase，通过raise_objection和drop_objecti
 
 - [[10-uvm_component与uvm_root]]
 - [[09-factory机制]]
-- [[01-Log解析]] - UVM日志相关
+- [[07-Scripts/03-Log解析]] - UVM日志相关
 
 ---
 

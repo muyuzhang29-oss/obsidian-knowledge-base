@@ -9,9 +9,6 @@
   "periodic-notes",
   "obsidian-banners",
   "obsidian-admonition",
-  "remotely-save",
-  "claude-code-integration",
-  "obsidian-minimal-settings",
   "obsidian-hider",
   "obsidian-style-settings",
   "cmdr",
@@ -19,16 +16,14 @@
   "creases",
   "rainbow-colored-sidebar",
   "table-extended",
-  "codeblock-customizer",
   "highlightr-plugin",
   "obsidian-custom-frames",
   "obsidian-iconize",
   "calendar",
   "obsidian-tasks-plugin",
-  "copilot",
   "obsidian-advanced-uri",
   "obsidian-shellcommands",
-  "realclaudian",
   "obsidian-annotator",
-  "obsidian-git"
+  "obsidian-git",
+  "local-homepage"
 ]

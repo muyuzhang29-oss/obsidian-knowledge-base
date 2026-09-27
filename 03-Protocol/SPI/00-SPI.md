@@ -587,7 +587,7 @@ endclass
 - [[03-Protocol/AXI/00-AXI|AXI]] - AXI 总线协议
 - [[03-Protocol/UART/00-UART|UART]] - UART 协议
 - [[08-Projects/01-SPI验证/00-项目概述|SPI 验证项目]] - SPI 验证实战项目
-- [[00-总索引]] - 返回总索引
+- [[00-工作台/03-总索引]] - 返回总索引
 
 ---
 

@@ -941,7 +941,7 @@ cdc report -details -output cdc_detail.rpt
 
 ## 相关笔记
 
-- [[04-时钟块Clocking-Block]] - SystemVerilog时钟块与信号采样/驱动时序控制
+- [[01-SV语法/03-时钟块Clocking-Block]] - SystemVerilog时钟块与信号采样/驱动时序控制
 - [[04-时序问题排查]] - 时序违例与修复方法
 - [[00-验证计划]] - 如何在验证计划中纳入CDC测试项
 - [[01-覆盖率]] - CDC相关功能覆盖率的定义方法

@@ -7,6 +7,10 @@
   "translucency": true,
   "enabledCssSnippets": [
     "01-知识库美化",
-    "99-workbench-safe"
-  ]
+    "99-workbench-safe",
+    "20-dashboard-live",
+    "21-code-fix"
+  ],
+  "monospaceFontFamily": "等距更纱黑体 / Sarasa Mono SC",
+  "textFontFamily": "等距更纱黑体 / Sarasa Mono SC"
 }

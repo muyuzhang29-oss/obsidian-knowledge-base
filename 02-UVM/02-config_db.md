@@ -10,14 +10,21 @@ updated: 2026-06-02
 
 ## 基本概念
 
+```mermaid
+flowchart TB
+  tb["testbench"]
+  env["env (uvm_env)"]
+  agent["agent (uvm_agent)"]
+  drv["driver"]
+  mon["monitor"]
+  sb["scoreboard"]
+  tb --> env
+  env --> agent
+  env --> sb
+  agent --> drv
+  agent --> mon
 ```
-testbench
-    └── env (uvm_env)
-            ├── agent (uvm_agent)
-            │       ├── driver (uvm_driver)
-            │       └── monitor (uvm_monitor)
-            └── scoreboard
-```
+
 
 ---
 

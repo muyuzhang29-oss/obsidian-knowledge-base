@@ -38,10 +38,10 @@ from pathlib import Path
 # ============================================================
 
 # 默认知识库根目录
-DEFAULT_KB_DIR = Path(r"D:\obsidian\knowledge-base")
+DEFAULT_KB_DIR = Path(r"D:\obsdian\knowledge-base")
 
 # 默认报告输出路径
-DEFAULT_OUTPUT = Path(r"D:\obsidian\knowledge-base\07-Scripts\健康检查报告.md")
+DEFAULT_OUTPUT = Path(r"D:\obsdian\knowledge-base\11-Vault维护\14-健康检查报告.md")
 
 # 忽略的目录（不扫描）
 IGNORE_DIRS = {
@@ -58,6 +58,10 @@ IGNORE_LINK_CHECK_FILES = {
     "00-索引/03-健康报告.md",
     "00-索引/04-健康报告-修复后.md",
     "00-索引/05-修复总结.md",
+    "11-Vault维护/12-知识库健康报告.md",
+    "11-Vault维护/13-知识库健康报告-修复后.md",
+    "11-Vault维护/14-健康检查报告.md",
+    "07-Scripts/健康检查报告.md",
 }
 
 # Frontmatter 正则：匹配 --- 包裹的 YAML 块
@@ -712,3 +716,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

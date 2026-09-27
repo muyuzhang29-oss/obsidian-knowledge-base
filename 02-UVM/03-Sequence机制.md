@@ -6,31 +6,32 @@ updated: 2026-06-02
 
 # UVM Sequence 机制
 
-> UVM中的激励生成与发送机制
+> UVM 中的激励生成与发送机制
 
 ## 架构概览
 
+```mermaid
+flowchart TB
+  subgraph seq_layer["Sequence Layer"]
+    S1["Seq 1"]
+    S2["Seq 2"]
+    SN["..."]
+    ITEM["Sequence Item<br/>Transaction"]
+    S1 --> ITEM
+    S2 --> ITEM
+    SN --> ITEM
+  end
+  subgraph sqr["uvm_sequencer"]
+    seq_layer
+  end
+  DRV["uvm_driver"]
+  sqr -->|"get_next_item / item_done"| DRV
+  DRV -->|"drive signals"| DUT["DUT"]
 ```
-┌──────────────────────────────────────┐
-│              Sequencer               │
-│  ┌────────────────────────────────┐ │
-│  │        Sequence Layer          │ │
-│  │   ┌───────┐ ┌───────┐        │ │
-│  │   │Seq 1  │ │Seq 2  │  ...  │ │
-│  │   └───┬───┘ └───┬───┘        │ │
-│  │       └─────────┬┘            │ │
-│  │                 ▼              │ │
-│  │      ┌─────────────────┐      │ │
-│  │      │  Sequence Item  │      │ │
-│  │      │   (Transaction) │      │ │
-│  │      └────────┬────────┘      │ │
-│  └──────────────┼────────────────┘ │
-│                 ▼                  │
-│            ┌─────────┐            │
-│            │ Driver  │            │
-│            └─────────┘            │
-└──────────────────────────────────────┘
-```
+
+
+> [!tip] 流程
+> `start()` → `start_item` / `finish_item` → sequencer 授权 → driver `get_next_item` → 驱动 DUT
 
 ---
 

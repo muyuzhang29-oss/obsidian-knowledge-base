@@ -1,4 +1,4 @@
-﻿---
+---
 tags:
   - Tools
   - VCS
@@ -666,7 +666,7 @@ ls $VCS_HOME/doc/
 
 ### 相关笔记
 
-- [[04-Tools/06-Verdi/00-Verdi|Verdi 调试工具]] - Verdi 波形调试
+- [[04-Tools/02-Verdi/00-Verdi|Verdi 调试工具]] - Verdi 波形调试
 - [[02-UVM/08-源代码研究|UVM 源码研究]] - UVM 验证方法学
 - [[03-Protocol/AXI/00-AXI|AXI 协议]] - AXI 协议（验证常用）
 
